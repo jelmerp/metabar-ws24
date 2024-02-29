@@ -1,0 +1,14 @@
+---
+title: "About"
+---
+
+This is the website for an Ohio State University workshop on Amplicon Metabarcoding,
+held from March 13-15, 2024 in Wooster, Ohio.
+
+This workshop is co-organized by:
+
+- Dr. Soledad Benitez-Ponce, Dept. of Plant Pathology
+- Dr. Timothy Frey, Dept. of Plant Pathology
+- Dr. Jelmer Poelstra, Molecular and Cellular Imaging Center (MCIC)
+- Fiama Guevara, Dept. of Plant Pathology
+- Melanie Medina Lopez, Dept. of Plant Pathology

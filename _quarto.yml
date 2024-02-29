@@ -1,0 +1,37 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Microbial Metabarcoding Workshop"
+  site-url: https://jelmerp.github.io/metabar-ws24
+  repo-url: https://github.com/jelmerp/metabar-ws24
+  page-navigation: true
+  back-to-top-navigation: true
+  navbar:
+    left:
+      - href: index.qmd
+        text: "{{< fa home >}}"
+    right:
+        - text: About
+        href: about.qmd
+    tools:
+      - icon: github
+        menu:
+          - text: Source Code
+            url:  https://github.com/jelmerp/metabar-ws24
+          - text: Report an Issue
+            url:  https://github.com/jelmerp/metabar-ws24/issues/new
+format:
+  html:
+    highlight-style: atom-one
+    theme: pulse
+    css: styles.css
+    toc: true
+    number-sections: true
+    number-depth: 3
+    grid:
+      body-width: 900px
+
+editor: source
+
