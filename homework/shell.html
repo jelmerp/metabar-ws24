@@ -352,8 +352,8 @@ Copying and pasting in this shell
 <h3 data-number="3.1" class="anchored" data-anchor-id="the-prompt"><span class="header-section-number">3.1</span> The prompt</h3>
 <p>Inside your terminal, the “prompt” indicates that the shell is ready for a command. What is shown exactly varies across shells and can also be customized, but our prompts at OSC should show the following information:</p>
 <p><code>&lt;username&gt;@&lt;node-name&gt; &lt;working-dir&gt;]$</code></p>
-<p>For example:</p>
-<pre class="bash-in-nocolor"><code>[jelmer@p0080 jelmer]$ </code></pre>
+<p>For example (and <em>note that <strong><code>~</code></strong> means your Home dir</em>):</p>
+<pre class="bash-in-nocolor"><code>[jelmer@pitzer-login02 ~]$ </code></pre>
 <p>We type our commands after the dollar sign, and then press <kbd>Enter</kbd> to execute the command. When the command has finished executing, we’ll get our prompt back and can type a new command.</p>
 <hr style="height:1pt; visibility:hidden;">
 </section>
@@ -365,7 +365,7 @@ Copying and pasting in this shell
 <li>The <code>date</code> command prints the current date and time:</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre class="bash-out"><code>Wed Feb 7 09:11:51 EST 2024</code></pre>
+<pre class="bash-out"><code>Tue Mar 5 09:11:51 EST 2024</code></pre>
 <ul>
 <li>The <code>whoami</code> (who-am-i) command prints your username:</li>
 </ul>
@@ -443,7 +443,7 @@ What was the problem with the path we specified? <em>(Click to see the answer)</
 <h4 class="anchored" data-anchor-id="the-default-behavior-of-ls">The default behavior of <code>ls</code></h4>
 <p>The <code>ls</code> command, short for “list”, will list files and directories:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre class="bash-out"><code>share   users</code></pre>
+<pre class="bash-out"><code>sandbox   share   users</code></pre>
 <p><em>(You should still be in <code>/fs/ess/PAS2714</code>. If not, <code>cd</code> there first.)</em></p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
@@ -473,15 +473,17 @@ Side note: <code>ls</code> output colors <em>(click to expand)</em>
 <h4 class="anchored" data-anchor-id="options">Options</h4>
 <p>In general, whereas arguments tell a command <em>what to operate on</em>, options will <em>modify its behavior</em>. For example, we can call <code>ls</code> with the <strong>option <code>-l</code></strong> (a dash followed by a lowercase L):</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre class="bash-out"><code>total 1
-drwxrwx---+ 4 jelmer PAS2714 4096 Mar  1 11:25 share
-drwxrwx---+ 2 jelmer PAS2714 4096 Mar  1 15:51 users</code></pre>
+<pre class="bash-out"><code>total 2
+drwxr-xr-x+ 2 jelmer PAS0471 4096 Mar  1 16:23 sandbox
+drwxr-xr-x+ 4 jelmer PAS0471 4096 Mar  1 16:13 share
+drwxrwxrwx+ 3 jelmer PAS0471 4096 Mar  1 16:19 users</code></pre>
 <p>Notice that it lists the same items as above, but <strong>printed in a different format</strong>: one item per line, with additional information such as the date and time each file was last modified, and file sizes in bytes (to the left of the date).</p>
 <p>Let’s add another option, <strong><code>-h</code></strong>:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> <span class="at">-h</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre class="bash-out"><code>total 1.0K
-drwxrwx---+ 4 jelmer PAS2714 4.0K Mar  1 11:25 share
-drwxrwx---+ 2 jelmer PAS2714 4.0K Mar  1 15:51 users</code></pre>
+<pre class="bash-out"><code>total 1.5K
+drwxr-xr-x+ 2 jelmer PAS0471 4.0K Mar  1 16:23 sandbox
+drwxr-xr-x+ 4 jelmer PAS0471 4.0K Mar  1 16:13 share
+drwxrwxrwx+ 3 jelmer PAS0471 4.0K Mar  1 16:19 users</code></pre>
 <details>
 <summary>
 What is different about the output, and what do you think that means? <em>(Click to see the answer)</em>
@@ -516,7 +518,7 @@ Plots were split into A and BC plots to include a cover crop treatment.</code></
 <div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> share/data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>fastq  meta  ref</code></pre>
 <p>The <code>data</code> dir appears to contain three (sub)dirs with different kinds of data. We’ll talk in detail about that later, but for now let’s look inside the <code>fastq</code> dir:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> data/fastq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> share/data/fastq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>NW102AB_R1.fastq.gz  NW201C_R1.fastq.gz   NW305AB_R1.fastq.gz  NW404BC_R1.fastq.gz  W204A_R1.fastq.gz   W303C_R1.fastq.gz   W404A_R1.fastq.gz
 NW102AB_R2.fastq.gz  NW201C_R2.fastq.gz   NW305AB_R2.fastq.gz  NW404BC_R2.fastq.gz  W204A_R2.fastq.gz   W303C_R2.fastq.gz   W404A_R2.fastq.gz
 NW102C_R1.fastq.gz   NW203A_R1.fastq.gz   NW305C_R1.fastq.gz   W101AB_R1.fastq.gz   W204BC_R1.fastq.gz  W304AB_R1.fastq.gz  W404BC_R1.fastq.gz
@@ -635,7 +637,7 @@ Paths that instead start from your current working directory are called “relat
 <pre class="bash-out"><code>data  README.md  results</code></pre>
 <p>This pattern can be continued all the way to the root of the computer, so <code>../..</code> means two levels up:</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ../..            <span class="co"># Two levels up, listing /fs/ess/PAS2714</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre class="bash-out"><code>share  users</code></pre>
+<pre class="bash-out"><code>sandbox  share  users</code></pre>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -744,11 +746,13 @@ In the Unix shell code above, note that:
 <div class="sourceCode" id="cb55"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /fs/ess/PAS2714/users</span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="va">$USER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Or two directories at once:</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="va">$USER</span>/scripts <span class="va">$USER</span>/sandbox</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Let’s move into our newly created dir and create two directories at once:</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$USER</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> scripts sandbox</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Let’s check what we did:</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="va">$USER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre class="bash-out"><code>scripts sandbox</code></pre>
+<div class="sourceCode" id="cb57"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>sandbox  scripts</code></pre>
 <hr style="height:1pt; visibility:hidden;">
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -763,10 +767,7 @@ Confused by <code>$USER</code>?
 <p>Instead of <code>$USER</code>, you can also type your literal username. If you do that, make sure that you get your username exactly right, including any capitalization.</p>
 <p>For example, I (username <code>jelmer</code>) could have run the following commands instead of the ones above:</p>
 <div class="sourceCode" id="cb59"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> jelmer</span>
-<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> jelmer/scripts jelmer/sandbox</span>
-<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> jelmer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> jelmer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
