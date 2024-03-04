@@ -135,9 +135,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Wed</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-wed">    
-        <li class="dropdown-header">Introduction to Metabarcoding</li>
-        <li class="dropdown-header">Intro to OSC</li>
-        <li class="dropdown-header">QC &amp; Trimmming</li>
+        <li class="dropdown-header">Intro to Metabarcoding</li>
+        <li>
+    <a class="dropdown-item" href="../02_osc.html">
+ <span class="dropdown-text">Intro to OSC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../03_qc-trim.html">
+ <span class="dropdown-text">QC &amp; Trimmming</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -168,10 +174,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-homework">    
         <li>
+    <a class="dropdown-item" href="../homework/instructions.html">
+ <span class="dropdown-text">Instructions</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../homework/shell.html">
  <span class="dropdown-text">Unix Shell</span></a>
   </li>  
-        <li class="dropdown-header">R</li>
+        <li>
+    <a class="dropdown-item" href="../homework/R.html">
+ <span class="dropdown-text">R</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item">
@@ -210,7 +223,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#why-the-unix-shell" id="toc-why-the-unix-shell" class="nav-link active" data-scroll-target="#why-the-unix-shell"><span class="header-section-number">1</span> Why the Unix shell?</a></li>
-  <li><a href="#how-to-go-through-this-page" id="toc-how-to-go-through-this-page" class="nav-link" data-scroll-target="#how-to-go-through-this-page"><span class="header-section-number">2</span> How to go through this page</a></li>
+  <li><a href="#how-to-go-through-this-page" id="toc-how-to-go-through-this-page" class="nav-link" data-scroll-target="#how-to-go-through-this-page"><span class="header-section-number">2</span> How to go through this page</a>
+  <ul class="collapse">
+  <li><a href="#opening-a-unix-shell-at-osc" id="toc-opening-a-unix-shell-at-osc" class="nav-link" data-scroll-target="#opening-a-unix-shell-at-osc"><span class="header-section-number">2.1</span> Opening a Unix shell at OSC</a></li>
+  </ul></li>
   <li><a href="#the-basics" id="toc-the-basics" class="nav-link" data-scroll-target="#the-basics"><span class="header-section-number">3</span> The basics</a>
   <ul class="collapse">
   <li><a href="#the-prompt" id="toc-the-prompt" class="nav-link" data-scroll-target="#the-prompt"><span class="header-section-number">3.1</span> The prompt</a></li>
@@ -244,7 +260,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Intro to the Unix Shell</h1>
+<h1 class="title">Homework: Intro to the Unix Shell</h1>
 </div>
 
 
@@ -315,8 +331,8 @@ Side note: Some Unix shell terminology <em>(Click to expand)</em>
 <h2 data-number="2" class="anchored" data-anchor-id="how-to-go-through-this-page"><span class="header-section-number">2</span> How to go through this page</h2>
 <p>You will be using a Unix shell at the Ohio Supercomputer Center (OSC) — see the instructions below to open one.</p>
 <p>Please follow along actively by typing all the commands shown below (unless it explicitly says you shouldn’t run something), not just the exercises.</p>
-<section id="opening-a-unix-shell-at-osc" class="level4">
-<h4 class="anchored" data-anchor-id="opening-a-unix-shell-at-osc">Opening a Unix shell at OSC</h4>
+<section id="opening-a-unix-shell-at-osc" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="opening-a-unix-shell-at-osc"><span class="header-section-number">2.1</span> Opening a Unix shell at OSC</h3>
 <ol type="1">
 <li>Log in to OSC’s OnDemand portal at <a href="https://ondemand.osc.edu" class="uri">https://ondemand.osc.edu</a>.</li>
 <li>In the blue top bar, click on the “Clusters” dropdown menu and then click Pitzer Shell Access.</li>
@@ -351,10 +367,23 @@ Copying and pasting in this shell
 <section id="the-prompt" class="level3" data-number="3.1">
 <h3 data-number="3.1" class="anchored" data-anchor-id="the-prompt"><span class="header-section-number">3.1</span> The prompt</h3>
 <p>Inside your terminal, the “prompt” indicates that the shell is ready for a command. What is shown exactly varies across shells and can also be customized, but our prompts at OSC should show the following information:</p>
-<p><code>&lt;username&gt;@&lt;node-name&gt; &lt;working-dir&gt;]$</code></p>
-<p>For example (and <em>note that <strong><code>~</code></strong> means your Home dir</em>):</p>
+<p><code>&lt;username&gt;@&lt;node-name&gt; &lt;working-directory&gt;]$</code></p>
+<p>For example (and _note that <strong><code>~</code></strong> means your Home directory/folder):</p>
 <pre class="bash-in-nocolor"><code>[jelmer@pitzer-login02 ~]$ </code></pre>
 <p>We type our commands after the dollar sign, and then press <kbd>Enter</kbd> to execute the command. When the command has finished executing, we’ll get our prompt back and can type a new command.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+“Directory” (or “dir”) for short is Unix-speak for “folder”
+</div>
+</div>
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
 <hr style="height:1pt; visibility:hidden;">
 </section>
 <section id="a-few-simple-commands-date-whoami-pwd" class="level3" data-number="3.2">
@@ -446,7 +475,7 @@ What was the problem with the path we specified? <em>(Click to see the answer)</
 <pre class="bash-out"><code>sandbox   share   users</code></pre>
 <p><em>(You should still be in <code>/fs/ess/PAS2714</code>. If not, <code>cd</code> there first.)</em></p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -455,7 +484,7 @@ Side note: <code>ls</code> output colors <em>(click to expand)</em>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The <code>ls</code> output above does not show the different colors you should see in your shell — the most common ones are:</p>
 <ul>
@@ -771,7 +800,7 @@ Confused by <code>$USER</code>?
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -780,7 +809,7 @@ Side note: Recursive <code>mkdir</code> <em>(Click to expand)</em>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>By default, <code>mkdir</code> does not work recursively: that is, it will refuse to make a dir <em>inside</em> a dir that does not yet exist. And if you try to do so, the resulting error might confuse you:</p>
 <div class="sourceCode" id="cb60"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> sandbox/2024/02/07</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -954,7 +983,7 @@ removed directory: ‘d1/d2’
 removed directory: ‘d1’</code></pre>
 <p>You should obviously be quite careful with <code>rm -r</code>!</p>
 <div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -963,7 +992,7 @@ There is no thrash bin when deleting files in the shell, so use <code>rm</code> 
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><code>rm -r</code> can be very dangerous — for example <code>rm -r /</code> would at least attempt to remove the entire contents of the computer, including the operating system.</p>
 <p>A couple ways to take precautions:</p>
@@ -1095,7 +1124,7 @@ Running an analysis for file data/fastq/NW103AB_R2.fastq.gz...
 Running an analysis for file data/fastq/NW103C_R1.fastq.gz...
 #[...output truncated...]</code></pre>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1104,7 +1133,7 @@ A further explanation of <code>for</code> loop syntax <em>(Click to expand)</em>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>On the first and last, unindented lines, <code>for</code> loops contain the following mandatory keywords:</p>
 <table class="table">
