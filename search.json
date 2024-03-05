@@ -102,14 +102,21 @@
     "href": "homework/instructions.html",
     "title": "Homework Instructions",
     "section": "",
-    "text": "Before the workshop starts, please work your way through the following two pages on this website:\n\nHomework: Intro to the Unix Shell\nHomework: Intro to R\n\nEach of these may take around 2 hours to complete with no prior experience.\n\n\n\n\n\n\n\nPrefer in-person instruction?\n\n\n\nIf you’re struggling with this material or simply prefer in-person instruction, send an email to Jelmer Poelstra (poelstra.1) — if there is interest, we can schedule a pre-workshop session on Mon the 11th or Tue the 12th.\n\n\n\n\n\n\n\n\n\nAlready have experience with this?\n\n\n\nIf you already have substantial experience with one or both of these topics, we ask you to still do the following:\n\nSkim through the pages for a refresher and if you see unfamiliar stuff, practice with it.\nAt OSC, create your own dir and copy the workshop’s data: follow Unix Shell sections 2.1, and 5.1-5.2.\nAt OSC, create an RStudio Project: go through the R sections 2.1 and 4.2.\n\n\n\n\n\n\n Back to top"
+    "text": "Before the workshop starts, please work your way through the following two pages on this website:\nEach of these may take around 2 hours to complete with no prior experience1."
+  },
+  {
+    "objectID": "homework/instructions.html#footnotes",
+    "href": "homework/instructions.html#footnotes",
+    "title": "Homework Instructions",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\n That’s a bit of a guess, we welcome feedback about how long it took you to do this.↩︎"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Amplicon Metabarcoding Workshop",
     "section": "",
-    "text": "Day\nTime\nTopic\nBy\n\n\n\n\nWed\n1 - 2 pm\nLecture: Intro to metabarcoding\nTim\n\n\n\n2:15 - 3 pm\nLab: Intro to OSC\nJelmer\n\n\n\n3 - 4:30 pm\nLab: QC & trimming\nJelmer\n\n\nThu\n1 - 2 pm\nLecture: ASV/OTU calling and pipeline considerations\nSoledad\n\n\n\n2:15 - 3:15 pm\nLab: Calling ASVs with the DADA2 pipeline\nTim\n\n\n\n3:30 - 4:30 pm\nLab: Alpha & beta diversity\nTim\n\n\nFri\n1 - 2 pm\nLab: Differential abundance with DESeq2\nMelanie\n\n\n\n2 - 3 pm\nLab: Network analysis\nMelanie\n\n\n\n3 - 4 pm\nLab: Core microbiome analysis\nFiama\n\n\n\n4 - 4:30 pm\nLab: Metadata and data submission\nSoledad\n\n\n\n\n\n\n Back to top"
+    "text": "Day\nTime\nTopic\nBy\n\n\n\n\nWed\n1 - 2 pm\nLecture: Intro to metabarcoding\nTim\n\n\n\n2:15 - 3 pm\nLab: Intro to OSC\nJelmer\n\n\n\n3 - 4:30 pm\nLab: QC & trimming\nJelmer\n\n\nThu\n1 - 2 pm\nLecture: ASV/OTU calling and pipeline considerations\nSoledad\n\n\n\n2:15 - 3:15 pm\nLab: Calling ASVs with the DADA2 pipeline\nTim\n\n\n\n3:30 - 4:30 pm\nLab: Alpha & beta diversity\nTim\n\n\nFri\n1 - 1:30 pm\nLab: Differential abundance with DESeq2\nMelanie\n\n\n\n1:30 - 3 pm\nLab: Network analysis\nMelanie\n\n\n\n3 - 4 pm\nLab: Core microbiome analysis\nFiama\n\n\n\n4 - 4:30 pm\nLab: Metadata and data submission\nFIama\n\n\n\n\n\n\n Back to top"
   },
   {
     "objectID": "03_qc-trim.html#introduction",
@@ -145,6 +152,13 @@
     "title": "Read QC and Trimming",
     "section": "4 Summarizing QC results with MultiQC",
     "text": "4 Summarizing QC results with MultiQC\nHere are some challenges you may run into after running FastQC:\n\nWhen you have many FASTQ files, you’ll generate a lot of FastQC HTML files to sort through. Our dataset is small with only 16 samples, but this still means 32 FastQC outputs. Other datasets may easily have dozens or even hundreds of samples, in which case checking all of the output becomes a very unpleasant task.\nEven if you do diligently go through each file, it’s not that easy to compare samples, since they are not drawn in the same graphs.\n\nMultiQC addresses these problems as it aggregates FastQC results from many files, and summarizes them into a single HTML file with (still) one graph per FastQC module.\n\n\n\n\n\n\nNot just for FastQC results!\n\n\n\nAnd while MultiQC is most widely used for FastQC aggregation, it can recognize and process the (often “log”-type) output of dozens of bioinformatics tools, including several others that we will be using.\n\n\nMultiQC’s graphs are also interactive, but here is a static example:\n\n\n\n\n\n\n\n4.1 Running MultiQC\nTo run MultiQC, use the command multiqc. Let’s start by running it with the --help option:\nmultiqc --help\n# (Only the top part of the output is shown in the screenshot below)\n\n\n\n\n\nAs the first couple of help lines in the paler gray color explain, MultiQC will search the [ANALYSIS DIRECTORY], a dir that we pass to it as an argument at the end of the command line.\nThat is, if we tell MultiQC about the results/fastqc_pretrim directory like so, it should find and then aggregate all the FastQC results in there:\n# (Don't run this - we'll complete the command in a second)\nmultiqc /fs/ess/PAS2714/share/results/fastqc_pretrim\n\n\n\n\n\n\nSince you ran FastQC on only sample, we’ll be using the FastQC results for all files that I generated for you.\n\n\n\n\n\n\nThe default output directory of MultiQC is the current working directory, so just like with FastQC, we do want to use that option as well3:\n# Run MultiQC to summarize the FastQC results\nmultiqc \\\n  --outdir results/multiqc_fastqc \\\n  /fs/ess/PAS2714/share/results/fastqc_pretrim\n\n\n\n\n\n\n\n\n4.2 MultiQC output\nThen, you should have some files in the output dir:\nls -lh results/multiqc_fastqc\ntotal 1.7M\ndrwxr-xr-x 2 jelmer PAS2250 4.0K Feb  4 14:57 multiqc_data\n-rw-r--r-- 1 jelmer PAS2250 1.7M Feb  4 14:57 multiqc_report.html\nGo ahead and find the HTML file in VS Code’s file browser, right-click on it and then download it to your computer, and click on the file in your own computer to open it in your browser (i.e., just like we did with the FastQC output).\n\n Exercise: Explore the MultiQC results\nCheck for example whether patterns are consistent across samples, or if there are any outliers."
+  },
+  {
+    "objectID": "03_qc-trim.html#cutadapt",
+    "href": "03_qc-trim.html#cutadapt",
+    "title": "Read QC and Trimming",
+    "section": "5 Cutadapt",
+    "text": "5 Cutadapt\n515F (GTGTGYCAGCMGCCGCGGTAA) - 806R (GGACTACNVGGGTWTCTAAT)."
   },
   {
     "objectID": "03_qc-trim.html#footnotes",
@@ -207,7 +221,7 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "This is the website for an Ohio State University workshop on Amplicon Metabarcoding, held from March 13-15, 2024 in Wooster, Ohio.\nThis workshop is co-organized by:\n\nDr. Soledad Benitez-Ponce, Dept. of Plant Pathology\nDr. Timothy Frey, Dept. of Plant Pathology\nDr. Jelmer Poelstra, Molecular and Cellular Imaging Center (MCIC)\nFiama Guevara, Dept. of Plant Pathology\nMelanie Medina Lopez, Dept. of Plant Pathology\n\n\n\n\n Back to top"
+    "text": "This is the website for an Ohio State University workshop on Amplicon Metabarcoding, held from March 13-15, 2024 in Wooster, Ohio.\nThis workshop is co-organized by:\n\nDr. Soledad Benitez-Ponce, Dept. of Plant Pathology (Personal website)\nDr. Timothy Frey, Dept. of Plant Pathology\nFiama Guevara, Dept. of Plant Pathology\nMelanie Medina Lopez, Dept. of Plant Pathology\nDr. Jelmer Poelstra, Molecular and Cellular Imaging Center (MCIC)\n\n\n\n\n Back to top"
   },
   {
     "objectID": "homework/shell.html#why-the-unix-shell",
