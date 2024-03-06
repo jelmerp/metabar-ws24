@@ -159,6 +159,10 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-reference-pages">    
         <li class="dropdown-header">Literature (TBA)</li>
+        <li>
+    <a class="dropdown-item" href="./ref/ref_software.html">
+ <span class="dropdown-text">Software management at OSC</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item">
@@ -255,20 +259,6 @@ ul.task-list li input[type="checkbox"] {
 
 
 <hr>
-<hr style="height:1pt; visibility:hidden;">
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-THIS PAGE IS STILL UNDER CONSTRUCTION
-</div>
-</div>
-<div class="callout-body-container callout-body">
-
-</div>
-</div>
 <p><br></p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -278,7 +268,7 @@ THIS PAGE IS STILL UNDER CONSTRUCTION
 <p><br></p>
 <section id="a-computational-infrastructure-for-genomics" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="a-computational-infrastructure-for-genomics"><span class="header-section-number">1</span> A computational infrastructure for genomics</h2>
-<p>Due in large part to the amount of data involved, a laptop or desktop computer is often not sufficient to work with large-scale genomics data. Additionally, many of the specialized programs that help you analyze your data can only be run through a “command-line interface”.</p>
+<p>A laptop or desktop computer is often not sufficient to work with large-scale genomics data. Additionally, many of the specialized programs that help you analyze your data can only be run through a “command-line interface”.</p>
 <p>Those are some of the reasons that a typical computational infrastructure to do what we may call “command-line genomics” involves the following components:</p>
 <ol type="1">
 <li>A <strong>supercomputer</strong> — in our case, the Ohio Supercomputer Center (OSC) <em>[this session]</em></li>
@@ -286,7 +276,7 @@ THIS PAGE IS STILL UNDER CONSTRUCTION
 <li>The <strong>Unix shell</strong> (terminal) <em>[<a href="./homework/shell.html">homework</a> and <a href="./03_qc-trim.html">next session</a>]</em></li>
 <li><strong>R</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> for interactive statistical analysis and visualization <em>[<a href="./homework/R.html">homework</a> and Thu + Fri]</em></li>
 </ol>
-<p>We will be using all of these components during this workshop. <strong>This session</strong> will provide an introduction to supercomputers in general and to the Ohio Supercomputer Center (OSC) specifically. In all of the lab sessions at this workshop, we’ll continue to work at OSC, so you will get a fair bit of experience with working at a supercomputer.</p>
+<p>We will be using all of these components during this workshop. <strong>This session</strong> will provide an introduction to supercomputers in general and to the Ohio Supercomputer Center (OSC) specifically. In all of the lab sessions at this workshop, we’ll continue to work at OSC, so you will get a fair bit of experience with it.</p>
 <hr style="height:1pt; visibility:hidden;">
 </section>
 <section id="high-performance-computing" class="level2" data-number="2">
@@ -332,7 +322,7 @@ OSC websites and “Projects”
 <p>Access to OSC’s computing power and storage space goes through <strong>OSC “Projects”</strong>:</p>
 <ul>
 <li>A project can be tied to a research project or lab, or be educational like this course’s project, <code>PAS2714</code>.</li>
-<li>Each project has a budget in terms of “compute hours” and storage space<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</li>
+<li>Each project has a <em>budget</em> in terms of “compute hours” and storage space<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</li>
 <li>As a user, it’s possible to be a member of multiple different projects.</li>
 </ul>
 </div>
@@ -453,16 +443,16 @@ Compute node types
 </div>
 </div>
 <div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-At-home reading: What works differently on a supercomputer like at OSC? <em>(Click to expand)</em>
+Side note: What works differently on a supercomputer like at OSC? <em>(Click to expand)</em>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Compared to command-line computing on a laptop or desktop, a number of aspects are different when working on a supercomputer like at OSC. We’ll learn much more about these later on in the course, but here is an overview:</p>
 <ul>
@@ -516,7 +506,7 @@ As mentioned, the nodes you end up on after logging in are not meant for heavy c
 </div>
 <p>This interface is <strong>much like the file browser on your own computer</strong>, so you can also create, delete, move and copy files and folders, and even upload (from your computer to OSC) and download (from OSC your computer) files<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> — see the buttons across the top.</p>
 <div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -525,7 +515,7 @@ Didn’t create your own dir in the Unix shell homework? Click here and follow t
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li>Click on the <code>users</code> dir in <code>/fs/ess/PAS714</code>.</li>
@@ -546,7 +536,7 @@ Didn’t create your own dir in the Unix shell homework? Click here and follow t
 <section id="clusters-unix-shell-access" class="level3" data-number="4.2">
 <h3 data-number="4.2" class="anchored" data-anchor-id="clusters-unix-shell-access"><span class="header-section-number">4.2</span> Clusters: Unix shell access</h3>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -555,7 +545,7 @@ System Status within Clusters <em>(Click to expand)</em>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>In the “<strong>Clusters</strong>” dropdown menu, click on the item at the bottom, “<strong>System Status</strong>”:</p>
 <div class="quarto-figure quarto-figure-center">
@@ -589,63 +579,50 @@ System Status within Clusters <em>(Click to expand)</em>
 </section>
 <section id="interactive-apps" class="level3" data-number="4.3">
 <h3 data-number="4.3" class="anchored" data-anchor-id="interactive-apps"><span class="header-section-number">4.3</span> Interactive Apps</h3>
-<p>We can access programs with Graphical User Interfaces (<strong>GUI</strong>s; point-and-click interfaces) via the <strong>Interactive Apps</strong> dropdown menu — let’s select VS Code using the “Code Server” button:</p>
+<p>We can access programs with Graphical User Interfaces (<strong>GUI</strong>s; point-and-click interfaces) via the <strong>Interactive Apps</strong> dropdown menu:</p>
+<ul>
+<li>Select VS Code using the “Code Server” button:</li>
+</ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="img/ondemand_vscode_select.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:32.0%"></p>
 </figure>
 </div>
-<p>Interactive Apps like VS Code and RStudio <strong>run on compute nodes</strong> (not login nodes). Because compute nodes always need to be “reserved”, we have to fill out a form and specify the following details:</p>
-<table class="table">
-<colgroup>
-<col style="width: 59%">
-<col style="width: 40%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Option</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>The OSC <code>Project</code> to be billed for the compute resource usage</td>
-<td><code>PAS2714</code></td>
-</tr>
-<tr class="even">
-<td>The <code>Number of hours</code> we want to make a reservation for<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></td>
-<td><code>3</code></td>
-</tr>
-<tr class="odd">
-<td>The <code>Working Directory</code><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> for the program</td>
-<td>Your personal folder in <code>/fs/ess/PAS2714</code> (e.g.&nbsp;<code>/fs/ess/PAS2714/jelmer</code>)</td>
-</tr>
-<tr class="even">
-<td>The <code>Codeserver Version</code></td>
-<td><code>4.8</code></td>
-</tr>
-</tbody>
-</table>
+<ul>
+<li>Interactive Apps like VS Code and RStudio <strong>run on compute nodes</strong> (not login nodes). Because compute nodes always need to be “reserved”, we have to fill out a form and specify the following details:
+<ul>
+<li>The OSC “<em>Project</em>” that we want to bill for the compute node usage: <code>PAS2714</code>.</li>
+<li>The “<em>Number of hours</em>” we want to make a reservation for: <code>3</code></li>
+<li>The “<em>Working Directory</em>” for the program: your personal folder in <code>/fs/ess/PAS2714/users</code>.</li>
+<li>The “<em>Codeserver Version</em>”: <code>4.8</code> (most recent)</li>
+</ul></li>
+</ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/ondemand_vscode_form2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%"></p>
+<p><img src="img/ondemand_vscode_form2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:55.0%"></p>
 </figure>
 </div>
-<p>Click on <strong>Launch</strong> at the bottom, which will send your request to the “compute job” scheduler.</p>
-<p>First, your job will be “<em>Queued</em>” — that is, waiting for the job scheduler to allocate compute node resources to it:</p>
+<ul>
+<li><p>Click on <strong>Launch</strong> at the bottom, which will send your request to the “compute job” scheduler.</p></li>
+<li><p>First, your job will be “<em>Queued</em>” — that is, waiting for the job scheduler to allocate compute node resources to it:</p></li>
+</ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="img/ondemand_vscode_queued.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
 </figure>
 </div>
-<p>Your job is typically granted resources within a few seconds (the card will then say “<em>Starting</em>”), and should be ready for usage (“<em>Running</em>”) in another couple of seconds:</p>
+<ul>
+<li>Your job is typically granted resources within a few seconds (the card will then say “<em>Starting</em>”), and should be ready for usage (“<em>Running</em>”) in another couple of seconds:</li>
+</ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="img/ondemand_vscode_running.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
 </figure>
 </div>
-<p>Once it appears, click on the blue <strong>Connect to VS Code</strong> button to open VS Code in a new browser tab.</p>
-<p>When VS Code opens, you may get these two pop-ups (and possibly some others) — click “Yes” (and check the box) and “Don’t Show Again”, respectively:</p>
+<ul>
+<li><p>Once it appears, click on the blue <strong>Connect to VS Code</strong> button to open VS Code in a new browser tab.</p></li>
+<li><p>When VS Code opens, you may get these two pop-ups (and possibly some others) — click “Yes” (and check the box) and “Don’t Show Again”, respectively:</p></li>
+</ul>
 <div class="columns">
 <div class="column" style="width:52%;">
 <div class="quarto-figure quarto-figure-center">
@@ -721,7 +698,7 @@ System Status within Clusters <em>(Click to expand)</em>
 <p><em>(If you need to switch folders, click &nbsp; <i class="fa-solid fa-bars" aria-label="bars"></i> &nbsp; =&gt; &nbsp; <code>File</code> &nbsp; =&gt; &nbsp; <code>Open Folder</code>.)</em></p>
 <hr style="height:1pt; visibility:hidden;">
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -730,7 +707,7 @@ Some VS Code tips and tricks
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li><p><strong>Resizing panes</strong><br>
@@ -744,7 +721,7 @@ For a single-page PDF overview of keyboard shortcuts for your operating system: 
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -753,7 +730,7 @@ Specific useful keyboard shortcuts <em>(Click to expand)</em>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Working with keyboard shortcuts for common operations can be a lot faster than using your mouse. Below are some useful ones for VS Code (for Mac, in some case, you’ll have to replace <kbd>Ctrl</kbd> with <kbd>⌘</kbd>):</p>
 <ul>
@@ -780,7 +757,7 @@ Specific useful keyboard shortcuts <em>(Click to expand)</em>
 <ul>
 <li><a href="https://mcic-osu.github.io/rnaseq-intro/modules/A01_osc.html">An extended version of this introduction</a></li>
 <li><a href="https://www.osc.edu/supercomputing/training">OSC’s online asynchronous courses</a></li>
-<li><a href="https://www.osc.edu/resources/getting_started/new_user_resource_guide">OSC’s new User Resource Guide</a><a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></li>
+<li><a href="https://www.osc.edu/resources/getting_started/new_user_resource_guide">OSC’s new User Resource Guide</a><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></li>
 </ul>
 
 
@@ -795,9 +772,7 @@ Specific useful keyboard shortcuts <em>(Click to expand)</em>
 <li id="fn2"><p>But we don’t have to pay anything for educational projects like this one. Otherwise, for OSC’s rates for academic research, see <a href="https://www.osc.edu/content/academic_fee_model_faq">this page</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>GPUs are e.g.&nbsp;used for Nanopore basecalling<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>Though this is not meant for large (&gt;1 GB) transfers. Different methods are available — we’ll talk about those later on.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>Note that we’ll be kicked off as soon as that amount of time has passed!<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>This will be your starting location in the file system; we’ll talk more about working dirs in a little bit.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p> Attribution: This page uses material from an <a href="https://mcic-osu.github.io/cl-workshop-22/modules/02-osc.html">OSC Introduction written by Mike Sovic</a> and from OSC’s Kate Cahill <a href="https://khill42.github.io/OSC_IntroHPC%3E">Software Carpentry introduction to OSC</a>.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p> Attribution: This page uses material from an <a href="https://mcic-osu.github.io/cl-workshop-22/modules/02-osc.html">OSC Introduction written by Mike Sovic</a> and from OSC’s Kate Cahill <a href="https://khill42.github.io/OSC_IntroHPC%3E">Software Carpentry introduction to OSC</a>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
