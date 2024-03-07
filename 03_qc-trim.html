@@ -267,8 +267,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#primer-sequences" id="toc-primer-sequences" class="nav-link" data-scroll-target="#primer-sequences"><span class="header-section-number">6.1</span> Primer sequences</a></li>
   <li><a href="#building-the-cutadapt-command" id="toc-building-the-cutadapt-command" class="nav-link" data-scroll-target="#building-the-cutadapt-command"><span class="header-section-number">6.2</span> Building the Cutadapt command</a></li>
-  <li><a href="#a-cutadapt-script-with-a-loop" id="toc-a-cutadapt-script-with-a-loop" class="nav-link" data-scroll-target="#a-cutadapt-script-with-a-loop"><span class="header-section-number">6.3</span> A Cutadapt script with a loop</a></li>
-  <li><a href="#check-the-output" id="toc-check-the-output" class="nav-link" data-scroll-target="#check-the-output"><span class="header-section-number">6.4</span> Check the output</a></li>
+  <li><a href="#our-cutadapt-loop" id="toc-our-cutadapt-loop" class="nav-link" data-scroll-target="#our-cutadapt-loop"><span class="header-section-number">6.3</span> Our Cutadapt loop</a></li>
+  <li><a href="#the-final-script" id="toc-the-final-script" class="nav-link" data-scroll-target="#the-final-script"><span class="header-section-number">6.4</span> The final script</a></li>
+  <li><a href="#check-the-output" id="toc-check-the-output" class="nav-link" data-scroll-target="#check-the-output"><span class="header-section-number">6.5</span> Check the output</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -539,7 +540,7 @@ CCCCCCGFGFGGGC-FFFGFGFFGGDFFGGGGGECGEGGAEGGGGGGGFGGDGG7CFFGGDCCFGGFCF8FGGGGGGCEG
 </div>
 </div>
 <section id="exercise-explore-the-file-with-less" class="level4 exercise">
-<h4 class="anchored" data-anchor-id="exercise-explore-the-file-with-less"><i class="fa-solid fa-user-edit" aria-label="user-edit"></i> <strong>Exercise</strong>: Explore the file with <code>less</code></h4>
+<h4 class="anchored" data-anchor-id="exercise-explore-the-file-with-less"><strong>Exercise</strong>: Explore the file with <code>less</code></h4>
 <p><code>less</code> doesn’t print stuff to screen but instead opens it in a “pager”. After running the command above, you should be viewing the file inside the <code>less</code> pager.</p>
 <p>You can move around in the file in several ways: by scrolling with your mouse, with up and down arrows, or, if you have them, <kbd>PgUp</kbd> and <kbd>PgDn</kbd> keys (also, <kbd>u</kbd> will move up half a page and <kbd>d</kbd> down half a page).</p>
 <p>Notice you won’t get your shell prompt back until you <strong>press</strong> <kbd>q</kbd> to quit <code>less</code>.</p>
@@ -812,14 +813,16 @@ Analysis complete for NW102AB_R2.fastq.gz</code></pre>
 </section>
 <section id="running-fastqc-for-all-samples" class="level2" data-number="4">
 <h2 data-number="4" class="anchored" data-anchor-id="running-fastqc-for-all-samples"><span class="header-section-number">4</span> Running FastQC for all samples</h2>
+<p>If we want to run FastQC for all samples, it will be much better to write a shell script and submit that as a so-called Slurm batch job, rather than running FastQC “interactively” like we did for the first sample.</p>
+<p>This is especially true for a complete data set, which would have much larger FASTQ files and possibly more samples.</p>
 <section id="building-our-script" class="level3" data-number="4.1">
 <h3 data-number="4.1" class="anchored" data-anchor-id="building-our-script"><span class="header-section-number">4.1</span> Building our script</h3>
-<p>To be able to run FastQC for all samples, we will start by putting our FastQC code inside a script.</p>
-<ul>
+<p>First, we will put our earlier FastQC code inside a script.</p>
+<ol type="1">
 <li>Open a new file in VS Code: click <i class="fa fa-bars"></i>, then <code>File</code>, then <code>New File</code>.</li>
 <li>Save the file (e.g.&nbsp;press <kbd>Ctrl/⌘</kbd>+<kbd>S</kbd>) in your <code>scripts</code> directory as <code>fastqc.sh</code>.</li>
-<li>Paste the following code in there:</li>
-</ul>
+<li>Paste the following code (same as we used above) in the script:</li>
+</ol>
 <div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the software</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load miniconda3</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> activate /fs/ess/PAS0471/jelmer/conda/mbar24</span>
@@ -829,19 +832,35 @@ Analysis complete for NW102AB_R2.fastq.gz</code></pre>
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Run FastQC</span></span>
 <span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="ex">fastqc</span> <span class="at">--outdir</span> results/fastqc data/fastq/NW102AB_R1.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>However, we will need to loop over all samples, which we can do as follows:</p>
+<hr style="height:1pt; visibility:hidden;">
+<p>However, we will need to modify our call to <code>fastqc</code> — we will <strong>loop over all FASTQ files</strong> as follows:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run FastQC (replacement for fastqc line above)</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fastq_file <span class="kw">in</span> data/fastq/<span class="pp">*</span>fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">fastqc</span> <span class="at">--outdir</span> results/fastqc <span class="st">"</span><span class="va">$fastq_file</span><span class="st">"</span></span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>We will be submitting this script as a so-called “batch job” to the Slurm compute job scheduler. To do so, we should also add some lines at the top of the script to tell Slurm some details about our request (much like we did when we filled out the form to start a VS Code session):</p>
+<ul>
+<li>We are looping over all FASTQ files with the globbing pattern <code>data/fastq/*fastq.gz</code>. The loop will run as many times as we have FASTQ files.</li>
+<li>In every iteration of the loop, the <code>"$fastq_file"</code> variable will contain 1 FASTQ file name, and we will run <code>fastqc</code> for that file<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</li>
+</ul>
+<hr style="height:1pt; visibility:hidden;">
+<p>We will be submitting this script as a batch job to the Slurm compute job scheduler. To do so, we should also add some lines at the top of the script:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --account=PAS2714</span></span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=slurm-fastqc.out</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>We will also add the following line to change some shell script settings, causing the script to stop running upon encountering an error:</p>
+<ul>
+<li>The first line <code>#!/bin/bash</code> merely indicates that this is a shell script<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> and not say an R or Python script.</li>
+<li>The lines starting with <code>#SBATCH</code> tell Slurm some details about our compute job request (much like we did when we filled out the form to start a VS Code session):
+<ul>
+<li>We always need to specify an “<code>account</code>”, i.e.&nbsp;OSC project, that should be billed.</li>
+<li>The only other option (of many possible!) we will use here is to specify the <code>output</code> file: this is where any output will go that would otherwise be printed to screen, such as the FastQC progress output we saw above.</li>
+</ul></li>
+</ul>
+<hr style="height:1pt; visibility:hidden;">
+<p>We will also add the following line to change some shell script settings, which will cause the script to stop running if any errors occur:</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Strict bash settings</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<hr style="height:1pt; visibility:hidden;">
 <p>All in all, our script should read:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -858,7 +877,7 @@ Analysis complete for NW102AB_R2.fastq.gz</code></pre>
 <span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the output dir</span></span>
 <span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> results/fastqc</span>
 <span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Run FastQC</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Run FastQC for all FASTQ files</span></span>
 <span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fastq_file <span class="kw">in</span> data/fastq/<span class="pp">*</span>fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
 <span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>    <span class="ex">fastqc</span> <span class="at">--outdir</span> results/fastqc <span class="st">"</span><span class="va">$fastq_file</span><span class="st">"</span></span>
 <span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
@@ -870,15 +889,15 @@ Analysis complete for NW102AB_R2.fastq.gz</code></pre>
 </section>
 <section id="submitting-the-script" class="level3" data-number="4.2">
 <h3 data-number="4.2" class="anchored" data-anchor-id="submitting-the-script"><span class="header-section-number">4.2</span> Submitting the script</h3>
-<p>Submit the script to Slurm (AKA “submit it to the queue”) with the <code>sbatch</code> command:</p>
+<p>Submit the script to Slurm (“submit it to the queue”) with the <code>sbatch</code> command:</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> scripts/fastqc.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>Submitted batch job 27047185</code></pre>
-<p>After some seconds (sometimes up to a minute or so<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>), the Slurm job should start and create the output file that we specified at the top of the script: <code>slurm-fastqc.out</code>.</p>
+<p>After some seconds (sometimes up to a minute or so<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>), the Slurm job should start and create the output file that we specified at the top of the script: <code>slurm-fastqc.out</code>.</p>
 <hr style="height:1pt; visibility:hidden;">
 </section>
 <section id="checking-the-output" class="level3" data-number="4.3">
 <h3 data-number="4.3" class="anchored" data-anchor-id="checking-the-output"><span class="header-section-number">4.3</span> Checking the output</h3>
-<p>Earlier, a bunch of FastQC “logging output” (“10% complete” and so on) was printed to screen, but because this job now runs remotely (on another compute node), such output will now end up in this “Slurm log file”. Let’s take a look:</p>
+<p>Earlier, FastQC logging output (“10% complete”, etc.) was printed to screen, but because this job now runs remotely on another compute node, such output will end up in the “Slurm log file” whose name we specified in the script. Let’s take a look:</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">less</span> slurm-fastqc.out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>application/gzip
 Started analysis of NW102AB_R1.fastq.gz
@@ -901,7 +920,8 @@ Approx 5% complete for NW102AB_R2.fastq.gz
 Approx 15% complete for NW102AB_R2.fastq.gz
 Approx 20% complete for NW102AB_R2.fastq.gz
 #[...output truncated...]</code></pre>
-<p>You will know that the job has successfully finished when the last few lines of the Slurm log file read “Done with script fastqc.sh” and print the date and time (as per the last lines of our script!):</p>
+<p>That looks good, in the output I printed above we can see that FastQC ran to completion for one FASTQ file and then started a second — and this will go on and on, for all of our 64 FASTQ files.</p>
+<p>You will know that the job has successfully finished when the last few lines of the Slurm log file read “<em>Done with script fastqc.sh</em>” and print the date and time (as per the last lines of our script!):</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> slurm-fastqc.out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>Approx 75% complete for W404BC_R2.fastq.gz
 Approx 85% complete for W404BC_R2.fastq.gz
@@ -910,7 +930,8 @@ Approx 95% complete for W404BC_R2.fastq.gz
 Analysis complete for W404BC_R2.fastq.gz
 Done with script fastqc.sh
 Wed Mar  6 13:34:10 EST 2024</code></pre>
-<p>Of course, we should also check the main output files, the HTMLs and zip files:</p>
+<hr style="height:1pt; visibility:hidden;">
+<p>Of course, we should also check the <strong>main output files</strong> — the HTMLs and zip files:</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> results/fastqc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>NW102AB_R1_fastqc.html  NW103C_R1_fastqc.zip    NW203A_R2_fastqc.html   NW304BC_R2_fastqc.zip   NW403BC_R1_fastqc.html  W101AB_R1_fastqc.zip   W103C_R2_fastqc.html   W205A_R2_fastqc.zip    W304AB_R1_fastqc.html  W403C_R1_fastqc.zip
 NW102AB_R1_fastqc.zip   NW103C_R2_fastqc.html   NW203A_R2_fastqc.zip    NW305AB_R1_fastqc.html  NW403BC_R1_fastqc.zip   W101AB_R2_fastqc.html  W103C_R2_fastqc.zip    W205BC_R1_fastqc.html  W304AB_R1_fastqc.zip   W403C_R2_fastqc.html
@@ -933,21 +954,21 @@ NW103C_R1_fastqc.html   NW203A_R1_fastqc.zip    NW304BC_R2_fastqc.html  NW403A_R
 <h2 data-number="5" class="anchored" data-anchor-id="summarizing-qc-results-with-multiqc"><span class="header-section-number">5</span> Summarizing QC results with MultiQC</h2>
 <p>Here are some challenges you may run into after running FastQC:</p>
 <ul>
-<li>When you have many FASTQ files, you’ll generate a lot of FastQC HTML files to sort through.</li>
-<li>Even if you do diligently go through each file, it’s not that easy to compare samples, since they are not drawn in the same graphs.</li>
+<li>When you have many FASTQ files, you’ll generate a lot of FastQC HTML files to sort through (as we did above).</li>
+<li>Even if you do diligently go through each file, it’s not that easy to compare the results across samples in detail, since they are not drawn in the same graphs.</li>
 </ul>
-<p>MultiQC addresses these problems as it aggregates FastQC results from many files, and summarizes them into a single HTML file with (still) one graph per FastQC module.</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<p>MultiQC addresses these problems by aggregating FastQC results from many files, and summarizing them into a single HTML file with (still) one graph per FastQC module.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Not just for FastQC results!
+Not just for FastQC results! MultiQC can recognize and process the output of dozens of bioinformatics tools.
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>And while MultiQC is most widely used for FastQC aggregation, it can recognize and process the (often “log”-type) output of dozens of bioinformatics tools.</p>
+
 </div>
 </div>
 <p>MultiQC’s graphs are also <em>interactive</em>, but here is a static example:</p>
@@ -959,7 +980,8 @@ Not just for FastQC results!
 <hr style="height:1pt; visibility:hidden;">
 <section id="running-multiqc" class="level3" data-number="5.1">
 <h3 data-number="5.1" class="anchored" data-anchor-id="running-multiqc"><span class="header-section-number">5.1</span> Running MultiQC</h3>
-<p>To run MultiQC, use the command <code>multiqc</code>. Let’s start by running it with the <code>--help</code> option:</p>
+<p>We will only need to run MultiQC once (because it will aggregate all FastQC results at once), and that will only take a few seconds — therefore, we can run the command interactively without using a script.</p>
+<p>Let’s start by running MultiQC (command <code>multiqc</code>) with the <code>--help</code> option:</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="ex">multiqc</span> <span class="at">--help</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (Only the top part of the output is shown in the screenshot below)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
@@ -967,28 +989,12 @@ Not just for FastQC results!
 <p><img src="img/multiqc_help.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
-<p>As the first couple of help lines in the paler gray color explain, MultiQC will search the <code>[ANALYSIS DIRECTORY]</code>, a dir that we pass to it as an argument at the end of the command line.</p>
-<p>That is, if we tell MultiQC about the <code>results/fastqc</code> directory like so, it should find and then aggregate all the FastQC results in there:</p>
+<p>As the first couple of help lines in the paler gray color explain, MultiQC will search the <code>[ANALYSIS DIRECTORY]</code>, a dir that we pass to it as an argument at the end of the command line. That is, if we tell MultiQC about the <code>results/fastqc</code> directory like so, it should find and then aggregate all the FastQC results in there:</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># (Don't run this - we'll complete the command in a second)</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="ex">multiqc</span> /fs/ess/PAS2714/share/results/fastqc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Since you ran FastQC on only sample, we’ll be using the FastQC results for all files that I generated for you.
-</div>
-</div>
-<div class="callout-body-container callout-body">
-
-</div>
-</div>
-<p>The default output directory of MultiQC is the current working directory, so just like with FastQC, we do want to use that option as well<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>:</p>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="ex">multiqc</span> results/fastqc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The default output directory of MultiQC is the current working directory, so just like with FastQC, we do want to use the option for the output dir — this is our final command and you can go ahead and execute it:</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run MultiQC to summarize the FastQC results</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="ex">multiqc</span> <span class="dt">\</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--outdir</span> results/multiqc_fastqc <span class="dt">\</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  /fs/ess/PAS2714/share/results/fastqc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="ex">multiqc</span> <span class="at">--outdir</span> results/multiqc results/fastqc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="img/multiqc_stdout.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
@@ -998,11 +1004,11 @@ Since you ran FastQC on only sample, we’ll be using the FastQC results for all
 </section>
 <section id="multiqc-output" class="level3" data-number="5.2">
 <h3 data-number="5.2" class="anchored" data-anchor-id="multiqc-output"><span class="header-section-number">5.2</span> MultiQC output</h3>
-<p>Then, you should have some files in the output dir:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> results/multiqc_fastqc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Once its done, you should have the following files in the output dir:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> results/multiqc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>total 1.7M
-drwxr-xr-x 2 jelmer PAS2250 4.0K Feb  4 14:57 multiqc_data
--rw-r--r-- 1 jelmer PAS2250 1.7M Feb  4 14:57 multiqc_report.html</code></pre>
+drwxr-xr-x 2 jelmer PAS2250 4.0K Mar  13 14:57 multiqc_data
+-rw-r--r-- 1 jelmer PAS2250 1.7M Mar  13 14:57 multiqc_report.html</code></pre>
 <p>Go ahead and find the HTML file in VS Code’s file browser, right-click on it and then download it to your computer, and click on the file in your own computer to open it in your browser (i.e., just like we did with the FastQC output).</p>
 <section id="exercise-explore-the-multiqc-results" class="level4 exercise">
 <h4 class="anchored" data-anchor-id="exercise-explore-the-multiqc-results"><i class="fa-solid fa-user-edit" aria-label="user-edit"></i> <strong>Exercise</strong>: Explore the MultiQC results</h4>
@@ -1013,28 +1019,47 @@ drwxr-xr-x 2 jelmer PAS2250 4.0K Feb  4 14:57 multiqc_data
 </section>
 <section id="cutadapt" class="level2" data-number="6">
 <h2 data-number="6" class="anchored" data-anchor-id="cutadapt"><span class="header-section-number">6</span> Cutadapt</h2>
-<p>To run Cutadapt, we need our primer sequences as well as the reverse complements of the primer sequences.</p>
+<p>When you prepare samples for amplicon metabarcoding, you amplify a specific region with primers, and these primers will be included in the sequences that you receive. Before we go any further, we need to <strong>remove these primer sequences</strong>, which we can do with the program Cutadapt.</p>
+<p>We will write a script with a loop to run Cutadapt for all samples and submit it a batch job like we did with FastQC.</p>
+<p><i class="fa-solid fa-user-edit" aria-label="user-edit"></i> Open a new text file and save it as <code>scripts/cutadapt.sh</code>.</p>
 <section id="primer-sequences" class="level3" data-number="6.1">
 <h3 data-number="6.1" class="anchored" data-anchor-id="primer-sequences"><span class="header-section-number">6.1</span> Primer sequences</h3>
-<p>We’ll start by storing the primer sequences in variables:</p>
+<p>When we run Cutadapt, we need to tell it about our primer sequences as well as their reverse complements. We’ll start by storing the primer sequences in variables:</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Primer sequences</span></span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="va">primer_f</span><span class="op">=</span>GTGTGYCAGCMGCCGCGGTAA</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="va">primer_r</span><span class="op">=</span>GGACTACNVGGGTWTCTAAT</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>There are many ways of getting the reverse complement of a sequence, including manually building it up, but here we’ll use a trick with the <code>tr</code> command to change each base into its complement, followed by the <code>rev</code> command to get the <em>reverse</em> complement — for example, for the forward primer:</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$primer_f</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">tr</span> ATCGYRKMBDHV TAGCRYMKVHDB <span class="kw">|</span> <span class="fu">rev</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>TTACCGCGGCKGCTGRCACAC</code></pre>
-<p>Below, we’ll get the reverse complement for both primers, and will store those in a variable as well using the construct <code>variable=$(command)</code><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>:</p>
+<p>Below, we’ll get the reverse complement for both primers, and will store those in a variable as well using the construct <code>variable=$(command)</code><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>:</p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the reverse-complements of the primers</span></span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="va">primer_f_rc</span><span class="op">=</span><span class="va">$(</span><span class="bu">echo</span> <span class="st">"</span><span class="va">$primer_f</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">tr</span> ATCGYRKMBDHV TAGCRYMKVHDB <span class="kw">|</span> <span class="fu">rev</span><span class="va">)</span></span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="va">primer_r_rc</span><span class="op">=</span><span class="va">$(</span><span class="bu">echo</span> <span class="st">"</span><span class="va">$primer_r</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">tr</span> ATCGYRKMBDHV TAGCRYMKVHDB <span class="kw">|</span> <span class="fu">rev</span><span class="va">)</span></span>
 <span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$primer_f_rc</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre class="bash-out"><code>TTACCGCGGCKGCTGRCACAC</code></pre>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the sequences</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$primer_f_rc</span><span class="st">"</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$primer_r_rc</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>TTACCGCGGCKGCTGRCACAC
+ATTAGAWACCCBNGTAGTCC</code></pre>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+More about the above <code>tr</code> command
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>TODO</p>
+</div>
+</div>
 <hr style="height:1pt; visibility:hidden;">
 </section>
 <section id="building-the-cutadapt-command" class="level3" data-number="6.2">
 <h3 data-number="6.2" class="anchored" data-anchor-id="building-the-cutadapt-command"><span class="header-section-number">6.2</span> Building the Cutadapt command</h3>
 <p>First, here is how we can tell Cutadapt about the primer sequences:</p>
+<p>TODO add some details about the syntax</p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cutadapt</span> <span class="dt">\</span></span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> <span class="st">"</span><span class="va">$primer_f</span><span class="st">"</span>...<span class="st">"</span><span class="va">$primer_r_rc</span><span class="st">"</span> <span class="dt">\</span></span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">-A</span> <span class="st">"</span><span class="va">$primer_r</span><span class="st">"</span>...<span class="st">"</span><span class="va">$primer_f_rc</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1053,15 +1078,15 @@ Spreading commands across multiple lines with <code>\</code>
 </div>
 <p>We will also:</p>
 <ul>
-<li>Tell Cutadapt to only keep sequences that contain the primer<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>, with the <code>--trimmed-only</code> option.</li>
-<li>Instruct Cutadapt to use 8 “cores” with <code>--cores 8</code>, which can speed up the run by up to 8-fold. For our small FASTQ files, this isn’t really necessary, but for a larger dataset, that can save significant time.</li>
+<li>Tell Cutadapt to only keep sequences that contain the primer<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>, with the <code>--trimmed-only</code> option.</li>
+<li>Instruct Cutadapt to use 8 “cores” with <code>--cores 8</code>, which can speed up the run by up to 8-fold. For our small FASTQ files, this isn’t really necessary, but for a larger dataset, that can save quite some time.</li>
 </ul>
 <div class="sourceCode" id="cb45"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cutadapt</span> <span class="dt">\</span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> <span class="st">"</span><span class="va">$primer_f</span><span class="st">"</span>...<span class="st">"</span><span class="va">$primer_r_rc</span><span class="st">"</span> <span class="dt">\</span></span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">-A</span> <span class="st">"</span><span class="va">$primer_r</span><span class="st">"</span>...<span class="st">"</span><span class="va">$primer_f_rc</span><span class="st">"</span> <span class="dt">\</span></span>
 <span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--trimmed-only</span> <span class="dt">\</span></span>
 <span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--cores</span> 8</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Finally, let’s also add the output files (<code>--output</code> for R1 and <code>--paired-output</code> for R2) and the input files (as positional arguments at the end of the command) for a single example sample to create a final example command of running Cutadapt for a single sample:</p>
+<p>Finally, let’s also add the output files (<code>--output</code> for R1 and <code>--paired-output</code> for R2) and the input files (as positional arguments at the end of the command) for a single example sample. With that, we have a final example command of running Cutadapt for a single sample:</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cutadapt</span> <span class="dt">\</span></span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> <span class="st">"</span><span class="va">$primer_f</span><span class="st">"</span>...<span class="st">"</span><span class="va">$primer_r_rc</span><span class="st">"</span> <span class="dt">\</span></span>
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">-A</span> <span class="st">"</span><span class="va">$primer_r</span><span class="st">"</span>...<span class="st">"</span><span class="va">$primer_f_rc</span><span class="st">"</span> <span class="dt">\</span></span>
@@ -1073,64 +1098,95 @@ Spreading commands across multiple lines with <code>\</code>
 <span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>    data/fastq/NW102AB_R2.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <hr style="height:1pt; visibility:hidden;">
 </section>
-<section id="a-cutadapt-script-with-a-loop" class="level3" data-number="6.3">
-<h3 data-number="6.3" class="anchored" data-anchor-id="a-cutadapt-script-with-a-loop"><span class="header-section-number">6.3</span> A Cutadapt script with a loop</h3>
-<p>We will TODO…</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --account=PAS2714</span></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=slurm-cutadapt.out</span></span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=8</span></span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Strict bash settings</span></span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
-<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the software</span></span>
-<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load miniconda3</span>
-<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> activate /fs/ess/PAS0471/jelmer/conda/mbar24</span>
-<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Primer sequences</span></span>
-<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a><span class="va">primer_f</span><span class="op">=</span>GTGTGYCAGCMGCCGCGGTAA</span>
-<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a><span class="va">primer_r</span><span class="op">=</span>GGACTACNVGGGTWTCTAAT</span>
-<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the reverse-complements of the primers</span></span>
-<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a><span class="va">primer_f_rc</span><span class="op">=</span><span class="va">$(</span><span class="bu">echo</span> <span class="st">"</span><span class="va">$primer_f</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">tr</span> ATCGYRKMBDHV TAGCRYMKVHDB <span class="kw">|</span> <span class="fu">rev</span><span class="va">)</span></span>
-<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a><span class="va">primer_r_rc</span><span class="op">=</span><span class="va">$(</span><span class="bu">echo</span> <span class="st">"</span><span class="va">$primer_r</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">tr</span> ATCGYRKMBDHV TAGCRYMKVHDB <span class="kw">|</span> <span class="fu">rev</span><span class="va">)</span></span>
-<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the output dir</span></span>
-<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a><span class="va">outdir</span><span class="op">=</span>results/cutadapt</span>
-<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span></span>
-<span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop over the R1 files</span></span>
-<span id="cb47-27"><a href="#cb47-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> R1 <span class="kw">in</span> data/fastq/<span class="pp">*</span>R1.fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb47-28"><a href="#cb47-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get the R2 file name</span></span>
-<span id="cb47-29"><a href="#cb47-29" aria-hidden="true" tabindex="-1"></a>    <span class="va">R2</span><span class="op">=</span><span class="va">${R1</span><span class="op">/</span><span class="ss">_R1</span><span class="op">/</span>_R2<span class="va">}</span></span>
-<span id="cb47-30"><a href="#cb47-30" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb47-31"><a href="#cb47-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define the output files</span></span>
-<span id="cb47-32"><a href="#cb47-32" aria-hidden="true" tabindex="-1"></a>    <span class="va">R1_out</span><span class="op">=</span><span class="st">"</span><span class="va">$outdir</span><span class="st">"</span>/<span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$R1</span><span class="st">"</span><span class="va">)</span></span>
-<span id="cb47-33"><a href="#cb47-33" aria-hidden="true" tabindex="-1"></a>    <span class="va">R2_out</span><span class="op">=</span><span class="st">"</span><span class="va">$outdir</span><span class="st">"</span>/<span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$R2</span><span class="st">"</span><span class="va">)</span></span>
-<span id="cb47-34"><a href="#cb47-34" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb47-35"><a href="#cb47-35" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Run Cutadapt</span></span>
-<span id="cb47-36"><a href="#cb47-36" aria-hidden="true" tabindex="-1"></a>    <span class="ex">cutadapt</span> <span class="dt">\</span></span>
-<span id="cb47-37"><a href="#cb47-37" aria-hidden="true" tabindex="-1"></a>            <span class="at">-a</span> <span class="st">"</span><span class="va">$primer_f</span><span class="st">"</span>...<span class="st">"</span><span class="va">$primer_r_rc</span><span class="st">"</span> <span class="dt">\</span></span>
-<span id="cb47-38"><a href="#cb47-38" aria-hidden="true" tabindex="-1"></a>            <span class="at">-A</span> <span class="st">"</span><span class="va">$primer_r</span><span class="st">"</span>...<span class="st">"</span><span class="va">$primer_f_rc</span><span class="st">"</span> <span class="dt">\</span></span>
-<span id="cb47-39"><a href="#cb47-39" aria-hidden="true" tabindex="-1"></a>            <span class="at">--trimmed-only</span> <span class="dt">\</span></span>
-<span id="cb47-40"><a href="#cb47-40" aria-hidden="true" tabindex="-1"></a>            <span class="at">--cores</span> 8 <span class="dt">\</span></span>
-<span id="cb47-41"><a href="#cb47-41" aria-hidden="true" tabindex="-1"></a>            <span class="at">--output</span> <span class="st">"</span><span class="va">$R1_out</span><span class="st">"</span> <span class="dt">\</span></span>
-<span id="cb47-42"><a href="#cb47-42" aria-hidden="true" tabindex="-1"></a>            <span class="at">--paired-output</span> <span class="st">"</span><span class="va">$R2_out</span><span class="st">"</span> <span class="dt">\</span></span>
-<span id="cb47-43"><a href="#cb47-43" aria-hidden="true" tabindex="-1"></a>            <span class="st">"</span><span class="va">$R1</span><span class="st">"</span> <span class="st">"</span><span class="va">$R2</span><span class="st">"</span></span>
-<span id="cb47-44"><a href="#cb47-44" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
-<span id="cb47-45"><a href="#cb47-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-46"><a href="#cb47-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Report</span></span>
-<span id="cb47-47"><a href="#cb47-47" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Done with script cutadapt.sh"</span></span>
-<span id="cb47-48"><a href="#cb47-48" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="our-cutadapt-loop" class="level3" data-number="6.3">
+<h3 data-number="6.3" class="anchored" data-anchor-id="our-cutadapt-loop"><span class="header-section-number">6.3</span> Our Cutadapt loop</h3>
+<p>In our script, we will run Cutadapt inside a loop, similar to how we ran FastQC. However, this case is a bit more complicated, because we need to run Cutadapt for one <strong>sample</strong> and therefore two FASTQ files at a time, rather than for one FASTQ file at a time.</p>
+<p>We will do that by <strong>looping over the R1 (forward read) files only</strong>, and inside the loop, inferring the name of the R2 file:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop over the R1 files</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> R1_in <span class="kw">in</span> data/fastq/<span class="pp">*</span>R1.fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get the R2 file name with "parameter expansion"</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># This does a search-and-replace: replace "_R1" with "_R2"</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">R2_in</span><span class="op">=</span><span class="va">${R1_in</span><span class="op">/</span><span class="ss">_R1</span><span class="op">/</span>_R2<span class="va">}</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Report</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"Input files: </span><span class="va">$R1_in</span><span class="st"> </span><span class="va">$R2_in</span><span class="st">"</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define the output files</span></span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>    <span class="va">R1_out</span><span class="op">=</span><span class="st">"</span><span class="va">$outdir</span><span class="st">"</span>/<span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$R1_in</span><span class="st">"</span><span class="va">)</span></span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>    <span class="va">R2_out</span><span class="op">=</span><span class="st">"</span><span class="va">$outdir</span><span class="st">"</span>/<span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$R2_in</span><span class="st">"</span><span class="va">)</span></span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Run Cutadapt</span></span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>    <span class="ex">cutadapt</span> <span class="dt">\</span></span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">-a</span> <span class="st">"</span><span class="va">$primer_f</span><span class="st">"</span>...<span class="st">"</span><span class="va">$primer_r_rc</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">-A</span> <span class="st">"</span><span class="va">$primer_r</span><span class="st">"</span>...<span class="st">"</span><span class="va">$primer_f_rc</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">--trimmed-only</span> <span class="dt">\</span></span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">--cores</span> 8 <span class="dt">\</span></span>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a>            <span class="at">--output</span> <span class="st">"</span><span class="va">$R1_out</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a>            <span class="at">--paired-output</span> <span class="st">"</span><span class="va">$R2_out</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">"</span><span class="va">$R1</span><span class="st">"</span> <span class="st">"</span><span class="va">$R2</span><span class="st">"</span></span>
+<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <hr style="height:1pt; visibility:hidden;">
 </section>
-<section id="check-the-output" class="level3" data-number="6.4">
-<h3 data-number="6.4" class="anchored" data-anchor-id="check-the-output"><span class="header-section-number">6.4</span> Check the output</h3>
-<div class="sourceCode" id="cb48"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">less</span> slurm-cutadapt.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="the-final-script" class="level3" data-number="6.4">
+<h3 data-number="6.4" class="anchored" data-anchor-id="the-final-script"><span class="header-section-number">6.4</span> The final script</h3>
+<div class="sourceCode" id="cb48"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --account=PAS2714</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=slurm-cutadapt.out</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=8</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Strict bash settings</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the software</span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load miniconda3</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> activate /fs/ess/PAS0471/jelmer/conda/mbar24</span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Primer sequences</span></span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a><span class="va">primer_f</span><span class="op">=</span>GTGTGYCAGCMGCCGCGGTAA</span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a><span class="va">primer_r</span><span class="op">=</span>GGACTACNVGGGTWTCTAAT</span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the reverse-complements of the primers</span></span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a><span class="va">primer_f_rc</span><span class="op">=</span><span class="va">$(</span><span class="bu">echo</span> <span class="st">"</span><span class="va">$primer_f</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">tr</span> ATCGYRKMBDHV TAGCRYMKVHDB <span class="kw">|</span> <span class="fu">rev</span><span class="va">)</span></span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a><span class="va">primer_r_rc</span><span class="op">=</span><span class="va">$(</span><span class="bu">echo</span> <span class="st">"</span><span class="va">$primer_r</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">tr</span> ATCGYRKMBDHV TAGCRYMKVHDB <span class="kw">|</span> <span class="fu">rev</span><span class="va">)</span></span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the output dir</span></span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a><span class="va">outdir</span><span class="op">=</span>results/cutadapt</span>
+<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span></span>
+<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop over the R1 files</span></span>
+<span id="cb48-27"><a href="#cb48-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> R1_in <span class="kw">in</span> data/fastq/<span class="pp">*</span>R1.fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb48-28"><a href="#cb48-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get the R2 file name</span></span>
+<span id="cb48-29"><a href="#cb48-29" aria-hidden="true" tabindex="-1"></a>    <span class="va">R2_in</span><span class="op">=</span><span class="va">${R1_in</span><span class="op">/</span><span class="ss">_R1</span><span class="op">/</span>_R2<span class="va">}</span></span>
+<span id="cb48-30"><a href="#cb48-30" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb48-31"><a href="#cb48-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Report</span></span>
+<span id="cb48-32"><a href="#cb48-32" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"Input files: </span><span class="va">$R1_in</span><span class="st"> </span><span class="va">$R2_in</span><span class="st">"</span></span>
+<span id="cb48-33"><a href="#cb48-33" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb48-34"><a href="#cb48-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define the output files</span></span>
+<span id="cb48-35"><a href="#cb48-35" aria-hidden="true" tabindex="-1"></a>    <span class="va">R1_out</span><span class="op">=</span><span class="st">"</span><span class="va">$outdir</span><span class="st">"</span>/<span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$R1_in</span><span class="st">"</span><span class="va">)</span></span>
+<span id="cb48-36"><a href="#cb48-36" aria-hidden="true" tabindex="-1"></a>    <span class="va">R2_out</span><span class="op">=</span><span class="st">"</span><span class="va">$outdir</span><span class="st">"</span>/<span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$R2_in</span><span class="st">"</span><span class="va">)</span></span>
+<span id="cb48-37"><a href="#cb48-37" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb48-38"><a href="#cb48-38" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Run Cutadapt</span></span>
+<span id="cb48-39"><a href="#cb48-39" aria-hidden="true" tabindex="-1"></a>    <span class="ex">cutadapt</span> <span class="dt">\</span></span>
+<span id="cb48-40"><a href="#cb48-40" aria-hidden="true" tabindex="-1"></a>            <span class="at">-a</span> <span class="st">"</span><span class="va">$primer_f</span><span class="st">"</span>...<span class="st">"</span><span class="va">$primer_r_rc</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb48-41"><a href="#cb48-41" aria-hidden="true" tabindex="-1"></a>            <span class="at">-A</span> <span class="st">"</span><span class="va">$primer_r</span><span class="st">"</span>...<span class="st">"</span><span class="va">$primer_f_rc</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb48-42"><a href="#cb48-42" aria-hidden="true" tabindex="-1"></a>            <span class="at">--trimmed-only</span> <span class="dt">\</span></span>
+<span id="cb48-43"><a href="#cb48-43" aria-hidden="true" tabindex="-1"></a>            <span class="at">--cores</span> 8 <span class="dt">\</span></span>
+<span id="cb48-44"><a href="#cb48-44" aria-hidden="true" tabindex="-1"></a>            <span class="at">--output</span> <span class="st">"</span><span class="va">$R1_out</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb48-45"><a href="#cb48-45" aria-hidden="true" tabindex="-1"></a>            <span class="at">--paired-output</span> <span class="st">"</span><span class="va">$R2_out</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb48-46"><a href="#cb48-46" aria-hidden="true" tabindex="-1"></a>            <span class="st">"</span><span class="va">$R1</span><span class="st">"</span> <span class="st">"</span><span class="va">$R2</span><span class="st">"</span></span>
+<span id="cb48-47"><a href="#cb48-47" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb48-48"><a href="#cb48-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-49"><a href="#cb48-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Report</span></span>
+<span id="cb48-50"><a href="#cb48-50" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Done with script cutadapt.sh"</span></span>
+<span id="cb48-51"><a href="#cb48-51" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<hr style="height:1pt; visibility:hidden;">
+</section>
+<section id="check-the-output" class="level3" data-number="6.5">
+<h3 data-number="6.5" class="anchored" data-anchor-id="check-the-output"><span class="header-section-number">6.5</span> Check the output</h3>
+<div class="sourceCode" id="cb49"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">less</span> slurm-cutadapt.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>x</code></pre>
-<div class="sourceCode" id="cb50"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> slurm-cutadapt.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> slurm-cutadapt.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>22      4       0.0     2       0 3 1
 24      1       0.0     2       0 1
 25      1       0.0     2       0 0 1
@@ -1141,7 +1197,7 @@ Spreading commands across multiple lines with <code>\</code>
 47      1       0.0     2       0 1
 Done with script cutadapt.sh
 Wed Mar  6 14:46:56 EST 2024</code></pre>
-<div class="sourceCode" id="cb52"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">"with adapter:"</span> slurm-cutadapt.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">"with adapter:"</span> slurm-cutadapt.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>  Read 1 with adapter:                  12,798 (99.6%)
   Read 2 with adapter:                  12,541 (97.6%)
   Read 1 with adapter:                  14,499 (99.7%)
@@ -1163,7 +1219,7 @@ Want to quickly see the lowest % of reads with adapter? <em>(Click to expand)</e
 </div>
 <div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="sourceCode" id="cb54"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">"with adapter:"</span> slurm-cutadapt.out <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span><span class="st">"("</span> <span class="at">-f2</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-n</span> <span class="kw">|</span> <span class="fu">head</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">"with adapter:"</span> slurm-cutadapt.out <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span><span class="st">"("</span> <span class="at">-f2</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-n</span> <span class="kw">|</span> <span class="fu">head</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>97.0%)
 97.3%)
 97.5%)
@@ -1174,13 +1230,14 @@ Want to quickly see the lowest % of reads with adapter? <em>(Click to expand)</e
 </div>
 </div>
 </div>
-<div class="sourceCode" id="cb56"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> results/cutadapt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> results/cutadapt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>NW102AB_R1.fastq.gz  NW103C_R1.fastq.gz   NW203A_R1.fastq.gz   NW304BC_R1.fastq.gz  NW403A_R1.fastq.gz   NW404BC_R1.fastq.gz  W103AB_R1.fastq.gz  W204BC_R1.fastq.gz  W303AB_R1.fastq.gz  W304C_R1.fastq.gz   W404A_R1.fastq.gz
 NW102AB_R2.fastq.gz  NW103C_R2.fastq.gz   NW203A_R2.fastq.gz   NW304BC_R2.fastq.gz  NW403A_R2.fastq.gz   NW404BC_R2.fastq.gz  W103AB_R2.fastq.gz  W204BC_R2.fastq.gz  W303AB_R2.fastq.gz  W304C_R2.fastq.gz   W404A_R2.fastq.gz
 NW102C_R1.fastq.gz   NW201AB_R1.fastq.gz  NW203BC_R1.fastq.gz  NW305AB_R1.fastq.gz  NW403BC_R1.fastq.gz  W101AB_R1.fastq.gz   W103C_R1.fastq.gz   W205A_R1.fastq.gz   W303C_R1.fastq.gz   W403AB_R1.fastq.gz  W404BC_R1.fastq.gz
 NW102C_R2.fastq.gz   NW201AB_R2.fastq.gz  NW203BC_R2.fastq.gz  NW305AB_R2.fastq.gz  NW403BC_R2.fastq.gz  W101AB_R2.fastq.gz   W103C_R2.fastq.gz   W205A_R2.fastq.gz   W303C_R2.fastq.gz   W403AB_R2.fastq.gz  W404BC_R2.fastq.gz
 NW103AB_R1.fastq.gz  NW201C_R1.fastq.gz   NW304A_R1.fastq.gz   NW305C_R1.fastq.gz   NW404A_R1.fastq.gz   W101C_R1.fastq.gz    W204A_R1.fastq.gz   W205BC_R1.fastq.gz  W304AB_R1.fastq.gz  W403C_R1.fastq.gz
 NW103AB_R2.fastq.gz  NW201C_R2.fastq.gz   NW304A_R2.fastq.gz   NW305C_R2.fastq.gz   NW404A_R2.fastq.gz   W101C_R2.fastq.gz    W204A_R2.fastq.gz   W205BC_R2.fastq.gz  W304AB_R2.fastq.gz  W403C_R2.fastq.gz</code></pre>
+<p><br><br></p>
 
 
 </section>
@@ -1192,10 +1249,11 @@ NW103AB_R2.fastq.gz  NW201C_R2.fastq.gz   NW304A_R2.fastq.gz   NW305C_R2.fastq.g
 <ol>
 <li id="fn1"><p>For a full list of installed software at OSC: <a href="https://www.osc.edu/resources/available_software/software_list" class="uri">https://www.osc.edu/resources/available_software/software_list</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p> Attribution: Some of the FastQC example plots were taken from <a href="https://rtsf.natsci.msu.edu/sites/_rtsf/assets/File/FastQC_TutorialAndFAQ_080717.pdf">here</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p> And very large jobs can sometimes take hours to start, but our jobs are small so that should not happen.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p> I will specify the dir <code>results/multiqc_fastqc</code>, indicating that this is a MultiQC run that summarizes FastQC output<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>This is called “command substitution”.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p> This is not the default: Cutadapt is even more commonly used to remove adapters, and then this doesn’t apply<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Therefore, our FastQC analysis will run sequentially (1-by-1) for each file, not in parallel.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Using the shell language Bash, specifically<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p> And very large jobs can sometimes take hours to start, but our jobs are small so that should not happen.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>This is called “command substitution”.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p> This is not the default: Cutadapt is even more commonly used to remove adapters, and then this doesn’t apply<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
