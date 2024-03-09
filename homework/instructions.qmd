@@ -1,0 +1,45 @@
+---
+title: "Homework Instructions"
+author: Jelmer Poelstra
+date: 2024-03-04
+---
+
+-----
+
+<br>
+
+**Before the workshop starts, please work your way through the following two pages on this website:**
+
+- **[Homework: Intro to the Unix Shell](shell.qmd)**
+- **[Homework: Intro to R](R.qmd)**
+
+Each of these may take around 2 hours to complete with no prior experience^[
+That's a bit of a guess, we welcome feedback about how long it took you to do this.
+].
+
+<hr style="height:1pt; visibility:hidden;" />
+
+::: callout-note
+#### Prefer in-person instruction?
+If you're struggling with this material or simply prefer in-person instruction,
+send an email to Jelmer Poelstra (poelstra.1) --- if there is interest,
+we can try to schedule a pre-workshop session on Mon the 11^th^ or Tue the 12^th^.
+:::
+
+<hr style="height:1pt; visibility:hidden;" />
+
+::: callout-warning
+#### Already have experience with this?
+If you already have substantial experience with one or both of these topics,
+we ask you to still do the following:
+
+- Skim through the pages for a refresher and if you see unfamiliar stuff, practice with it.
+- At OSC, create your own dir and copy the workshop's data:
+  follow Unix Shell sections [2.1](shell.qmd#opening-a-unix-shell-at-osc),
+  and [5.1-5.2](shell.qmd#create-dirs-with-mkdir).
+- At OSC, create an RStudio Project: go through the R sections
+  [2.1](R.qmd#start-an-rstudio-session-at-osc) and [4.2](R.qmd#create-a-new-rstudio-project).
+
+:::
+
+<br><br>

@@ -5,17 +5,18 @@ title: "Amplicon Metabarcoding Workshop"
 subtitle: "March 13-15, 2024 --- Wooster Campus, OSU"
 ---
 
-x
+----------------------------------------------------------------------------------------------------
 
-| Day | Time           | Topic                                                                      | By      |
-|--------|--------------|--------------------------|--------------------------|
-| Wed | 1 - 2 pm       | Lecture: Introduction to Metabarcoding                                     | Tim     |
-|     | 2:15 - 2:45 pm | Lab: Intro to OSC                                                          | Jelmer  |
-|     | 2:45 - 4:30 pm | Lab: QC & trimming                                                         | Jelmer  |
-| Thu | 1 - 2 pm       | Lecture: ASV/OTU calling, pipeline considerations, and the phyloseq object | Soledad |
-|     | 2:15 - 3:15 pm | Lab: Calling ASVs with the DADA2 pipeline                                  | Tim     |
-|     | 3:30 - 4:30 pm | Lab: Alpha & Beta diversity                                                | Tim     |
-| Fri | 1 - 2 pm       | Lab: Differential abundance with DESeq2                                    | Melanie |
-|     | 2 - 3 pm       | Network analysis                                                           | Melanie |
-|     | 3 - 4 pm       | Core microbiome analysis                                                   | Fiama   |
-|     | 4 - 4:30 pm    | Metadata and data submission to databases                                  | Soledad |
+<br>
+
+| Day | Time           | Topic                                                        | By      |
+|-----|----------------|--------------------------------------------------------------|---------|
+| Wed | 1 - 2 pm       | Lecture: **Intro to metabarcoding**                          | Tim     |
+|     | 2:15 - 3 pm    | Lab: [**Intro to OSC**](02_osc.qmd)                          | Jelmer  |
+|     | 3 - 4:30 pm    | Lab: [**QC & trimming**](03_qc-trim.qmd)                     | Jelmer  |
+| Thu | 1 - 2 pm       | Lecture: **ASV/OTU calling and pipeline considerations**     | Soledad |
+|     | 2:15 - 3:15 pm | Lab: [**Calling ASVs with the DADA2 pipeline**](05_dada.qmd) | Tim     |
+|     | 3:30 - 4:30 pm | Lab: **Alpha & beta diversity**                              | Tim     |
+| Fri | 1 - 1:30 pm    | Lab: **Differential abundance with DESeq2**                  | Melanie |
+|     | 1:30 - 3 pm    | Lab: **Network analysis**                                    | Melanie |
+|     | 3 - 4:40 pm    | Lab: **Core microbiome analysis**                            | Fiama   |

@@ -1,0 +1,793 @@
+---
+title: "Calling ASVs with the DADA2 pipeline"
+pagetitle: "dada2"
+author: Timothy Frey
+date: 2024-03-13
+execute: 
+  eval: false
+knitr:
+  opts_chunk:
+    out.width: "85%"
+    class-output: styled-output
+editor_options: 
+  chunk_output_type: console
+---
+
+----------------------------------------------------------------------------------------------------
+
+<br>
+
+## Setting up
+
+#### Start an RStudio Server job at OSC
+
+1.  Log in to OSC at <https://ondemand.osc.edu>.
+2.  Click on **`Interactive Apps`** (top bar) and then **`RStudio Server`** (all the way at the bottom).
+3.  Fill out the form as follows:
+    -   Cluster: **`Pitzer`**
+    -   R version: **`4.3.0`**
+    -   Project: **`PAS2714`**
+    -   Number of hours: **`4`**
+    -   Node type: **`any`**
+    -   Number of cores: **`4`**
+4.  Click **`Launch`** and once your job has started, click **`Connect to RStudio Server`**.
+
+<hr style="height:1pt; visibility:hidden;" />
+
+#### Open your RStudio Project
+
+- Your RStudio Project in `/fs/ess/PAS2714` may have automatically opened.
+  You can see whether a Project is open, and if so, which one, in the top-right of your screen
+  (left screenshot below)
+- If your Project isn’t open, click on the R-in-a-box icon to open it
+  (right screenshot below):
+
+::: columns
+::: column
+![Here, the project `jelmer` is open.<br>Your Project name is also your username.](img/rproj-open.png){fig-align="center"}
+:::
+::: column
+![Opening an RStudio Project](https://mcic-osu.github.io/2020-12-microbiomics-workshop/img/rproj-dropdown.png){fig-align="center"}
+:::
+:::
+
+::: {.callout-warning collapse="true"}
+#### Don't have an RStudio Project yet? Click here to create one.
+1.  Click **`File`** (top bar, below your browser's address bar) \> **`New Project`**
+2.  In the popup window, click **`Existing Directory`**.
+
+<details><summary>*Click to see a screenshot*</summary>
+
+![](homework/img/rstudio_proj_existingdir.png){fig-align="center" width="40%"}
+
+</details>
+
+3.  Click **`Browse...`** to select your personal dir.
+
+<details><summary>*Click to see a screenshot*</summary>
+
+![](homework/img/rstudio_proj_browse.png){fig-align="center" width="40%"}
+
+</details>
+
+4.  In the next window, you should be in your Home directory (abbreviated as **`~`**),
+    from which you can't click your way to `/fs/ess`!
+    Instead, you'll first have to click on the (very small!) **`...`** highlighted in the screenshot below:
+
+![](homework/img/rstudio_proj_dotdotdot_ed.png){fig-align="center" width="50%"}
+
+5.  Type at least part of the path to your personal dir in `/fs/ess/PAS2714/users`,
+    e.g. like shown below, and click **`OK`**:
+
+![](homework/img/rstudio_proj_path2.png){fig-align="center" width="35%"}
+
+6.  Now you should be able to browse/click the rest of the way to your personal directory,
+    something like `/fs/ess/PAS2714/users/jelmer`.
+7.  Click **`Choose`** to pick your selected directory.
+8.  Click **`Create Project`**.
+
+RStudio should reload and you should now have your new Project "open".
+:::
+
+<hr style="height:1pt; visibility:hidden;" />
+
+#### Create a new script
+
+Click `File` > `New file` > `R script`, and immediately save the new file
+(`File` > `Save as`) as `dada.R` inside your `scripts` directory^[
+(you can create that dir in the dialog box if needed].
+
+We recommend that you copy-and-paste (or type, if you prefer) code from this webpage
+into your script and _then_ execute the code.
+That way, you'll have a nice record of what you did, exactly.
+
+<hr style="height:1pt; visibility:hidden;" />
+
+#### Load R packages
+
+To save time, we have already installed all the necessary R packages at OSC into a custom library.
+To add this library for the current R session:
+
+```{r}
+# Set the R library location
+.libPaths("/fs/ess/PAS0471/jelmer/R/metabar")
+dyn.load("/fs/ess/PAS0471/jelmer/software/GLPK/lib/libglpk.so.40", local = FALSE)
+```
+
+Then load the packages:
+
+```{r, eval=TRUE, message=FALSE}
+# Load the packages
+library(dada2)
+library(phyloseq)
+library(tidyverse)
+```
+```bash-out
+# (You should get a number of package startup messages - not shown)
+```
+
+- [_dada2_](https://benjjneb.github.io/dada2/) -
+  Functions to assemble amplicon sequence varients (ASVS), with single nucleotide resolution,
+  including filtering, dereplication, ASV inference, merging of paired (FWD and REV) and construction
+  of a sequence table and a taxonomy table.
+- [_phyloseq_](https://joey711.github.io/phyloseq/) -
+  A package for organizing, analyzing and visualizing microbial community analysis.
+- [_tidyverse_](https://www.tidyverse.org) -
+  A package for speeding up, organizing, streamlining and visualizing data science.
+
+<hr style="height:1pt; visibility:hidden;" />
+
+## Preparing to run the workflow
+
+#### Set the number of cores
+
+Most dada2 functions can use multiple cores.
+Because we are on a cluster and we have reserved only
+part of a node, auto-detection of the number of cores will not be appropriate
+(the program will detect more cores than we have available).
+Therefore, we should specify the appropriate number of cores in our function calls below.
+
+We will set the number of cores here,
+assuming you requested 4 cores in your job submission (change if needed):
+
+```{r, eval=TRUE}
+# Set the number of cores
+n_cores <- 4
+```
+
+#### Set file paths
+
+Setting file paths in the beginning to make things easier to change or troubleshoot in the future.
+
+**Input files:**
+
+```{r, eval=TRUE}
+# Define the input files
+
+# Dir with input FASTQ files (post-cutadapt trimmed reads):
+indir <- "results/cutadapt"
+
+# FASTA file with training data - a database your sequences will be compared to (SILVA, UNITE, etc):
+# (Check for an up-to-date version at <https://benjjneb.github.io/dada2/training.html>)
+tax_key <- "data/ref/silva_nr99_v138.1_train_set.fa.gz"  
+
+# File with sample metadata (data about your samples, treatments, blocking, etc):
+metadata_file <- "data/meta/meta.tsv"
+```
+
+::: {.callout-warning collapse="true"}
+#### Don't have the input files? Click here to copy them.
+
+Next to the `Console` in R, click the `Terminal` to access a Unix shell.
+In the Terminal, run the following `cp` commands to copy the necessary data.
+
+- If you're missing the `cutadapt` results because you didn't manage to run this
+  in the previous session:
+  
+  ```bash
+  cp -rv /fs/ess/PAS2714/share/results2/cutadapt /fs/ess/PAS2714/users/$USER/results
+  ```
+
+- You really should have the `data` and (other) `results` already, but if not:
+
+  ```bash
+  cp -rv /fs/ess/PAS2714/share/data /fs/ess/PAS2714/users/$USER
+  cp -rv /fs/ess/PAS2714/share/results /fs/ess/PAS2714/users/$USER
+  ```
+:::
+
+**Output files:**
+
+```{r, eval=TRUE}
+# Define the output dirs
+outdir <- "results/dada"                     # Most output
+filter_dir <- "results/dada/filtered_fastq"  # Filtered FASTQ files
+
+# Create directories if they are not already created:
+dir.create(outdir, showWarnings = FALSE, recursive = TRUE)
+dir.create(filter_dir, showWarnings = FALSE, recursive = TRUE)
+```
+
+#### Assign forward and reverse reads
+
+We will assign the FASTQ files that we processed with `cutadapt` to two vectors:
+one with files with forward reads, and one with files with reverse reads.
+These files can be distinguished by having “R1” (forward) and “R2” (reverse) in their names.
+
+```{r, eval=TRUE}
+# Create vectors with FASTQ file names
+fastqs_raw_F <- sort(list.files(indir, pattern = "_R1.fastq.gz", full.names = TRUE))
+fastqs_raw_R <- sort(list.files(indir, pattern = "_R2.fastq.gz", full.names = TRUE))
+
+head(fastqs_raw_F)
+```
+
+#### Check sample IDs
+
+We’ll get the sample IDs from the FASTA file names and from a file with metadata,
+and will check if they are the same. First we’ll prepare the metadata:
+
+```{r, eval=TRUE}
+# Read and prepare the metadata
+metadata_df <- read.table(file = metadata_file, sep = "\t", header = TRUE)
+
+colnames(metadata_df)[1] <- "SampleID"
+rownames(metadata_df) <- metadata_df$SampleID
+
+head(metadata_df)
+```
+
+Let’s compare the sample IDs from the metadata with the FASTQ filenames:
+
+```{r, eval=TRUE}
+# Check the sample IDs in the metadata
+metadata_df$SampleID
+```
+
+```{r, eval=TRUE}
+# Check the FASTA file names
+# (Note, basename() strips the dir name from the filename)
+head(basename(fastqs_raw_F))
+```
+
+To extract the sample IDs from the FASTQ file names,
+we remove everything after `_R` from the file names using the `sub()` function:
+
+```{r, eval=TRUE}
+# Extract the sample IDs from the FASTQ file names
+# sub() arguments: sub(pattern, replacement, vector)
+sampleIDs <- sub("_R.*", "", basename(fastqs_raw_F))
+head(sampleIDs)
+```
+
+We can check whether the IDs from the FASTQ files and the metadata data frame are the same:
+
+```{r, eval=TRUE}
+# Check whether the sample IDs match
+identical(sort(metadata_df$SampleID), sampleIDs)
+```
+
+::: callout-important
+#### The above code should have returned `TRUE` but if it returned `FALSE`, we should:
+
+- Check whether any samples are missing from the FASTQ files:
+
+  ```{r,eval=TRUE}
+  setdiff(sort(metadata_df$SampleID), sampleIDs)
+  ```
+
+- Check whether any samples are missing from the metadata:
+
+  ```{r,eval=TRUE}
+  setdiff(sampleIDs, sort(metadata_df$SampleID))
+  ```
+:::
+
+<hr style="height:1pt; visibility:hidden;" />
+
+## Filtering and quality trimming
+
+We will now perform quality filtering (removing poor-quality reads) and trimming (removing
+poor-quality bases) on the FASTQ files using *DADA2*’s `filterAndTrim()` function.
+
+The `filterAndTrim()` function will write the filtered and trimmed reads to new FASTQ files.
+Therefore, we first define the file names for the new files:
+
+```{r, eval=TRUE}
+# Define the paths to the filtered (output) FASTQ files
+# (filter_dir directory set and created in the "set file paths" step,
+# still have seperate names for FWD and RVS reads at this point.)
+fastqs_filt_F <- file.path(filter_dir, paste0(sampleIDs, "_F_filt.fastq"))
+fastqs_filt_R <- file.path(filter_dir, paste0(sampleIDs, "_R_filt.fastq"))
+```
+
+We will use the following arguments of the `filterAndTrim()` function:
+
+- `truncLen` - Truncate reads after `truncLen` bases and discard reads shorter than this.
+  Could be adjusted depending on the primers that are used.
+  Also could be left out in the case of a more variable sequence (Ex: ITS).
+  The trimming length can be different for forward and reverse reads,
+  which is good because reverse reads are often of worse quality.
+
+- It is also suggested to trim the first 10 nucleotides of each read (`trimLeft` argument),
+  since these positions are likely to contain errors.
+
+- `maxEE` is an important argument that will let DADA2 trim reads based on the maximum numbers of
+  Expected Errors (EE) given the quality scores of the reads’ bases.
+
+- `trunQ` - trim read after an instance of a quality score less than or equal to this number
+
+```{r}
+# Filter the FASTQ files
+filter_results <-
+  filterAndTrim(fastqs_raw_F, fastqs_filt_F,
+                fastqs_raw_R, fastqs_filt_R,
+                truncLen = c(250,210),
+                trimLeft = 10,
+                maxN = 0,
+                maxEE = c(2,2),
+                truncQ = 2,
+                rm.phix = FALSE,
+                multithread = n_cores,
+                compress = FALSE, verbose = TRUE) 
+
+head(filter_results)
+```
+```bash-out
+                    reads.in reads.out
+NW102AB_R1.fastq.gz    12507      8681
+NW102C_R1.fastq.gz     14178      9657
+NW103AB_R1.fastq.gz    11814      7569
+NW103C_R1.fastq.gz     14704     10221
+NW201AB_R1.fastq.gz    12031      8125
+NW201C_R1.fastq.gz     12223      8188
+```
+
+<hr style="height:1pt; visibility:hidden;" />
+
+## Dereplication and error training
+
+Next, we want to “dereplicate” the filtered FASTQ files.
+During dereplication, we condense the data by collapsing together all reads that
+encode the same sequence, which significantly reduces later computation times.
+
+```{r}
+# Dereplicate the FASTQ files
+fastqs_derep_F <- derepFastq(fastqs_filt_F, verbose = FALSE)
+fastqs_derep_R <- derepFastq(fastqs_filt_R, verbose = FALSE)
+
+names(fastqs_derep_F) <- sampleIDs
+names(fastqs_derep_R) <- sampleIDs
+```
+
+The *DADA2* algorithm makes use of a parametric error model (`err`) and every amplicon dataset has a
+different set of error rates. The `learnErrors` method learns this error model from the data, by
+alternating estimation of the error rates and inference of sample composition until they converge on
+a jointly consistent solution.
+
+This is a computationally intensive step and is one of the most time consuming steps of the dada
+pipeline in my experience (depending on size of dataset could be up to 24 hours or more).
+The `multithread` argument here speeds along the process.
+(If your dataset is very large consider using a "hugemem" node at OSC for this step.)
+
+```{r}
+# Error training
+err_F <- learnErrors(fastqs_derep_F, multithread = n_cores, verbose = TRUE)
+err_R <- learnErrors(fastqs_derep_R, multithread = n_cores, verbose = TRUE)
+```
+```bash-out
+71510640 total bases in 297961 reads from 32 samples will be used for learning the error rates.
+Initializing error rates to maximum possible estimate.
+selfConsist step 1 ................................
+   selfConsist step 2
+   selfConsist step 3
+   selfConsist step 4
+   selfConsist step 5
+   selfConsist step 6
+Convergence after  6  rounds.
+
+59592200 total bases in 297961 reads from 32 samples will be used for learning the error rates.
+Initializing error rates to maximum possible estimate.
+selfConsist step 1 ................................
+   selfConsist step 2
+   selfConsist step 3
+   selfConsist step 4
+   selfConsist step 5
+   selfConsist step 6
+   selfConsist step 7
+Convergence after  7  rounds.
+```
+
+We’ll plot errors to verify that error rates have been reasonable well-estimated. Pay attention to
+the fit between observed error rates (points) and fitted error rates (lines):
+
+```{r}
+# Plot the error profiles
+plotErrors(err_F, nominalQ = TRUE)
+plotErrors(err_R, nominalQ = TRUE)
+```
+
+<details><summary>Click to see the expected plots</summary>
+
+For the forward reads:
+
+![](img/err1.png)
+
+For the reverse reads:
+
+![](img/err2.png)
+</details>
+
+These plot show error rates from the transition between all base pair transitions:
+
+- Black points are observed error rates.
+- The black line is estimated error rates using machine learning.
+- The red line shows expected error rates under the nominal definition of the quality score.
+
+Looking for the estimated rate to fit most of the observed points and that error
+rates drop with increased quality scores.
+
+<hr style="height:1pt; visibility:hidden;" />
+
+## Infer ASVs
+
+We will now run the core dada algorithm,
+which infers Amplicon Sequence Variants (ASVs) from the sequences.
+
+This step is quite computationally intensive, and for this tutorial, we will therefore perform
+independent inference for each sample (`pool = FALSE`), which will keep the computation time down.
+In my experience, this step could take several hours with large datasets.
+
+Pooling will increase computation time, especially if you have many samples, but will improve
+detection of rare variants seen once or twice in an individual sample, but many times across all
+samples. Therefore, for your own analysis, you will likely want to use pooling, though
+“pseudo-pooling” is also an option.
+
+```{r}
+# Infer ASVs
+dada_Fs <- dada(fastqs_derep_F, err = err_F, pool = FALSE, multithread = n_cores)
+dada_Rs <- dada(fastqs_derep_R, err = err_R, pool = FALSE, multithread = n_cores)
+```
+```bash-out
+Sample 1 - 8681 reads in 5956 unique sequences.
+Sample 2 - 9657 reads in 5718 unique sequences.
+Sample 3 - 7569 reads in 5594 unique sequences.
+Sample 4 - 10221 reads in 7071 unique sequences.
+Sample 5 - 8125 reads in 4975 unique sequences.
+Sample 6 - 8188 reads in 5951 unique sequences.
+# [...output truncated...]
+```
+
+Let’s inspect one of the resulting objects:
+
+```{r}
+dada_Fs[[1]]
+```
+```bash-out
+dada-class: object describing DADA2 denoising results
+343 sequence variants were inferred from 5956 input unique sequences.
+Key parameters: OMEGA_A = 1e-40, OMEGA_C = 1e-40, BAND_SIZE = 16
+```
+
+<hr style="height:1pt; visibility:hidden;" />
+
+## Merge read pairs
+
+In this step, we will first merge the forward and reverse read pairs:
+the fragment that we amplified with our primers was short enough to generate
+lots of overlap among the sequences from the two directions.
+
+```{r}
+# Merge forward and reverse reads
+mergers <- mergePairs(dada_Fs, fastqs_derep_F,
+                      dada_Rs, fastqs_derep_R,
+                      verbose = TRUE)
+```
+```bash-out
+5463 paired-reads (in 253 unique pairings) successfully merged out of 6865 (in 531 pairings) input.
+6421 paired-reads (in 325 unique pairings) successfully merged out of 7887 (in 606 pairings) input.
+3934 paired-reads (in 169 unique pairings) successfully merged out of 5650 (in 433 pairings) input.
+6144 paired-reads (in 248 unique pairings) successfully merged out of 8082 (in 609 pairings) input.
+5519 paired-reads (in 243 unique pairings) successfully merged out of 6548 (in 478 pairings) input.
+4693 paired-reads (in 181 unique pairings) successfully merged out of 6298 (in 449 pairings) input.
+# [...output truncated...]
+```
+
+Just like tables can be saved in R using `write.table()` or `write.csv()`,
+R objects can be saved using `saveRDS()`.
+The resulting RDS file can then be loaded into an R environment using `readRDS()`.
+This is a convenient way to save R objects that require a lot of computation time.
+
+We should not be needing the very large dereplicated sequence objects anymore,
+but to be able to quickly restart our analysis from a new R session if necessary,
+we now save these objects to RDS files.
+And after that, we can safely remove these objects from our environment.
+
+```{r}
+# Save the dereplicated objects
+saveRDS(fastqs_derep_F, file = file.path(outdir, "fastqs_derep_F.rds"))
+saveRDS(fastqs_derep_R, file = file.path(outdir, "fastqs_derep_R.rds"))
+
+rm(fastqs_derep_F, fastqs_derep_R) # Remove objects from environment
+```
+
+<hr style="height:1pt; visibility:hidden;" />
+
+## Construct a sequence table
+
+Next, we construct an Amplicon Sequence Variant table (ASV) table:
+
+```{r}
+# Create the sequence table
+seqtab_all <- makeSequenceTable(mergers)
+```
+
+Let's check the dimensions of this table, which are the number of samples (rows)
+and the number of ASVs (columns):
+```{r}
+# Check the dimensions of the sequence table
+dim(seqtab_all)
+```
+```bash-out
+[1]   32 2004
+```
+
+Let’s inspect the distribution of sequence lengths,
+these should match the expected length of your amplicon:
+
+```{r}
+# Check the ASV sequence lengths
+table(nchar(getSequences(seqtab_all)))
+```
+```bash-out
+ 240  249  251  253 
+1999    2    1    2 
+```
+
+::: {.callout-note collapse="true"}
+#### If you want to filter your ASVs to be within a certain range length _(Click to expand)_
+
+You can do that as follows:
+
+```{r}
+# Define a minimum ASV length threshold
+min_len <- 235
+
+# Define a maximum ASV length threshold
+max_len <- 245
+
+# Filter the sequence table
+seqtab_all <- seqtab_all[, nchar(colnames(seqtab_all)) %in% seq(min_len, max_len)]
+```
+:::
+
+<hr style="height:1pt; visibility:hidden;" />
+
+## Remove chimeras
+
+Now, we will remove chimeras.
+The dada algorithm models and removes substitution errors, but
+chimeras are another importance source of spurious sequences in amplicon sequencing.
+Chimeras are formed during PCR amplification.
+When one sequence is incompletely amplified, the incomplete amplicon primes the next amplification step,
+yielding a spurious amplicon.
+The result is a sequence read which is half of one sample sequence and half another.
+
+Fortunately, the accuracy of the sequence variants after denoising makes identifying chimeras
+simpler than it is when dealing with fuzzy OTUs.
+Chimeric sequences are identified if they can be exactly reconstructed by combining a
+left-segment and a right-segment from two more abundant “parent” sequences.
+
+```{r}
+# Identify and remove chimeras
+seqtab <- removeBimeraDenovo(seqtab_all,
+                             method = "consensus",
+                             multithread = n_cores,
+                             verbose = TRUE)
+```
+```bash-out
+Identified 1 bimeras out of 2004 input sequences.
+```
+
+Let's check the proportion of sequences that was retained:
+
+```{r}
+# Proportion of retained sequences:
+sum(seqtab) / sum(seqtab_all)
+```
+```bash-out
+[1] 0.9992489
+```
+
+We will save the `seqtab` object as an RDS file:
+
+```{r}
+# Save the sequence table
+saveRDS(seqtab, file = file.path(outdir, "seqtab.rds"))
+```
+
+<hr style="height:1pt; visibility:hidden;" />
+
+## Generate a summary table
+
+In this step, we will generate a summary table of the number of sequences processed and outputs of
+different steps of the pipeline.
+
+This information is generally used to further evaluate characteristics and quality of the run,
+sample-to-sample variation, and resulting sequencing depth for each sample.
+
+To get started, we will define a function `getN()` that will get the number of unique
+reads for a sample.
+Then, we apply `getN()` to each element of the `dada_Fs`, `dada_Rs`, and `merged` objects,
+which gives us vectors with the number of unique reads for each sample,
+during each of these steps:
+
+```{r}
+# Get the numbers of unique reads at each step
+getN <- function(x) sum(getUniques(x))
+
+denoised_F <- sapply(dada_Fs, getN)
+denoised_R <- sapply(dada_Rs, getN)
+merged <- sapply(mergers, getN)
+```
+
+We’ll join these vectors together with the `filter_results` dataframe,
+and the number of non-chimeric reads:
+
+```{r}
+# Create a summary table
+nreads_summary <- data.frame(filter_results,
+                             denoised_F,
+                             denoised_R,
+                             merged,
+                             nonchim = rowSums(seqtab),
+                             row.names = sampleIDs)
+colnames(nreads_summary)[1:2] <- c("input", "filtered")
+```
+
+```{r}
+# Have a look at the first few rows of the summary table
+head(nreads_summary)
+```
+```bash-out
+        input filtered denoised_F denoised_R merged nonchim
+NW102AB 12507     8681       7340       7475   5463    5463
+NW102C  14178     9657       8341       8529   6421    6421
+NW103AB 11814     7569       6120       6233   3934    3934
+NW103C  14704    10221       8559       8784   6144    6144
+NW201AB 12031     8125       6965       7060   5519    5519
+NW201C  12223     8188       6797       6799   4693    4693
+```
+
+Finally, we’ll write this table to file:
+
+```{r}
+# Write the summary table to file
+write.table(nreads_summary,
+            file = file.path(outdir, "nreads_summary.txt"),
+            sep = "\t", quote = FALSE, row.names = TRUE)
+```
+
+<hr style="height:1pt; visibility:hidden;" />
+
+## Assign taxonomy to ASVs
+
+Now, we will assign taxonomy to our ASVs.
+
+Depending on the marker gene and the data, you will have to choose the appropriate reference file
+for this step.
+Several files have been formatted for taxonomy assignments in DADA2 pipeline and are
+available at the DADA2 website.
+Here we are using SILVA a comprehensive, quality checked and
+regularly updated datasets of aligned small (16S/18S, SSU) and large subunit (23S/28S, LSU)
+ribosomal RNA (rRNA) sequences for all three domains of life (Bacteria, Archaea and Eukarya)
+(<https://www.arb-silva.de/>).
+
+```{r}
+# Assign taxonomy to the ASVs
+tax <- assignTaxonomy(seqtab, tax_key, multi = TRUE, verbose = TRUE)
+saveRDS(tax, file.path(outdir, "tax.rds"))
+```
+
+We can check whether the sequences in our taxonomy table and sequence table match:
+
+```{r}
+if(!identical(getSequences(tax), getSequences(seqtab))) stop("Taxonomy mismatch.")
+```
+
+And take a look at how many ASVs belong to each phylum:
+
+```{r}
+# How many ASVs are in each phylum?
+table(tax[,"Phylum"], useNA = "ifany")
+```
+```bash-out
+
+ Abditibacteriota   Acidobacteriota  Actinobacteriota    Armatimonadota      Bacteroidota  Bdellovibrionota       Chloroflexi     Crenarchaeota 
+                1               235               344                19               180                 7               229                17 
+    Cyanobacteria      Dependentiae  Desulfobacterota   Elusimicrobiota Entotheonellaeota    Fibrobacterota        Firmicutes   Gemmatimonadota 
+               24                 2                 7                 2                 6                 1                40                78 
+ Latescibacterota            MBNT15 Methylomirabilota       Myxococcota      Nitrospirota   Patescibacteria   Planctomycetota    Proteobacteria 
+               19                 1                 5               118                 1                16               194               336 
+          RCP2-54     Spirochaetota       Sumerlaeota Verrucomicrobiota             WPS-2              <NA> 
+                4                 1                 1                94                 5                16 
+```
+
+<hr style="height:1pt; visibility:hidden;" />
+
+## Generate output files
+
+In this last step, we will generate output files from the *DADA2* outputs that are
+formatted for downstream analysis in *phyloseq*.
+First, we will write a FASTA file with the final ASV sequences.
+(This FASTA file can also be used for phylogenetic tree inference with different R packages.)
+
+```{r}
+# Write the output files
+
+# Prepare sequences and headers:
+asv_seqs <- colnames(seqtab)
+asv_headers <- paste(">ASV", 1:ncol(seqtab), sep = "_")
+
+# Interleave headers and sequences:
+asv_fasta <- c(rbind(asv_headers, asv_seqs))
+
+# Write fasta file:
+write(asv_fasta, file = file.path(outdir, "ASVs.fa"))
+```
+
+Now, we build the final *phyloseq* object. Notes:
+
+- While we will not add a phylogenetic tree now, this can also be added to a *phyloseq* object.
+- Our metadata dataframe contains three samples that we don’t have sequences for.
+  However, this is not a problem: *phyloseq* will match the sample IDs in the metadata
+  with those in the OTU table, and disregard IDs not present in the OTU table.
+
+First we need to strip the "R1/R2.fastq.gz" suffixes from the sequence table,
+in order to make the sample IDs match:
+
+```{r}
+# Fix the sample IDs in the sequence table
+rownames(seqtab) <- sub("_R.*", "", rownames(seqtab))
+```
+
+Then we can create the phyloseq object:
+
+```{r}
+# Create the phyloseq object
+ps <- phyloseq(otu_table(seqtab, taxa_are_rows = FALSE),
+               sample_data(metadata_df),
+               tax_table(tax))
+
+# Saves the phyloseq object as an .rds file (which can be imported directly by phyloseq):
+saveRDS(ps, file = file.path(outdir, "ps.rds"))
+```
+
+<hr style="height:1pt; visibility:hidden;" />
+
+## In closing
+
+### Further reading
+
+- For another rundown of the dada2 pipeline take a look at the excellent tutorial at
+  <https://benjjneb.github.io/dada2/tutorial.html>
+- For a tutorial for reads generated using PacBio sequencing see:
+  <https://benjjneb.github.io/LRASManuscript/LRASms_Zymo.html>
+- Taxonomic references for dada: <https://benjjneb.github.io/dada2/training.html>
+
+### Attribution
+
+This documented was adapted from [Callahan et al. 2006](https://f1000research.com/articles/5-1492/v2)
+by Matthew Willman, with further edits by Soledad Benitez Ponce, Timothy Frey and Jelmer Poelstra.
+
+<hr style="height:1pt; visibility:hidden;" />
+
+## Bonus: Phylogenetic tree
+
+[_phangorn_](https://cran.r-project.org/web/packages/phangorn/index.html) is a package for estimation of phylogenetic trees in R.
+  
+```{r}
+library(phangorn)
+```
+
+<br> <br>

@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "Microbial Metabarcoding Workshop"
+  title: "Metabarcoding Workshop"
   site-url: https://jelmerp.github.io/metabar-ws24
   repo-url: https://github.com/jelmerp/metabar-ws24
   page-navigation: true
@@ -12,8 +12,39 @@ website:
     left:
       - href: index.qmd
         text: "{{< fa home >}}"
+      - text: Wed
+        menu:
+        - text: Intro to metabarcoding (TBA)
+        - text: Intro to OSC
+          href: 02_osc.qmd
+        - text: QC & trimmming
+          href: 03_qc-trim.qmd
+      - text: Thu
+        menu:
+        - text: ASV/OTU calling and pipeline considerations (TBA)
+        - text: Calling ASVs with DADA2
+          href: 05_dada.qmd
+        - text: Alpha & beta diversity (TBA)
+      - text: Fri
+        menu:
+        - text: Network analysis (TBA)
+        - text: Core microbiome analysis (TBA)
     right:
-        - text: About
+      - text: Homework
+        menu:
+          - text: Instructions
+            href: homework/instructions.qmd
+          - text: Unix Shell
+            href: homework/shell.qmd
+          - text: R
+            href: homework/R.qmd
+      - text: Reference pages
+        menu:
+          - text: Literature (TBA)
+          - text: Metadata & data submission (TBA)
+          - text: Software management at OSC
+            href: ref/ref_software.qmd
+      - text: About
         href: about.qmd
     tools:
       - icon: github
@@ -22,10 +53,15 @@ website:
             url:  https://github.com/jelmerp/metabar-ws24
           - text: Report an Issue
             url:  https://github.com/jelmerp/metabar-ws24/issues/new
+  page-footer:
+    left: "2024, Jelmer Poelstra"
+    right:
+      - icon: github
+        href: https://github.com/jelmerp/pracs-sp24
 format:
   html:
     highlight-style: atom-one
-    theme: pulse
+    theme: minty
     css: styles.css
     toc: true
     number-sections: true

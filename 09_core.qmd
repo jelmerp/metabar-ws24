@@ -1,0 +1,296 @@
+---
+title: "Core-Microbiome"
+author: "Fiama Guevara"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+::: callout-warning
+#### THIS PAGE IS STILL UNDER CONSTRUCTION
+:::
+
+----------------------------------------------------------------------------------------------------
+
+```{r}
+#Library needed
+library("phyloseq")
+library("ggplot2")
+library("microbiome")
+library("ggvenn")
+```
+
+## Defining a Core Microbiome {.unnumbered}
+
+Let's start *defining* what is considered a core microbiome. A ***core microbiome*** comprises the
+members shared among two or more microbial assemblages associated with a habitat.
+
+There are several approaches to define a core microbiome[^1]:
+
+[^1]: Cantoran et al. 2023 DOI:<https://doi.org/10.1093/femsec/fiad098>
+
+1.  Membership (shared taxa)
+2.  Composition (relative abundance)
+3.  Phylogenetic and functional redundancy
+4.  Persistence (temporal and spatial)
+5.  Connectivity (co-variation within and shared communities)
+
+## We will learn two approaches:
+
+Start reading the **`phyloseq`** object containing your data:
+
+```{r}
+ps.dataset <- readRDS("results/ps_fulldata/bac22rot_w_ASV.rds")
+```
+
+Take a look of your metadata and the variables you want to analyse. We will focus on **Rotation**.
+
+```{r}
+sample_data(ps.dataset)
+```
+
+### Composition (relative abundance)
+
+1.  Transform the ASV count table to compositional data (relative abundance). For that we will use
+    the R package **`microbiome`** (previously installed) with the function **`transform`**.
+
+```{r}
+ps.dataset.cm <- microbiome::transform(ps.dataset, "compositional")
+```
+
+2.  Determine the core taxa by the variable of interest (**Rotation**).For this you will subset the
+    data by **Rotation** variable.
+
+```{r}
+ps.CS <- subset_samples(ps.dataset.cm, Rotation == "CS")
+ps.CSW <- subset_samples(ps.dataset.cm, Rotation == "CSW")
+```
+
+Then, get the core taxa using the function **`core_members`** from the R package **`microbiome`**.
+
+```{r}
+core.taxa.CS <- core_members(ps.CS, detection = 0.001, prevalence = 95/100)
+core.taxa.CSW <- core_members(ps.CSW, detection = 0.001, prevalence = 95/100)
+```
+
+::: callout-tip
+## How to set detection and prevalence threasholds
+
+**Detection** (limit of detection) will be the minimum *relative abundance* value at which taxa will
+be selected. This can be set by the user or determined empirically based on sequencing depth.
+
+**Prevalence** is the proportion of samples that will be selected given a detection threshold.
+:::
+
+<details>
+
+<summary><b>Example</b> (click here)</summary>
+
+Consider this mock data for relative abundance of *Pseudomonas fluorescens* in 10 soil microbiome
+samples:
+
+| Sample | Relative abundance (%) |
+|--------|:-----------------------|
+| 1      | 0.002                  |
+| 3      | 0.49                   |
+| 4      | 7.8                    |
+| 5      | 12.1                   |
+| 6      | 0.52                   |
+| 7      | 0.2                    |
+| 8      | 0.06                   |
+| 9      | 9.1                    |
+| 10     | 0.08                   |
+
+Based on detection values, the prevalence will change. Lower detection threshold equals higher
+prevalence:
+
+| Detection | Prevalence |
+|-----------|:-----------|
+| 1         | 3/10       |
+| 0.1       | 6/10       |
+| 0.01      | 9/10       |
+
+</details>
+
+3.  Create a list with the selected core taxa for both subsets
+
+```{r}
+cores.list <- list(CS = core.taxa.CS, CSW = core.taxa.CSW)
+cores.list #To see the list of core taxa by Rotation
+```
+
+Get the list of shared taxa from the taxa table of your dataset
+
+```{r, echo=FALSE}
+tax.table.ps <- as.data.frame(tax_table(ps.dataset))
+
+shared.taxa <-  core.taxa.CS[core.taxa.CS %in% core.taxa.CSW]
+tax <- tax.table.ps[which(row.names(tax.table.ps) %in% shared.taxa ),]
+tax
+```
+
+Get the list of unique taxa in Rotation CS
+
+```{r, echo=FALSE}
+unique.taxa.CS <-  core.taxa.CS[!core.taxa.CS %in% core.taxa.CSW]
+tax.CS <- tax.table.ps[which(row.names(tax.table.ps) %in% unique.taxa.CS),]
+tax.CS
+```
+
+Get the list of unique taxa in Rotation CSW
+
+```{r, echo=FALSE}
+unique.taxa.CSW <-  core.taxa.CSW[!core.taxa.CSW %in% core.taxa.CS]
+tax.CSW <- tax.table.ps[which(row.names(tax.table.ps) %in% unique.taxa.CSW),]
+tax.CSW
+```
+
+4.  Plot a Venn Diagram
+
+```{r, echo=FALSE}
+plot <- ggvenn(cores.list, fill_color = c("#0073C2FF", "#EFC000FF"),
+            stroke_size = 0.5, set_name_size = 5, text_size = 3,
+            show_percentage = T)
+print(plot)
+```
+
+### Membership and Composition
+
+This approach takes into account presence/absence and relative abundance to select shared taxa. The
+threshold could arbitrary be set but here we will follow the 95th percentile approach\[\^2\]. That
+means that we will assign core membership to taxa that fell within the 95th percentile of the ranked
+frequency and ranked relative abundance within the whole data.
+
+::: {.callout-note collapse="true"}
+#### Side note: 95th Percentile approach. *(Click to expand)*
+
+Diagram of how the 95th percentile frequency and abundance core taxa were identified. The
+distribution of total relative abundance and frequency of taxa is assessed and the those ranked
+within the 95th percentile (top 5%) are selected as core.
+
+![](img/Percentile.95.approach.Cantoran2023.png){fig-align="center" width="50%"}
+:::
+
+1.  Create a data frame from the **`phyloseq`** object
+
+```{r}
+df <- psmelt(ps.dataset.cm)
+```
+
+2.  Take the total Relative Abundance sum of each genus
+
+```{r}
+df.RA <- aggregate(df$Abundance, by = list(Genus = df$Genus), FUN=sum) 
+df.RA <- dplyr::rename(df.RA, TotalRA = `x`)
+```
+
+3.  Determining 95th quantile of the RA data
+
+```{r, echo=FALSE}
+quantile.95.abund <- quantile(df.RA$TotalRA, 0.95)
+quantile.95.abund
+```
+
+4.  Selecting for genera that fit the 95th cutoff
+
+```{r}
+taxa.95 <- subset(df.RA, TotalRA >= quantile.95.abund) 
+taxa.95.genus <- taxa.95$Genus
+
+```
+
+5.  Determine the frequency 95th cutoff. We go back and use the original phyloseq object and
+    agglomerate the data by Genus tax rank (it could be any tax rank you want e.g., Phylum, Family)
+
+```{r, echo=FALSE}
+ps.genus <- tax_glom(ps.dataset, "Genus")
+ASVs.genus <- otu_table(ps.genus)
+df.ASVs.genus <- as.data.frame(ASVs.genus)
+rownames(df.ASVs.genus) <- as.data.frame(tax_table(ps.genus))$Genus
+
+```
+
+6.  Create a table of presence/abundance of ASVs. We will use 1 if present, 0 if not.
+
+```{r}
+df.PA <- 1*((df.ASVs.genus>0)==1)
+Occupancy <- rowSums(df.PA)/ncol(df.PA) #Calculate occupancy
+df.Freq <- as.data.frame(cbind(df.PA, Occupancy))
+df.Freq <- tibble::rownames_to_column(df.Freq, 'Genus')
+
+```
+
+7.  Determining 95th quantile of the presence/abundance table
+
+```{r, echo=FALSE}
+quantile.95.freq <- quantile(df.Freq$Occupancy, 0.95)
+quantile.95.freq
+```
+
+8.  Select the genera that fit the 95th cutoff
+
+```{r}
+#
+Freq.95 <- subset(df.Freq, Occupancy >= quantile.95.freq) #select cutoff 
+Freq.95.genus <- Freq.95$Genus
+
+Quantile.95 <- merge.data.frame(Freq.95, taxa.95, by = "Genus")  
+
+```
+
+::: {.callout-note collapse="true"}
+#### Side note: You can plot a Venn Diagram to see how many taxa made the cutoffs. *(Click to expand)*
+
+Use the **Core.list** data:
+
+```{r}
+Core.95.list <- list(Frequency = Freq.95.genus, Relative_abundance = taxa.95.genus)
+plot.VennD <- ggvenn(Core.95.list,
+            stroke_size = 0.5, set_name_size = 3.2, text_size = 3)
+
+print(plot.VennD)
+```
+:::
+
+9.  Get the list of your core taxa based on the 95th percentile
+
+```{r, echo=FALSE}
+Core.95.intersect <- Reduce(intersect, Core.95.list)
+```
+
+10. Subset your original phyloseq object for core taxa
+
+```{r, echo=FALSE}
+ps.Core <- subset_taxa(ps.dataset, Genus %in% c(Core.95.intersect))
+```
+
+11. Fix the relative abundance of the core taxa to continue with the plot
+
+```{r, echo=FALSE}
+# Agglomerate taxa by genus level
+Core_genera <- tax_glom(ps.Core, taxrank = 'Genus', NArm = FALSE)
+
+# Get relative abundance in %
+Core_genera.RA <- transform_sample_counts(Core_genera , function(x) 100 * x/sum(x))
+
+#Transform to a data frame
+df.Core_genera <- psmelt(Core_genera.RA)
+
+```
+
+12. Create a bubble plot You can customize your plot using *`ggplot2`* package available options.
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+
+df.Core_genera %>%
+  dplyr::group_by(Genus, Rotation, Location,) %>%
+  dplyr::summarize(abundance = mean(Abundance)) %>%
+  ggplot(aes(Rotation, Genus)) +
+  facet_wrap(~Location) +
+    geom_point(aes(size = abundance), color = "grey30", fill = "#66A61E", alpha = 0.5, shape = 21, stroke = 0.1) +
+        scale_size_continuous(range = c(0,8), breaks = c(1, 3, 5, 8, 10), name="Relative\nAbundance (%)") +
+          scale_x_discrete(name ="Rotation") +
+            theme_bw()
+
+```
