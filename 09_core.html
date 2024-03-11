@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Fiama Guevara">
+<meta name="dcterms.date" content="2024-03-15">
 
-<title>Metabarcoding Workshop - Core-Microbiome</title>
+<title>Metabarcoding Workshop - Defining a Core Microbiome</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -167,7 +168,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-fri">    
         <li class="dropdown-header">Network analysis (TBA)</li>
-        <li class="dropdown-header">Core microbiome analysis (TBA)</li>
+        <li>
+    <a class="dropdown-item" href="./09_core.html">
+ <span class="dropdown-text">Core microbiome analysis</span></a>
+  </li>  
     </ul>
   </li>
 </ul>
@@ -197,9 +201,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-reference-pages">    
         <li class="dropdown-header">Literature (TBA)</li>
-        <li class="dropdown-header">Metadata &amp; data submission (TBA)</li>
         <li>
-    <a class="dropdown-item" href="./ref/ref_software.html">
+    <a class="dropdown-item" href="./ref/sra_sub.html">
+ <span class="dropdown-text">SRA data submission</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ref/software.html">
  <span class="dropdown-text">Software management at OSC</span></a>
   </li>  
     </ul>
@@ -239,12 +246,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#defining-a-core-microbiome" id="toc-defining-a-core-microbiome" class="nav-link active" data-scroll-target="#defining-a-core-microbiome">Defining a Core Microbiome</a></li>
-  <li><a href="#we-will-learn-two-approaches" id="toc-we-will-learn-two-approaches" class="nav-link" data-scroll-target="#we-will-learn-two-approaches"><span class="header-section-number">1</span> We will learn two approaches:</a>
-  <ul class="collapse">
-  <li><a href="#composition-relative-abundance" id="toc-composition-relative-abundance" class="nav-link" data-scroll-target="#composition-relative-abundance"><span class="header-section-number">1.1</span> Composition (relative abundance)</a></li>
-  <li><a href="#membership-and-composition" id="toc-membership-and-composition" class="nav-link" data-scroll-target="#membership-and-composition"><span class="header-section-number">1.2</span> Membership and Composition</a></li>
-  </ul></li>
+  <li><a href="#core-microbiome" id="toc-core-microbiome" class="nav-link active" data-scroll-target="#core-microbiome">Core Microbiome</a></li>
+  <li><a href="#lets-start" id="toc-lets-start" class="nav-link" data-scroll-target="#lets-start"><span class="header-section-number">1</span> Let’s start…</a></li>
+  <li><a href="#approach-1-composition-relative-abundance" id="toc-approach-1-composition-relative-abundance" class="nav-link" data-scroll-target="#approach-1-composition-relative-abundance"><span class="header-section-number">2</span> Approach 1: Composition (relative abundance)</a></li>
+  <li><a href="#approach-2-membership-and-composition" id="toc-approach-2-membership-and-composition" class="nav-link" data-scroll-target="#approach-2-membership-and-composition"><span class="header-section-number">3</span> Approach 2: Membership and Composition</a></li>
   </ul>
 </nav>
     </div>
@@ -253,7 +258,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Core-Microbiome</h1>
+<h1 class="title">Defining a Core Microbiome</h1>
 </div>
 
 
@@ -267,6 +272,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </div>
   </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 15, 2024</p>
+    </div>
+  </div>
   
     
   </div>
@@ -276,93 +287,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-THIS PAGE IS STILL UNDER CONSTRUCTION
-</div>
-</div>
-<div class="callout-body-container callout-body">
-
-</div>
-</div>
 <hr>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Library needed</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"phyloseq"</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggplot2"</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"microbiome"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-microbiome R package (microbiome.github.com)
-    
-
-
- Copyright (C) 2011-2022 Leo Lahti, 
-    Sudarshan Shetty et al. &lt;microbiome.github.io&gt;</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'microbiome'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:ggplot2':
-
-    alpha</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:base':
-
-    transform</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggvenn"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: dplyr</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'dplyr'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    filter, lag</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    intersect, setdiff, setequal, union</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: grid</code></pre>
-</div>
-</div>
-<section id="defining-a-core-microbiome" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="defining-a-core-microbiome">Defining a Core Microbiome</h2>
-<p>Let’s start <em>defining</em> what is considered a core microbiome. A <strong><em>core microbiome</em></strong> comprises the members shared among two or more microbial assemblages associated with a habitat.</p>
+<p><br></p>
+<section id="core-microbiome" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="core-microbiome">Core Microbiome</h2>
+<p>Let’s start <em>understanding</em> what is considered a <strong><em>core microbiome</em></strong>. It comprises the members shared among two or more microbial assemblages associated with a habitat. To define a core microbiome we can consider parameters such as composition, phylogeny, persistence and biotic/abiotic interactions.</p>
 <p>There are several approaches to define a core microbiome<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
 <ol type="1">
-<li>Membership (shared taxa)</li>
+<li>Membership (taxonomically defined)</li>
 <li>Composition (relative abundance)</li>
 <li>Phylogenetic and functional redundancy</li>
 <li>Persistence (temporal and spatial)</li>
 <li>Connectivity (co-variation within and shared communities)</li>
 </ol>
+<p><br></p>
 </section>
-<section id="we-will-learn-two-approaches" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="we-will-learn-two-approaches"><span class="header-section-number">1</span> We will learn two approaches:</h2>
-<p>Start reading the <strong><code>phyloseq</code></strong> object containing your data:</p>
+<section id="lets-start" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="lets-start"><span class="header-section-number">1</span> Let’s start…</h2>
+<p>Load the necessary packages:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ps.dataset <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"results/ps_fulldata/bac22rot_w_ASV.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the R library to load packages from</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">.libPaths</span>(<span class="st">"/fs/ess/PAS0471/jelmer/R/metabar"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dyn.load</span>(<span class="st">"/fs/ess/PAS0471/jelmer/software/GLPK/lib/libglpk.so.40"</span>, <span class="at">local =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the packages</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phyloseq)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(microbiome)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggvenn)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Read the <strong><code>phyloseq</code></strong> object containing your data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ps.dataset <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"results/ps_fulldata/bac22rot_w_ASV.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Take a look of your metadata and the variables you want to analyse. We will focus on <strong>Rotation</strong>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_data</span>(ps.dataset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_data</span>(ps.dataset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>           Year Location Rotation  Plot TRT Block Sampling.Date
+<pre class="styled-output"><code>           Year Location Rotation  Plot TRT Block Sampling.Date
 T22NW102AB 2022    NWARS       CS 102AB   2   100    June, 2022
 T22NW102C  2022    NWARS       CS  102C   7   100    June, 2022
 T22NW103AB 2022    NWARS      CSW 103AB   3   100    June, 2022
@@ -395,25 +358,27 @@ T22W404A   2022     WARS      CSW  404A   8   400    June, 2022
 T22W404BC  2022     WARS      CSW 404BC   3   400    June, 2022</code></pre>
 </div>
 </div>
-<section id="composition-relative-abundance" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="composition-relative-abundance"><span class="header-section-number">1.1</span> Composition (relative abundance)</h3>
+<p><br></p>
+</section>
+<section id="approach-1-composition-relative-abundance" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="approach-1-composition-relative-abundance"><span class="header-section-number">2</span> Approach 1: Composition (relative abundance)</h2>
 <ol type="1">
 <li>Transform the ASV count table to compositional data (relative abundance). For that we will use the R package <strong><code>microbiome</code></strong> (previously installed) with the function <strong><code>transform</code></strong>.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ps.dataset.cm <span class="ot">&lt;-</span> microbiome<span class="sc">::</span><span class="fu">transform</span>(ps.dataset, <span class="st">"compositional"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ps.dataset.cm <span class="ot">&lt;-</span> microbiome<span class="sc">::</span><span class="fu">transform</span>(ps.dataset, <span class="st">"compositional"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="2" type="1">
 <li>Determine the core taxa by the variable of interest (<strong>Rotation</strong>).For this you will subset the data by <strong>Rotation</strong> variable.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>ps.CS <span class="ot">&lt;-</span> <span class="fu">subset_samples</span>(ps.dataset.cm, Rotation <span class="sc">==</span> <span class="st">"CS"</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>ps.CSW <span class="ot">&lt;-</span> <span class="fu">subset_samples</span>(ps.dataset.cm, Rotation <span class="sc">==</span> <span class="st">"CSW"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ps.CS <span class="ot">&lt;-</span> <span class="fu">subset_samples</span>(ps.dataset.cm, Rotation <span class="sc">==</span> <span class="st">"CS"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>ps.CSW <span class="ot">&lt;-</span> <span class="fu">subset_samples</span>(ps.dataset.cm, Rotation <span class="sc">==</span> <span class="st">"CSW"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, get the core taxa using the function <strong><code>core_members</code></strong> from the R package <strong><code>microbiome</code></strong>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>core.taxa.CS <span class="ot">&lt;-</span> <span class="fu">core_members</span>(ps.CS, <span class="at">detection =</span> <span class="fl">0.001</span>, <span class="at">prevalence =</span> <span class="dv">95</span><span class="sc">/</span><span class="dv">100</span>)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>core.taxa.CSW <span class="ot">&lt;-</span> <span class="fu">core_members</span>(ps.CSW, <span class="at">detection =</span> <span class="fl">0.001</span>, <span class="at">prevalence =</span> <span class="dv">95</span><span class="sc">/</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>core.taxa.CS <span class="ot">&lt;-</span> <span class="fu">core_members</span>(ps.CS, <span class="at">detection =</span> <span class="fl">0.001</span>, <span class="at">prevalence =</span> <span class="dv">95</span><span class="sc">/</span><span class="dv">100</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>core.taxa.CSW <span class="ot">&lt;-</span> <span class="fu">core_members</span>(ps.CSW, <span class="at">detection =</span> <span class="fl">0.001</span>, <span class="at">prevalence =</span> <span class="dv">95</span><span class="sc">/</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -427,8 +392,6 @@ How to set detection and prevalence threasholds
 <div class="callout-body-container callout-body">
 <p><strong>Detection</strong> (limit of detection) will be the minimum <em>relative abundance</em> value at which taxa will be selected. This can be set by the user or determined empirically based on sequencing depth.</p>
 <p><strong>Prevalence</strong> is the proportion of samples that will be selected given a detection threshold.</p>
-</div>
-</div>
 <details>
 <summary>
 <b>Example</b> (click here)
@@ -504,14 +467,16 @@ How to set detection and prevalence threasholds
 </tbody>
 </table>
 </details>
+</div>
+</div>
 <ol start="3" type="1">
-<li>Create a list with the selected core taxa for both subsets</li>
+<li>Create a list with the selected core taxa for both subsets.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>cores.list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">CS =</span> core.taxa.CS, <span class="at">CSW =</span> core.taxa.CSW)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>cores.list <span class="co">#To see the list of core taxa by Rotation</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>cores.list <span class="ot">&lt;&lt;-</span> <span class="fu">list</span>(<span class="at">CS =</span> core.taxa.CS, <span class="at">CSW =</span> core.taxa.CSW)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>cores.list <span class="co">#To see the list of core taxa (ASVs) by Rotation</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>$CS
+<pre class="styled-output"><code>$CS
  [1] "ASV_1372" "ASV_1425" "ASV_1426" "ASV_1723" "ASV_1737" "ASV_2316"
  [7] "ASV_2440" "ASV_2450" "ASV_2483" "ASV_2545" "ASV_2605" "ASV_2635"
 [13] "ASV_2825" "ASV_3076" "ASV_3576" "ASV_3587" "ASV_3592" "ASV_3986"
@@ -532,289 +497,154 @@ $CSW
 [49] "ASV_8079"</code></pre>
 </div>
 </div>
-<p>Get the list of shared taxa from the taxa table of your dataset</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>          Kingdom            Phylum               Class               Order
-ASV_1372 Bacteria    Proteobacteria Alphaproteobacteria         Rhizobiales
-ASV_1425 Bacteria    Proteobacteria Alphaproteobacteria         Rhizobiales
-ASV_1426 Bacteria    Proteobacteria Alphaproteobacteria         Rhizobiales
-ASV_1723 Bacteria    Proteobacteria Alphaproteobacteria    Sphingomonadales
-ASV_1737 Bacteria    Proteobacteria Alphaproteobacteria    Sphingomonadales
-ASV_2316 Bacteria    Proteobacteria Gammaproteobacteria     Xanthomonadales
-ASV_2440 Bacteria    Proteobacteria Gammaproteobacteria     Burkholderiales
-ASV_2450 Bacteria    Proteobacteria Gammaproteobacteria     Burkholderiales
-ASV_2483 Bacteria    Proteobacteria Gammaproteobacteria     Burkholderiales
-ASV_2545 Bacteria    Proteobacteria Gammaproteobacteria     Burkholderiales
-ASV_2605 Bacteria    Proteobacteria Gammaproteobacteria     Burkholderiales
-ASV_2635 Bacteria    Proteobacteria Gammaproteobacteria     Burkholderiales
-ASV_2825 Bacteria       Myxococcota          Myxococcia        Myxococcales
-ASV_3076 Bacteria       Myxococcota           Polyangia        Polyangiales
-ASV_3576 Bacteria        Firmicutes             Bacilli          Bacillales
-ASV_3592 Bacteria        Firmicutes             Bacilli          Bacillales
-ASV_3986 Bacteria  Actinobacteriota     Thermoleophilia Solirubrobacterales
-ASV_4073 Bacteria  Actinobacteriota     Thermoleophilia          Gaiellales
-ASV_4082 Bacteria  Actinobacteriota     Thermoleophilia          Gaiellales
-ASV_4242 Bacteria  Actinobacteriota      Actinobacteria          Frankiales
-ASV_4391 Bacteria  Actinobacteriota      Actinobacteria   Micromonosporales
-ASV_4478 Bacteria  Actinobacteriota      Actinobacteria       Micrococcales
-ASV_4504 Bacteria  Actinobacteriota      Actinobacteria       Micrococcales
-ASV_4565 Bacteria  Actinobacteriota      Actinobacteria   Pseudonocardiales
-ASV_4642 Bacteria  Actinobacteriota      Actinobacteria Propionibacteriales
-ASV_5791 Bacteria   Acidobacteriota      Acidobacteriae    Acidobacteriales
-ASV_6609 Bacteria   Planctomycetota       Phycisphaerae    Tepidisphaerales
-ASV_7160 Bacteria Verrucomicrobiota    Verrucomicrobiae  Chthoniobacterales
-ASV_7731 Bacteria       Chloroflexi              KD4-96                &lt;NA&gt;
-ASV_7736 Bacteria       Chloroflexi              KD4-96                &lt;NA&gt;
-ASV_7822 Bacteria   Gemmatimonadota    Gemmatimonadetes    Gemmatimonadales
-ASV_7848 Bacteria   Gemmatimonadota    Gemmatimonadetes    Gemmatimonadales
-ASV_8079 Bacteria Methylomirabilota    Methylomirabilia     Rokubacteriales
-                       Family                  Genus       Species
-ASV_1372    Xanthobacteraceae           Pseudolabrys          &lt;NA&gt;
-ASV_1425    Xanthobacteraceae         Bradyrhizobium       elkanii
-ASV_1426    Xanthobacteraceae         Bradyrhizobium     japonicum
-ASV_1723    Sphingomonadaceae           Sphingomonas          &lt;NA&gt;
-ASV_1737    Sphingomonadaceae           Sphingomonas daechungensis
-ASV_2316     Xanthomonadaceae             Arenimonas          &lt;NA&gt;
-ASV_2440              SC-I-84                   &lt;NA&gt;          &lt;NA&gt;
-ASV_2450              SC-I-84                   &lt;NA&gt;          &lt;NA&gt;
-ASV_2483              TRA3-20                   &lt;NA&gt;          &lt;NA&gt;
-ASV_2545    Nitrosomonadaceae                 mle1-7          &lt;NA&gt;
-ASV_2605       Comamonadaceae          Piscinibacter          &lt;NA&gt;
-ASV_2635       Comamonadaceae          Piscinibacter          &lt;NA&gt;
-ASV_2825        Myxococcaceae             Archangium       gephyra
-ASV_3076        Polyangiaceae          Aetherobacter          &lt;NA&gt;
-ASV_3576          Bacillaceae               Bacillus     circulans
-ASV_3592          Bacillaceae               Bacillus          &lt;NA&gt;
-ASV_3986 Solirubrobacteraceae        Solirubrobacter          &lt;NA&gt;
-ASV_4073                 &lt;NA&gt;                   &lt;NA&gt;          &lt;NA&gt;
-ASV_4082          Gaiellaceae                Gaiella          &lt;NA&gt;
-ASV_4242      Acidothermaceae           Acidothermus          &lt;NA&gt;
-ASV_4391   Micromonosporaceae                   &lt;NA&gt;          &lt;NA&gt;
-ASV_4478    Cellulomonadaceae           Cellulomonas          &lt;NA&gt;
-ASV_4504   Intrasporangiaceae             Oryzihumus        terrae
-ASV_4565   Pseudonocardiaceae         Pseudonocardia          &lt;NA&gt;
-ASV_4642      Nocardioidaceae           Nocardioides          &lt;NA&gt;
-ASV_5791                 &lt;NA&gt;                   &lt;NA&gt;          &lt;NA&gt;
-ASV_6609    WD2101 soil group                   &lt;NA&gt;          &lt;NA&gt;
-ASV_7160  Chthoniobacteraceae Candidatus Udaeobacter          &lt;NA&gt;
-ASV_7731                 &lt;NA&gt;                   &lt;NA&gt;          &lt;NA&gt;
-ASV_7736                 &lt;NA&gt;                   &lt;NA&gt;          &lt;NA&gt;
-ASV_7822    Gemmatimonadaceae           Gemmatimonas          &lt;NA&gt;
-ASV_7848    Gemmatimonadaceae           Gemmatimonas          &lt;NA&gt;
-ASV_8079                 &lt;NA&gt;                   &lt;NA&gt;          &lt;NA&gt;
-         Species_exact confidence
-ASV_1372          &lt;NA&gt;       0.80
-ASV_1425          &lt;NA&gt;       0.95
-ASV_1426          &lt;NA&gt;       0.57
-ASV_1723          &lt;NA&gt;       0.99
-ASV_1737 daechungensis       0.81
-ASV_2316          &lt;NA&gt;       1.00
-ASV_2440          &lt;NA&gt;       1.00
-ASV_2450          &lt;NA&gt;       1.00
-ASV_2483          &lt;NA&gt;       0.99
-ASV_2545          &lt;NA&gt;       0.99
-ASV_2605          &lt;NA&gt;       0.90
-ASV_2635          &lt;NA&gt;       0.82
-ASV_2825          &lt;NA&gt;       0.65
-ASV_3076         rufus       0.94
-ASV_3576          &lt;NA&gt;       0.63
-ASV_3592          &lt;NA&gt;       0.73
-ASV_3986          &lt;NA&gt;       1.00
-ASV_4073          &lt;NA&gt;       1.00
-ASV_4082          &lt;NA&gt;       1.00
-ASV_4242          &lt;NA&gt;       1.00
-ASV_4391          &lt;NA&gt;       1.00
-ASV_4478          &lt;NA&gt;       0.97
-ASV_4504          &lt;NA&gt;       0.57
-ASV_4565          &lt;NA&gt;       0.95
-ASV_4642          &lt;NA&gt;       1.00
-ASV_5791          &lt;NA&gt;       1.00
-ASV_6609          &lt;NA&gt;       1.00
-ASV_7160          &lt;NA&gt;       1.00
-ASV_7731          &lt;NA&gt;       1.00
-ASV_7736          &lt;NA&gt;       1.00
-ASV_7822          &lt;NA&gt;       0.99
-ASV_7848          &lt;NA&gt;       1.00
-ASV_8079          &lt;NA&gt;       1.00</code></pre>
-</div>
-</div>
-<p>Get the list of unique taxa in Rotation CS</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>          Kingdom           Phylum            Class             Order
-ASV_3587 Bacteria       Firmicutes          Bacilli        Bacillales
-ASV_4348 Bacteria Actinobacteriota   Actinobacteria Micromonosporales
-ASV_4555 Bacteria Actinobacteriota   Actinobacteria Pseudonocardiales
-ASV_5779 Bacteria  Acidobacteriota   Acidobacteriae  Acidobacteriales
-ASV_7847 Bacteria  Gemmatimonadota Gemmatimonadetes  Gemmatimonadales
-                     Family         Genus      Species Species_exact confidence
-ASV_3587        Bacillaceae      Bacillus  aryabhattai          &lt;NA&gt;       0.96
-ASV_4348 Micromonosporaceae          &lt;NA&gt;         &lt;NA&gt;          &lt;NA&gt;       1.00
-ASV_4555 Pseudonocardiaceae Amycolatopsis mediterranei          &lt;NA&gt;       1.00
-ASV_5779               &lt;NA&gt;          &lt;NA&gt;         &lt;NA&gt;          &lt;NA&gt;       1.00
-ASV_7847  Gemmatimonadaceae  Gemmatimonas         &lt;NA&gt;          &lt;NA&gt;       1.00</code></pre>
-</div>
-</div>
-<p>Get the list of unique taxa in Rotation CSW</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>          Kingdom            Phylum               Class               Order
-ASV_1367 Bacteria    Proteobacteria Alphaproteobacteria         Rhizobiales
-ASV_1388 Bacteria    Proteobacteria Alphaproteobacteria         Rhizobiales
-ASV_1863 Bacteria    Proteobacteria Alphaproteobacteria     Acetobacterales
-ASV_2619 Bacteria    Proteobacteria Gammaproteobacteria     Burkholderiales
-ASV_2896 Bacteria       Myxococcota           Polyangia        Polyangiales
-ASV_3898 Bacteria  Actinobacteriota     Thermoleophilia Solirubrobacterales
-ASV_3962 Bacteria  Actinobacteriota     Thermoleophilia Solirubrobacterales
-ASV_4059 Bacteria  Actinobacteriota     Thermoleophilia          Gaiellales
-ASV_4477 Bacteria  Actinobacteriota      Actinobacteria       Micrococcales
-ASV_4521 Bacteria  Actinobacteriota      Actinobacteria       Micrococcales
-ASV_4654 Bacteria  Actinobacteriota      Actinobacteria Propionibacteriales
-ASV_4655 Bacteria  Actinobacteriota      Actinobacteria Propionibacteriales
-ASV_5760 Bacteria   Acidobacteriota      Acidobacteriae    Acidobacteriales
-ASV_6960 Bacteria Verrucomicrobiota    Verrucomicrobiae      Pedosphaerales
-ASV_7349 Bacteria   Acidobacteriota    Vicinamibacteria  Vicinamibacterales
-ASV_7858 Bacteria   Gemmatimonadota    Gemmatimonadetes    Gemmatimonadales
-                    Family          Genus Species Species_exact confidence
-ASV_1367 Xanthobacteraceae           &lt;NA&gt;    &lt;NA&gt;          &lt;NA&gt;       0.97
-ASV_1388 Xanthobacteraceae           &lt;NA&gt;    &lt;NA&gt;          &lt;NA&gt;       1.00
-ASV_1863  Acetobacteraceae           &lt;NA&gt;    &lt;NA&gt;          &lt;NA&gt;       1.00
-ASV_2619    Comamonadaceae     Acidovorax  avenae          &lt;NA&gt;       1.00
-ASV_2896           BIrii41           &lt;NA&gt;    &lt;NA&gt;          &lt;NA&gt;       1.00
-ASV_3898             67-14           &lt;NA&gt;    &lt;NA&gt;          &lt;NA&gt;       1.00
-ASV_3962             67-14           &lt;NA&gt;    &lt;NA&gt;          &lt;NA&gt;       0.96
-ASV_4059              &lt;NA&gt;           &lt;NA&gt;    &lt;NA&gt;          &lt;NA&gt;       1.00
-ASV_4477 Cellulomonadaceae   Cellulomonas    &lt;NA&gt;          &lt;NA&gt;       1.00
-ASV_4521    Micrococcaceae   Arthrobacter    &lt;NA&gt;          &lt;NA&gt;       0.82
-ASV_4654   Nocardioidaceae      Kribbella    &lt;NA&gt;          &lt;NA&gt;       1.00
-ASV_4655   Nocardioidaceae      Kribbella    &lt;NA&gt;          &lt;NA&gt;       1.00
-ASV_5760              &lt;NA&gt;           &lt;NA&gt;    &lt;NA&gt;          &lt;NA&gt;       1.00
-ASV_6960   Pedosphaeraceae ADurb.Bin063-1    &lt;NA&gt;          &lt;NA&gt;       1.00
-ASV_7349              &lt;NA&gt;           &lt;NA&gt;    &lt;NA&gt;          &lt;NA&gt;       1.00
-ASV_7858 Gemmatimonadaceae   Gemmatimonas    &lt;NA&gt;          &lt;NA&gt;       1.00</code></pre>
-</div>
-</div>
 <ol start="4" type="1">
-<li>Plot a Venn Diagram</li>
+<li>Get the list of shared taxa from the taxa table of your dataset.</li>
 </ol>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>tax.table.ps <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">tax_table</span>(ps.dataset))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>shared.taxa <span class="ot">&lt;-</span>  core.taxa.CS[core.taxa.CS <span class="sc">%in%</span> core.taxa.CSW]</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>tax <span class="ot">&lt;-</span> tax.table.ps[<span class="fu">which</span>(<span class="fu">row.names</span>(tax.table.ps) <span class="sc">%in%</span> shared.taxa ),]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="5" type="1">
+<li>Get the list of unique taxa in Rotation CS.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>unique.taxa.CS <span class="ot">&lt;-</span>  core.taxa.CS[<span class="sc">!</span>core.taxa.CS <span class="sc">%in%</span> core.taxa.CSW]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>tax.CS <span class="ot">&lt;-</span> tax.table.ps[<span class="fu">which</span>(<span class="fu">row.names</span>(tax.table.ps) <span class="sc">%in%</span> unique.taxa.CS),]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="6" type="1">
+<li>Get the list of unique taxa in Rotation CSW.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>unique.taxa.CSW <span class="ot">&lt;-</span>  core.taxa.CSW[<span class="sc">!</span>core.taxa.CSW <span class="sc">%in%</span> core.taxa.CS]</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>tax.CSW <span class="ot">&lt;-</span> tax.table.ps[<span class="fu">which</span>(<span class="fu">row.names</span>(tax.table.ps) <span class="sc">%in%</span> unique.taxa.CSW),]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="7" type="1">
+<li>Plot a Venn Diagram.</li>
+</ol>
+<div class="cell" height="0.5" width="0.5">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>plot <span class="ot">&lt;-</span> <span class="fu">ggvenn</span>(cores.list, <span class="at">fill_color =</span> <span class="fu">c</span>(<span class="st">"#0073C2FF"</span>, <span class="st">"#EFC000FF"</span>),</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">stroke_size =</span> <span class="fl">0.5</span>, <span class="at">set_name_size =</span> <span class="dv">5</span>, <span class="at">text_size =</span> <span class="dv">5</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">show_percentage =</span> T)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="09_core_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="09_core_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" style="width:85.0%"></p>
 </figure>
 </div>
 </div>
 </div>
+<p><br></p>
 </section>
-<section id="membership-and-composition" class="level3" data-number="1.2">
-<h3 data-number="1.2" class="anchored" data-anchor-id="membership-and-composition"><span class="header-section-number">1.2</span> Membership and Composition</h3>
-<p>This approach takes into account presence/absence and relative abundance to select shared taxa. The threshold could arbitrary be set but here we will follow the 95th percentile approach[^2]. That means that we will assign core membership to taxa that fell within the 95th percentile of the ranked frequency and ranked relative abundance within the whole data.</p>
+<section id="approach-2-membership-and-composition" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="approach-2-membership-and-composition"><span class="header-section-number">3</span> Approach 2: Membership and Composition</h2>
+<p>This approach takes into account presence/absence and relative abundance to select shared taxa. The threshold could arbitrary be set but here we will follow the 95th percentile approach<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. That means that we will assign core membership to taxa that fell within the 95th percentile of the ranked frequency and ranked relative abundance within the whole data.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Side note: 95th Percentile approach. <em>(Click to expand)</em>
+Side note: How the 95th Percentile approach works. <em>(Click to expand)</em>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Diagram of how the 95th percentile frequency and abundance core taxa were identified. The distribution of total relative abundance and frequency of taxa is assessed and the those ranked within the 95th percentile (top 5%) are selected as core.</p>
+<p>Diagram of how the 95th percentile frequency and abundance core taxa were identified. The distribution of total relative abundance and frequency of taxa is assessed and the those ranked within the 95th percentile (top 5%) are selected as core. Figure from Cantoran et al.&nbsp;2023.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="img/Percentile.95.approach.Cantoran2023.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%"></p>
+<p><img src="img/Percentile.95.approach.Cantoran2023.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
 <ol type="1">
-<li>Create a data frame from the <strong><code>phyloseq</code></strong> object</li>
+<li>Create a data frame from the <strong><code>phyloseq</code></strong> object.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">psmelt</span>(ps.dataset.cm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">psmelt</span>(ps.dataset.cm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="2" type="1">
-<li>Take the total Relative Abundance sum of each genus</li>
+<li>Take the total Relative Abundance sum of each genus.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df.RA <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(df<span class="sc">$</span>Abundance, <span class="at">by =</span> <span class="fu">list</span>(<span class="at">Genus =</span> df<span class="sc">$</span>Genus), <span class="at">FUN=</span>sum) </span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>df.RA <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">rename</span>(df.RA, <span class="at">TotalRA =</span> <span class="st">`</span><span class="at">x</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df.RA <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(df<span class="sc">$</span>Abundance, <span class="at">by =</span> <span class="fu">list</span>(<span class="at">Genus =</span> df<span class="sc">$</span>Genus), <span class="at">FUN=</span>sum) </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>df.RA <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">rename</span>(df.RA, <span class="at">TotalRA =</span> <span class="st">`</span><span class="at">x</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="3" type="1">
-<li>Determining 95th quantile of the RA data</li>
+<li>Determining 95th quantile of the RA data.</li>
 </ol>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>      95% 
-0.1663236 </code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>quantile.<span class="fl">95.</span>abund <span class="ot">&lt;-</span> <span class="fu">quantile</span>(df.RA<span class="sc">$</span>TotalRA, <span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="4" type="1">
-<li>Selecting for genera that fit the 95th cutoff</li>
+<li>Selecting for genera that fit the 95th cutoff.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>taxa<span class="fl">.95</span> <span class="ot">&lt;-</span> <span class="fu">subset</span>(df.RA, TotalRA <span class="sc">&gt;=</span> quantile.<span class="fl">95.</span>abund) </span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>taxa.<span class="fl">95.</span>genus <span class="ot">&lt;-</span> taxa<span class="fl">.95</span><span class="sc">$</span>Genus</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>taxa<span class="fl">.95</span> <span class="ot">&lt;-</span> <span class="fu">subset</span>(df.RA, TotalRA <span class="sc">&gt;=</span> quantile.<span class="fl">95.</span>abund) </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>taxa.<span class="fl">95.</span>genus <span class="ot">&lt;-</span> taxa<span class="fl">.95</span><span class="sc">$</span>Genus</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="5" type="1">
-<li>Determine the frequency 95th cutoff. We go back and use the original phyloseq object and agglomerate the data by Genus tax rank (it could be any tax rank you want e.g., Phylum, Family)</li>
+<li>Determine the frequency 95th cutoff. We go back and use the original phyloseq object and agglomerate the data by Genus tax rank (it could be any tax rank you want e.g., Phylum, Family).</li>
 </ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ps.genus <span class="ot">&lt;-</span> <span class="fu">tax_glom</span>(ps.dataset, <span class="st">"Genus"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>ASVs.genus <span class="ot">&lt;-</span> <span class="fu">otu_table</span>(ps.genus)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>df.ASVs.genus <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(ASVs.genus)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(df.ASVs.genus) <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">tax_table</span>(ps.genus))<span class="sc">$</span>Genus</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <ol start="6" type="1">
 <li>Create a table of presence/abundance of ASVs. We will use 1 if present, 0 if not.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df.PA <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">*</span>((df.ASVs.genus<span class="sc">&gt;</span><span class="dv">0</span>)<span class="sc">==</span><span class="dv">1</span>)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>Occupancy <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(df.PA)<span class="sc">/</span><span class="fu">ncol</span>(df.PA) <span class="co">#Calculate occupancy</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>df.Freq <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">cbind</span>(df.PA, Occupancy))</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>df.Freq <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>(df.Freq, <span class="st">'Genus'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df.PA <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">*</span>((df.ASVs.genus<span class="sc">&gt;</span><span class="dv">0</span>)<span class="sc">==</span><span class="dv">1</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>Occupancy <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(df.PA)<span class="sc">/</span><span class="fu">ncol</span>(df.PA) <span class="co">#Calculate occupancy</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>df.Freq <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">cbind</span>(df.PA, Occupancy))</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>df.Freq <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>(df.Freq, <span class="st">"Genus"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="7" type="1">
-<li>Determining 95th quantile of the presence/abundance table</li>
+<li>Determining 95th quantile of the presence/abundance table.</li>
 </ol>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>95% 
-  1 </code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>quantile.<span class="fl">95.</span>freq <span class="ot">&lt;-</span> <span class="fu">quantile</span>(df.Freq<span class="sc">$</span>Occupancy, <span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="8" type="1">
-<li>Select the genera that fit the 95th cutoff</li>
+<li>Select the genera that fit the 95th cutoff.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>Freq<span class="fl">.95</span> <span class="ot">&lt;-</span> <span class="fu">subset</span>(df.Freq, Occupancy <span class="sc">&gt;=</span> quantile.<span class="fl">95.</span>freq) <span class="co">#select cutoff </span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>Freq.<span class="fl">95.</span>genus <span class="ot">&lt;-</span> Freq<span class="fl">.95</span><span class="sc">$</span>Genus</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>Quantile<span class="fl">.95</span> <span class="ot">&lt;-</span> <span class="fu">merge.data.frame</span>(Freq<span class="fl">.95</span>, taxa<span class="fl">.95</span>, <span class="at">by =</span> <span class="st">"Genus"</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>Freq<span class="fl">.95</span> <span class="ot">&lt;-</span> <span class="fu">subset</span>(df.Freq, Occupancy <span class="sc">&gt;=</span> quantile.<span class="fl">95.</span>freq) <span class="co">#select cutoff </span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>Freq.<span class="fl">95.</span>genus <span class="ot">&lt;-</span> Freq<span class="fl">.95</span><span class="sc">$</span>Genus</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>Quantile<span class="fl">.95</span> <span class="ot">&lt;-</span> <span class="fu">merge.data.frame</span>(Freq<span class="fl">.95</span>, taxa<span class="fl">.95</span>, <span class="at">by =</span> <span class="st">"Genus"</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Side note: You can plot a Venn Diagram to see how many taxa made the cutoffs. <em>(Click to expand)</em>
+Side note: Plot a Venn Diagram to see how many taxa made the cutoffs. <em>(Click to expand)</em>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Use the <strong>Core.list</strong> data:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>Core.<span class="fl">95.</span>list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Frequency =</span> Freq.<span class="fl">95.</span>genus, <span class="at">Relative_abundance =</span> taxa.<span class="fl">95.</span>genus)</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>plot.VennD <span class="ot">&lt;-</span> <span class="fu">ggvenn</span>(Core.<span class="fl">95.</span>list,</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">stroke_size =</span> <span class="fl">0.5</span>, <span class="at">set_name_size =</span> <span class="fl">3.2</span>, <span class="at">text_size =</span> <span class="dv">3</span>)</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(plot.VennD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Use the <strong>Freq.95.genus</strong> and <strong>taxa.95.genus</strong> data:</p>
+<div class="cell" height="1" width="1">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>Core.<span class="fl">95.</span>list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Frequency =</span> Freq.<span class="fl">95.</span>genus, <span class="at">Relative_abundance =</span> taxa.<span class="fl">95.</span>genus)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>plot.VennD <span class="ot">&lt;-</span> <span class="fu">ggvenn</span>(Core.<span class="fl">95.</span>list,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">stroke_size =</span> <span class="fl">0.5</span>, <span class="at">set_name_size =</span> <span class="fl">3.2</span>, <span class="at">text_size =</span> <span class="dv">3</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(plot.VennD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="09_core_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="09_core_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" style="width:85.0%"></p>
 </figure>
 </div>
 </div>
@@ -823,22 +653,49 @@ Side note: You can plot a Venn Diagram to see how many taxa made the cutoffs. <e
 </div>
 </div>
 <ol start="9" type="1">
-<li>Get the list of your core taxa based on the 95th percentile</li>
-</ol>
-<ol start="10" type="1">
-<li>Subset your original phyloseq object for core taxa</li>
-</ol>
-<ol start="11" type="1">
-<li>Fix the relative abundance of the core taxa to continue with the plot</li>
-</ol>
-<ol start="12" type="1">
-<li>Create a bubble plot You can customize your plot using <em><code>ggplot2</code></em> package available options.</li>
+<li>Get the list of your core taxa based on the 95th percentile.</li>
 </ol>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>Core.<span class="fl">95.</span>intersect <span class="ot">&lt;-</span> <span class="fu">Reduce</span>(intersect, Core.<span class="fl">95.</span>list)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="10" type="1">
+<li>Subset your original phyloseq object for core taxa.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>ps.Core <span class="ot">&lt;-</span> <span class="fu">subset_taxa</span>(ps.dataset, Genus <span class="sc">%in%</span> <span class="fu">c</span>(Core.<span class="fl">95.</span>intersect))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="11" type="1">
+<li>Fix the relative abundance of the core taxa to continue with the plot.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Agglomerate taxa by genus level</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>Core_genera <span class="ot">&lt;-</span> <span class="fu">tax_glom</span>(ps.Core, <span class="at">taxrank =</span> <span class="st">"Genus"</span>, <span class="at">NArm =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get relative abundance in %</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>Core_genera.RA <span class="ot">&lt;-</span> <span class="fu">transform_sample_counts</span>(Core_genera , <span class="cf">function</span>(x) <span class="dv">100</span> <span class="sc">*</span> x<span class="sc">/</span><span class="fu">sum</span>(x))</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Transform to a data frame</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>df.Core_genera <span class="ot">&lt;-</span> <span class="fu">psmelt</span>(Core_genera.RA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="12" type="1">
+<li>Create a bubble plot. You can customize your plot using <strong><code>ggplot2</code></strong> package available options.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df.Core_genera <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Genus, Rotation, Location,) <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">abundance =</span> <span class="fu">mean</span>(Abundance)) <span class="sc">%&gt;%</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Rotation, Genus)) <span class="sc">+</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Location) <span class="sc">+</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> abundance), <span class="at">color =</span> <span class="st">"grey30"</span>, <span class="at">fill =</span> <span class="st">"#66A61E"</span>,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">stroke =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">8</span>), <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">10</span>),</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>                        <span class="at">name=</span><span class="st">"Relative</span><span class="sc">\n</span><span class="st">Abundance (%)"</span>) <span class="sc">+</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">name =</span><span class="st">"Rotation"</span>) <span class="sc">+</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="09_core_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="09_core_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" style="width:85.0%"></p>
 </figure>
 </div>
 </div>
@@ -846,13 +703,13 @@ Side note: You can plot a Venn Diagram to see how many taxa made the cutoffs. <e
 
 
 </section>
-</section>
 
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>Cantoran et al.&nbsp;2023 DOI:<a href="https://doi.org/10.1093/femsec/fiad098" class="uri">https://doi.org/10.1093/femsec/fiad098</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Shade et al.&nbsp;2012 DOI:<a href="https://doi.org/10.1111/j.1462-2920.2011.02585.x" class="uri">https://doi.org/10.1111/j.1462-2920.2011.02585.x</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Cantoran et al.&nbsp;2023 DOI:<a href="https://doi.org/10.1093/femsec/fiad098" class="uri">https://doi.org/10.1093/femsec/fiad098</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

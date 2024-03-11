@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Timothy Frey">
-<meta name="dcterms.date" content="2024-03-13">
+<meta name="dcterms.date" content="2024-03-14">
 
 <title>Diversity</title>
 <style>
@@ -168,7 +168,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-fri">    
         <li class="dropdown-header">Network analysis (TBA)</li>
-        <li class="dropdown-header">Core microbiome analysis (TBA)</li>
+        <li>
+    <a class="dropdown-item" href="./09_core.html">
+ <span class="dropdown-text">Core microbiome analysis</span></a>
+  </li>  
     </ul>
   </li>
 </ul>
@@ -198,9 +201,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-reference-pages">    
         <li class="dropdown-header">Literature (TBA)</li>
-        <li class="dropdown-header">Metadata &amp; data submission (TBA)</li>
         <li>
-    <a class="dropdown-item" href="./ref/ref_software.html">
+    <a class="dropdown-item" href="./ref/sra_sub.html">
+ <span class="dropdown-text">SRA data submission</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ref/software.html">
  <span class="dropdown-text">Software management at OSC</span></a>
   </li>  
     </ul>
@@ -276,7 +282,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">March 13, 2024</p>
+      <p class="date">March 14, 2024</p>
     </div>
   </div>
   
@@ -492,12 +498,10 @@ refseq()      DNAStringSet:      [ 8088 reference sequences ]</code></pre>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> microViz<span class="sc">::</span><span class="fu">distinct_palette</span>(<span class="at">pal =</span> <span class="st">"kelly"</span>)) <span class="sc">+</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.05</span>))) <span class="sc">+</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">reverse =</span> <span class="cn">TRUE</span>, <span class="at">keywidth =</span> <span class="dv">1</span>, <span class="at">keyheight =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>,</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Relative Abundance (Genera &gt; 2%)"</span>,</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Relative Abundance of Bacteria"</span>) <span class="sc">+</span></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">reverse =</span> <span class="cn">TRUE</span>, <span class="at">keywidth =</span> <span class="dv">1</span>, <span class="at">keyheight =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Relative Abundance (Genera &gt; 2%)"</span>,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Relative Abundance of Bacteria"</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">

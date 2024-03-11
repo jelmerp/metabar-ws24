@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Jelmer Poelstra">
-<meta name="dcterms.date" content="2024-03-04">
+<meta name="author" content="Fiama Guevara">
+<meta name="dcterms.date" content="2024-03-11">
 
-<title>Metabarcoding Workshop - Homework Instructions</title>
+<title>Metabarcoding Workshop - SRA Data Submission</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -208,14 +242,25 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#important-information-before-starting" id="toc-important-information-before-starting" class="nav-link active" data-scroll-target="#important-information-before-starting"><span class="header-section-number">1</span> Important information before starting</a></li>
+  <li><a href="#start-submission" id="toc-start-submission" class="nav-link" data-scroll-target="#start-submission"><span class="header-section-number">2</span> Start Submission</a>
+  <ul class="collapse">
+  <li><a href="#create-an-account-in-ncbi" id="toc-create-an-account-in-ncbi" class="nav-link" data-scroll-target="#create-an-account-in-ncbi"><span class="header-section-number">2.1</span> Create an account in NCBI</a></li>
+  <li><a href="#submission-process" id="toc-submission-process" class="nav-link" data-scroll-target="#submission-process"><span class="header-section-number">2.2</span> Submission Process</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Homework Instructions</h1>
+<h1 class="title">SRA Data Submission</h1>
 </div>
 
 
@@ -225,14 +270,14 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Jelmer Poelstra </p>
+             <p>Fiama Guevara </p>
           </div>
   </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">March 4, 2024</p>
+      <p class="date">March 11, 2024</p>
     </div>
   </div>
   
@@ -246,54 +291,257 @@ ul.task-list li input[type="checkbox"] {
 
 <hr>
 <p><br></p>
-<p><strong>Before the workshop starts, please work your way through the following two pages on this website:</strong></p>
-<ul>
-<li><strong><a href="../homework/shell.html">Homework: Intro to the Unix Shell</a></strong></li>
-<li><strong><a href="../homework/R.html">Homework: Intro to R</a></strong></li>
-</ul>
-<p>Each of these may take around 2 hours to complete with no prior experience<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
-<hr style="height:1pt; visibility:hidden;">
+<p><strong>Sequence Read Archive (SRA)</strong> is an open access repository for high throughput sequencing data (e.g., Illumina sequencing data). In this section we will provide a general overview/summary of the process and important considerations when submitting data to public repositories. Use the link resources provided for further information.</p>
+<p><br></p>
+<section id="important-information-before-starting" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="important-information-before-starting"><span class="header-section-number">1</span> Important information before starting</h2>
+<ol type="1">
+<li><p>SRA only accepts minimally-processed read data (raw data) in specific formats. SRA accepts binary files such as BAM, SFF, and HDF5 formats and text formats such as FASTQ. <strong>SRA does NOT accept assembled contigs</strong>.</p></li>
+<li><p>Check the number of samples and the size of your files. You can submit &lt;100 samples and files less than 100GB (including compressed <em>gzip</em> or <em>bzip2</em>, files ) in a SINGLE submission. If more than 100 samples, you must create multiple submissions with the same <strong><code>BioProject</code></strong> reference. Remember keeping each set of uploads under 5TB.</p></li>
+<li><p>You can NOT update an existing record or resubmit the data files. For that you must contact the SRA helpdesk (<strong>sra@ncbi.nlm.nih.gov</strong>) for assistance.</p></li>
+</ol>
+<p><br></p>
+</section>
+<section id="start-submission" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="start-submission"><span class="header-section-number">2</span> Start Submission</h2>
+<section id="create-an-account-in-ncbi" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="create-an-account-in-ncbi"><span class="header-section-number">2.1</span> Create an account in NCBI</h3>
+<p>To start you have to create an account at <a href="https://account.ncbi.nlm.nih.gov/signup/" class="uri">https://account.ncbi.nlm.nih.gov/signup/</a>. You can choose any of the options available:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img_sra/NCBIsignup.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%"></p>
+</figure>
+</div>
+<p>Make sure to link your account to an email you will have access to in the future. You can use your OSU email but make sure you add an additional/alternative email contact for your submissions.</p>
+</section>
+<section id="submission-process" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="submission-process"><span class="header-section-number">2.2</span> Submission Process</h3>
+<ol type="1">
+<li>Once you have an account, use the following link to <em><code>Log in</code></em> the SRA Submission Portal <a href="https://submit.ncbi.nlm.nih.gov/subs/sra/" class="uri">https://submit.ncbi.nlm.nih.gov/subs/sra/</a></li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img_sra/SRA_portal.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></p>
+</figure>
+</div>
+<ol start="2" type="1">
+<li>Click on the <em><code>New submission</code></em> button.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img_sra/NewSubmission.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></p>
+</figure>
+</div>
+<p>Here you will follow several steps (tabs) in the upper gray bar:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img_sra/Steps.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></p>
+</figure>
+</div>
+<ol start="3" type="1">
+<li>Notice that SRA assigned a temporary submission ID in the form of <strong><code>SUB####</code></strong>. This is a unique number that will help you track the status of your submission and request help to SRA staff. Continue adding your information on the <strong><code>Submitter</code></strong> section and click <em><code>Continue</code></em>.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img_sra/SubmitterInfo.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></p>
+</figure>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Complete your submission within 30 days.
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You may leave your submission at any step and return to finish it later. However, if you upload files and do not submit them, they will be automatically deleted 30 days after folder creation.</p>
+</div>
+</div>
+<ol start="4" type="1">
+<li>Continue with the section <strong><code>General Info</code></strong>. Here you need to provide information in case you already have a BioProject and BioSample numbers. If not, just select <strong>NO</strong> in both options and you will be able to create both later during the submission process. <strong>IMPORTANT:</strong> You need to set a release date, it is recommended to select a date of at least a year after submission so you can make modifications if needed and before any manuscript submission.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img_sra/GeneralInfo.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Prefer in-person instruction?
+BioProject and BioSample <em>(Click to expand)</em>
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>If you’re struggling with this material or simply prefer in-person instruction, send an email to Jelmer Poelstra (poelstra.1) — if there is interest, we can try to schedule a pre-workshop session on Mon the 11<sup>th</sup> or Tue the 12<sup>th</sup>.</p>
+<p><strong>BioProject</strong> describes the goal of the sequencing study, thus you may accumulate data that are suitable for submission in multiple NCBI databases and all can be linked to the same BioProject. BioProject accession ID will appear in the form <code>PRJNA##</code>.</p>
+<p><strong>BioSample</strong> is a record of a biological isolate with unique physical properties that had been sequenced. BioSample accession IDs will be <code>SAM##</code>.</p>
+<p>Examples from NCBI <a href="https://www.ncbi.nlm.nih.gov/sra/docs/submitbio/" class="uri">https://www.ncbi.nlm.nih.gov/sra/docs/submitbio/</a>:</p>
+<ol type="a">
+<li>23,000 unique 16S amplicons from a single seawater collection point = 1 BioSample</li>
+<li>CHO cells infected with a virus and sampled at 0, 2, 4, and 8 hours post infection = 4 BioSamples (because 4 different time points)</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img_sra/BioProject_BioSample_NCBI.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+<figcaption>Figure from NCBI</figcaption>
+</figure>
 </div>
 </div>
-<hr style="height:1pt; visibility:hidden;">
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
+</div>
+</div>
+<ol start="5" type="1">
+<li>In the section <strong><code>Project Info</code></strong> provide the Title and Description of the project/study from which your samples come from. You can add additional information about your project<br>
+such as Grants and link it to external information in <em><code>External links</code></em>.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img_sra/ProjectInfo.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<ol start="6" type="1">
+<li>In the section <strong><code>BioSample Type</code></strong> you can choose from different packages based on your data/study. These packages include attributes defined by the Genome Standards Consortium (GSC) to formally describe and standardize sample metadata.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img_sra/BioSampleType.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></p>
+</figure>
+</div>
+<ol start="7" type="1">
+<li>Continue with the section <strong><code>BioSample Attributes</code></strong>. Here you can download a BioSamples Submission Template based on the package previously chosen. Fill the information mandatory and add more columns for additional fields you want to include (see ‘More about Metadata’ box below).</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img_sra/BioSampleAttributes.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p>For example: I chose the <em><code>Package MIMARKS: survey, agriculture; version 6.0</code></em> and downloaded the template seen below. Complete the template and upload it or use the <em><code>built-in table editor</code></em> option. <strong>IMPORTANT:</strong> to avoid errors, you must INCLUDE a column with unique sample identifiers (see red square in the example below) different to the sample names.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img_sra/BioSampleAttributes2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></p>
+<figcaption>EXAMPLE: Spreadsheet of Package MIMARKS: survey, agriculture; version 6.0</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Already have experience with this?
+More about Metadata <em>(Click to expand)</em>
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>If you already have substantial experience with one or both of these topics, we ask you to still do the following:</p>
+<p>Include as much metadata as possible for your sample. This will help when comparisons among datasets and future analysis with your data might be required.</p>
+<p>Dundore-Arias et al.&nbsp;2020<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> discuss on the importance of agriculture-specific metadata standards for microbiome research. They proposed a list of “required” and “desirable” metadata categories and ontologies essential to be included for describing agricultural microbiome studies.</p>
+<p>You can include as many additional fields (columns) as you see necessary on your <em>BioSample Submission Template</em>. For instance, soil physical properties, sample collection methods, sample processing.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img_sra/BioSampleAttributes_Dundore-Arias2020.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></p>
+<figcaption>Section of a list from Dundore-Arias et al.&nbsp;2020</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<ol start="8" type="1">
+<li>In the section <strong><code>SRA Metadata</code></strong> you need to add the information related to your sample files. Similarly to BioSample information, you can download the metadata template, fill in the information and upload it again OR add the metadata using the <em><code>built-in table editor</code></em> option.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img_sra/SRAmetadata.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></p>
+</figure>
+</div>
+<p>Make sure you add the filenames for Forward (R1) and Reverse (R2) reads including format extension, and describe the sequencing process including library strategy, layout, platform, etc.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img_sra/metadataExample.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></p>
+</figure>
+</div>
+<ol start="9" type="1">
+<li><p>Finally, upload your files in the section <strong><code>Files</code></strong></p>
+<p>The <em><code>Web browser</code></em> option is the easiest way to do it since it let you drag files from your computer, however the process could be very slow if you have several files.</p>
+<p>Note that your uploaded file names should match to the file names listed on the <strong><code>Metadata</code></strong> tab, including the file extension.</p></li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img_sra/AddFiles.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></p>
+</figure>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Upload files via ‘FTP command line’ option <em>(Click to expand)</em>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>This is a faster way of uploading several files directly from command line to NCBI’s SRA. From the OSC (Ohio Supercomputer Center), follow these steps:</p>
+<ol type="1">
+<li><p>Open the terminal and locate your data within OSC using the command <strong><code>cd</code></strong> ‘your/directory/path/here’.</p></li>
+<li><p>Start a <strong>FTP connection</strong> by entering <strong><code>ftp ftp-private.ncbi.nlm.nih.gov</code></strong>.</p></li>
+<li><p>After connecting, use the username and password provided by the NCBI SRA submission portal (it will appear when you select the <em><code>FTP upload instructions</code></em>).</p></li>
+<li><p>Before attempting to move your files into your account you will need to create a new directory and access it by using the following commands:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="st">'YourNewDirectory'</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">'YourNewDirectory'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Now copy the files in your current OSC directory to your newly created NCBI SRA directory using the command <strong><code>mput *</code></strong></p></li>
+<li><p>Verify that the files have been successfully copied by clicking on the select <strong><code>preload folder</code></strong> option in the file submission page</p></li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img_sra/FTP_upload.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></p>
+<figcaption>Figure from NCBI</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<ol start="10" type="1">
+<li>Please review your submission’s summary and make sure that all information is correct including the release date. At this stage, you can return to any step of your submission by clicking on the corresponding tabs.</li>
+</ol>
+<p>You can check your submissions on <em><code>My Submissions</code></em> tab in SRA Submission Portal’s home page <a href="https://submit.ncbi.nlm.nih.gov/subs/" class="uri">https://submit.ncbi.nlm.nih.gov/subs/</a>. Your submission’s Overview page can be found by clicking on the link <strong><code>SUB#</code></strong> in the column Submission.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img_sra/final_submission.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%"></p>
+<figcaption>Figure from NCBI</figcaption>
+</figure>
+</div>
+<p><br> <br></p>
+<hr>
+<section id="attribution" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="attribution">Attribution</h4>
+<p>This material was modified after NCBI and SRA guides:</p>
 <ul>
-<li>Skim through the pages for a refresher and if you see unfamiliar stuff, practice with it.</li>
-<li>At OSC, create your own dir and copy the workshop’s data: follow Unix Shell sections <a href="../homework/shell.html#opening-a-unix-shell-at-osc">2.1</a>, and <a href="../homework/shell.html#create-dirs-with-mkdir">5.1-5.2</a>.</li>
-<li>At OSC, create an RStudio Project: go through the R sections <a href="../homework/R.html#start-an-rstudio-session-at-osc">2.1</a> and <a href="../homework/R.html#create-a-new-rstudio-project">4.2</a>.</li>
+<li><a href="https://submit.ncbi.nlm.nih.gov/about/sra/">What You Should Expect</a></li>
+<li><a href="https://www.ncbi.nlm.nih.gov/sra/docs/submitportal/">Making Submission in SRA Submission Portal</a></li>
+<li><a href="https://www.ncbi.nlm.nih.gov/sra/docs/submitbio/">Submit your project and biological samples</a></li>
+<li><a href="https://www.ncbi.nlm.nih.gov/biosample/docs/packages/">BioSample Packages</a></li>
+<li><a href="https://www.ncbi.nlm.nih.gov/sra/docs/submitspfiles/">Troubleshooting SRA submission in the SRA Submission Portal Wizard</a></li>
 </ul>
-</div>
-</div>
-<p><br><br></p>
+<p><br> <br></p>
 
 
+</section>
+</section>
+</section>
 
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p> That’s a bit of a guess, we welcome feedback about how long it took you to do this.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Dundore-Arias et al.&nbsp;2020. “Community-Driven Metadata Standards for Agricultural Microbiome Research”. <a href="https://apsjournals.apsnet.org/doi/10.1094/PBIOMES-09-19-0051-P" class="uri">https://apsjournals.apsnet.org/doi/10.1094/PBIOMES-09-19-0051-P</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

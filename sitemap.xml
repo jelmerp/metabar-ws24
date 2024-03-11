@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://jelmerp.github.io/metabar-ws24/06_div.html</loc>
-    <lastmod>2024-03-11T00:22:57.170Z</lastmod>
+    <lastmod>2024-03-11T14:05:24.330Z</lastmod>
   </url>
   <url>
     <loc>https://jelmerp.github.io/metabar-ws24/homework/R.html</loc>
@@ -14,15 +14,19 @@
   </url>
   <url>
     <loc>https://jelmerp.github.io/metabar-ws24/index.html</loc>
-    <lastmod>2024-03-10T18:14:09.481Z</lastmod>
+    <lastmod>2024-03-11T14:12:07.545Z</lastmod>
   </url>
   <url>
     <loc>https://jelmerp.github.io/metabar-ws24/02_osc.html</loc>
     <lastmod>2024-03-09T14:27:33.578Z</lastmod>
   </url>
   <url>
-    <loc>https://jelmerp.github.io/metabar-ws24/ref/ref_software.html</loc>
-    <lastmod>2024-03-06T17:04:22.816Z</lastmod>
+    <loc>https://jelmerp.github.io/metabar-ws24/ref/software.html</loc>
+    <lastmod>2024-03-11T14:13:53.357Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jelmerp.github.io/metabar-ws24/ref/sra_sub.html</loc>
+    <lastmod>2024-03-11T14:32:58.109Z</lastmod>
   </url>
   <url>
     <loc>https://jelmerp.github.io/metabar-ws24/03_qc-trim.html</loc>
@@ -30,7 +34,7 @@
   </url>
   <url>
     <loc>https://jelmerp.github.io/metabar-ws24/05_dada.html</loc>
-    <lastmod>2024-03-11T00:14:56.463Z</lastmod>
+    <lastmod>2024-03-11T14:05:23.489Z</lastmod>
   </url>
   <url>
     <loc>https://jelmerp.github.io/metabar-ws24/about.html</loc>
@@ -42,6 +46,6 @@
   </url>
   <url>
     <loc>https://jelmerp.github.io/metabar-ws24/09_core.html</loc>
-    <lastmod>2024-03-08T23:43:31.037Z</lastmod>
+    <lastmod>2024-03-11T14:18:28.551Z</lastmod>
   </url>
 </urlset>
