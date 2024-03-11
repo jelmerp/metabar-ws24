@@ -979,34 +979,46 @@ NW201C  12223     8188       6797       6799   4693    4693</code></pre>
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the ASV sequences from the seqtab object</span></span>
 <span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>seqs <span class="ot">&lt;-</span> <span class="fu">getSequences</span>(seqtab)</span>
 <span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a><span class="co"># This propagates to the tip labels of the tree.</span></span>
-<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a><span class="co"># At this stage ASV labels are full ASV sequence</span></span>
-<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(seqs) <span class="ot">&lt;-</span> seqs </span>
-<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a>alignment <span class="ot">&lt;-</span> <span class="fu">AlignSeqs</span>(<span class="fu">DNAStringSet</span>(seqs),</span>
-<span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">anchor =</span> <span class="cn">NA</span>,</span>
-<span id="cb63-9"><a href="#cb63-9" aria-hidden="true" tabindex="-1"></a>                       <span class="at">iterations =</span> <span class="dv">5</span>,</span>
-<span id="cb63-10"><a href="#cb63-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">refinements =</span> <span class="dv">5</span>)</span>
-<span id="cb63-11"><a href="#cb63-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb63-12"><a href="#cb63-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute pairwise distances among ASVs</span></span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The names() propagate to the tip labels of the tree.</span></span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a><span class="co"># At this stage ASV labels are full ASV sequences</span></span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(seqs) <span class="ot">&lt;-</span> seqs</span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Align the sequences and store the alignment</span></span>
+<span id="cb63-9"><a href="#cb63-9" aria-hidden="true" tabindex="-1"></a>alignment <span class="ot">&lt;-</span> <span class="fu">AlignSeqs</span>(<span class="fu">DNAStringSet</span>(seqs),</span>
+<span id="cb63-10"><a href="#cb63-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">anchor =</span> <span class="cn">NA</span>,</span>
+<span id="cb63-11"><a href="#cb63-11" aria-hidden="true" tabindex="-1"></a>                       <span class="at">iterations =</span> <span class="dv">5</span>,</span>
+<span id="cb63-12"><a href="#cb63-12" aria-hidden="true" tabindex="-1"></a>                       <span class="at">refinements =</span> <span class="dv">5</span>)</span>
 <span id="cb63-13"><a href="#cb63-13" aria-hidden="true" tabindex="-1"></a>phang.align <span class="ot">&lt;-</span> <span class="fu">phyDat</span>(<span class="fu">as</span>(alignment, <span class="st">"matrix"</span>), <span class="at">type =</span> <span class="st">"DNA"</span>)</span>
-<span id="cb63-14"><a href="#cb63-14" aria-hidden="true" tabindex="-1"></a>dm <span class="ot">&lt;-</span> <span class="fu">dist.ml</span>(phang.align)</span>
-<span id="cb63-15"><a href="#cb63-15" aria-hidden="true" tabindex="-1"></a>treeNJ <span class="ot">&lt;-</span> <span class="fu">NJ</span>(dm)</span>
-<span id="cb63-16"><a href="#cb63-16" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">pml</span>(treeNJ, <span class="at">data =</span> phang.align)</span>
+<span id="cb63-14"><a href="#cb63-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-15"><a href="#cb63-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Based on the alignment, compute pairwise distances among ASVs</span></span>
+<span id="cb63-16"><a href="#cb63-16" aria-hidden="true" tabindex="-1"></a>dm <span class="ot">&lt;-</span> <span class="fu">dist.ml</span>(phang.align)</span>
 <span id="cb63-17"><a href="#cb63-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb63-18"><a href="#cb63-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a GTR model</span></span>
-<span id="cb63-19"><a href="#cb63-19" aria-hidden="true" tabindex="-1"></a>fitGTR <span class="ot">&lt;-</span> <span class="fu">update</span>(fit, <span class="at">k =</span> <span class="dv">4</span>, <span class="at">inv =</span> <span class="fl">0.2</span>)</span>
+<span id="cb63-18"><a href="#cb63-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Build a neighbor-joining tree</span></span>
+<span id="cb63-19"><a href="#cb63-19" aria-hidden="true" tabindex="-1"></a>treeNJ <span class="ot">&lt;-</span> <span class="fu">NJ</span>(dm)</span>
 <span id="cb63-20"><a href="#cb63-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb63-21"><a href="#cb63-21" aria-hidden="true" tabindex="-1"></a><span class="co"># ....</span></span>
-<span id="cb63-22"><a href="#cb63-22" aria-hidden="true" tabindex="-1"></a>fitGTR <span class="ot">&lt;-</span> <span class="fu">optim.pml</span>(fitGTR,</span>
-<span id="cb63-23"><a href="#cb63-23" aria-hidden="true" tabindex="-1"></a>                    <span class="at">model =</span> <span class="st">"GTR"</span>,</span>
-<span id="cb63-24"><a href="#cb63-24" aria-hidden="true" tabindex="-1"></a>                    <span class="at">optInv =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb63-25"><a href="#cb63-25" aria-hidden="true" tabindex="-1"></a>                    <span class="at">optGamma =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb63-26"><a href="#cb63-26" aria-hidden="true" tabindex="-1"></a>                    <span class="at">rearrangement =</span> <span class="st">"stochastic"</span>,</span>
-<span id="cb63-27"><a href="#cb63-27" aria-hidden="true" tabindex="-1"></a>                    <span class="at">control =</span> <span class="fu">pml.control</span>(<span class="at">trace =</span> <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb63-21"><a href="#cb63-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the likelihood of the tree</span></span>
+<span id="cb63-22"><a href="#cb63-22" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">pml</span>(treeNJ, <span class="at">data =</span> phang.align)</span>
+<span id="cb63-23"><a href="#cb63-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-24"><a href="#cb63-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a GTR model</span></span>
+<span id="cb63-25"><a href="#cb63-25" aria-hidden="true" tabindex="-1"></a>fitGTR <span class="ot">&lt;-</span> <span class="fu">update</span>(fit, <span class="at">k =</span> <span class="dv">4</span>, <span class="at">inv =</span> <span class="fl">0.2</span>)</span>
+<span id="cb63-26"><a href="#cb63-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-27"><a href="#cb63-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Optimize the tree</span></span>
+<span id="cb63-28"><a href="#cb63-28" aria-hidden="true" tabindex="-1"></a>fitGTR <span class="ot">&lt;-</span> <span class="fu">optim.pml</span>(fitGTR,</span>
+<span id="cb63-29"><a href="#cb63-29" aria-hidden="true" tabindex="-1"></a>                    <span class="at">model =</span> <span class="st">"GTR"</span>,</span>
+<span id="cb63-30"><a href="#cb63-30" aria-hidden="true" tabindex="-1"></a>                    <span class="at">optInv =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb63-31"><a href="#cb63-31" aria-hidden="true" tabindex="-1"></a>                    <span class="at">optGamma =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb63-32"><a href="#cb63-32" aria-hidden="true" tabindex="-1"></a>                    <span class="at">rearrangement =</span> <span class="st">"stochastic"</span>,</span>
+<span id="cb63-33"><a href="#cb63-33" aria-hidden="true" tabindex="-1"></a>                    <span class="at">control =</span> <span class="fu">pml.control</span>(<span class="at">trace =</span> <span class="dv">0</span>))</span>
+<span id="cb63-34"><a href="#cb63-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-35"><a href="#cb63-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Root the tree</span></span>
+<span id="cb63-36"><a href="#cb63-36" aria-hidden="true" tabindex="-1"></a>rooted_tree <span class="ot">&lt;-</span> <span class="fu">root_by_longest_edge</span>(fitGTR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To create a phyloseq object that includes the tree:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>TODO</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>ps <span class="ot">&lt;-</span> <span class="fu">phyloseq</span>(<span class="fu">otu_table</span>(seqtab, <span class="at">taxa_are_rows =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>               <span class="fu">sample_data</span>(metadata_df),</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>               <span class="fu">tax_table</span>(tax),</span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>               <span class="fu">phy_tree</span>(rooted_tree))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br> <br></p>
 
