@@ -742,44 +742,17 @@ Run 1 stress 0.06106308
 <div class="cell">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Redundancy Analysis</span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>ord.rda <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(ps,</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">formula =</span> o <span class="sc">~</span> Rotation<span class="sc">+</span>Location,</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">formula =</span> o <span class="sc">~</span> Rotation <span class="sc">+</span> Location,</span>
 <span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">method =</span> <span class="st">"CAP"</span>,</span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">distance =</span> <span class="st">"bray"</span>)</span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="fu">RsquareAdj</span>(ord.rda) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="styled-output"><code>$r.squared
-[1] 0.4067635
-
-$adj.r.squared
-[1] 0.3628201</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova.cca</span>(ord.rda)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="styled-output"><code>Permutation test for capscale under reduced model
-Permutation: free
-Number of permutations: 999
-
-Model: capscale(formula = OTU ~ Rotation + Location, data = data, distance = distance)
-         Df SumOfSqs      F Pr(&gt;F)    
-Model     2   1.5634 9.2565  0.001 ***
-Residual 27   2.2801                  
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vif.cca</span>(ord.rda)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre class="styled-output"><code> RotationCSW LocationWARS 
-    1.005128     1.005128 </code></pre>
-</div>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">distance =</span> <span class="st">"bray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the RDA</span></span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ordination</span>(ps,</span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>                vegan<span class="sc">::</span><span class="fu">scores</span>(ord.rda, <span class="at">scaling =</span> <span class="dv">1</span>),</span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">type =</span> <span class="st">"sites"</span>,</span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">"Location"</span>,</span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">shape =</span> <span class="st">"Rotation"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the RDA</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ordination</span>(ps,</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>                vegan<span class="sc">::</span><span class="fu">scores</span>(ord.rda, <span class="at">scaling =</span> <span class="dv">1</span>),</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">type =</span> <span class="st">"sites"</span>,</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">"Location"</span>,</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">shape =</span> <span class="st">"Rotation"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -797,15 +770,22 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <p>Do communities cluster by a known environmental factor (rotation, location)?</p>
 <p>Finally, we’ll test whether there is a statistically significant ecological level treatment effect. PERMANOVA sounds fancy, but it is just an ANOVA performed using permutations. Permutations are used to determine how data may appear if there is no treatment effect and group differences are due to random chance. Observed data are then compared to the randomized data to calculate a p-value.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>sampledf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(ps))</span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>dist.mat <span class="ot">&lt;-</span> phyloseq<span class="sc">::</span><span class="fu">distance</span>(ps, <span class="at">method =</span> <span class="st">"jsd"</span>)</span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>perm <span class="ot">&lt;-</span> <span class="fu">how</span>(<span class="at">nperm =</span> <span class="dv">999</span>)</span>
-<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="fu">setBlocks</span>(perm) <span class="ot">&lt;-</span> <span class="fu">with</span>(sampledf, Block)</span>
-<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a><span class="fu">adonis2</span>(dist.mat <span class="sc">~</span> Location <span class="sc">*</span> Rotation,</span>
-<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> sampledf, <span class="at">permutations =</span> perm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Storing our metadata in a data frame</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>sampledf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(ps))</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Selecting our distance method (in this case the same as we used for NMDS,</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Jensen-Shannon divergence, but we could use different options here)</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>dist.mat <span class="ot">&lt;-</span> phyloseq<span class="sc">::</span><span class="fu">distance</span>(ps, <span class="at">method =</span> <span class="st">"jsd"</span>)</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Selecting the number of permutations to perform</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>perm <span class="ot">&lt;-</span> <span class="fu">how</span>(<span class="at">nperm =</span> <span class="dv">999</span>)</span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Selecting blocks from the experiment</span></span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="fu">setBlocks</span>(perm) <span class="ot">&lt;-</span> <span class="fu">with</span>(sampledf, Block)</span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Run PERMANOVA with the selected distance method and your variables of interest</span></span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a><span class="co"># (in this case, location and rotation)</span></span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a><span class="fu">adonis2</span>(dist.mat <span class="sc">~</span> Location <span class="sc">*</span> Rotation,</span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> sampledf, <span class="at">permutations =</span> perm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="styled-output"><code>Permutation test for adonis under reduced model
 Terms added sequentially (first to last)
@@ -816,14 +796,15 @@ Number of permutations: 999
 adonis2(formula = dist.mat ~ Location * Rotation, data = sampledf, permutations = perm)
                   Df SumOfSqs      R2       F Pr(&gt;F)    
 Location           1  0.52765 0.49807 27.8874  0.001 ***
-Rotation           1  0.02225 0.02100  1.1759  0.236    
-Location:Rotation  1  0.01755 0.01657  0.9278  0.373    
+Rotation           1  0.02225 0.02100  1.1759  0.252    
+Location:Rotation  1  0.01755 0.01657  0.9278  0.381    
 Residual          26  0.49194 0.46436                   
 Total             29  1.05940 1.00000                   
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
+<p>So, sampling location has a statistically significant effect on bacterial community composition, consistent with the patterns we saw in the ordination plots.</p>
 <p><br> <br></p>
 <hr>
 <section id="attribution" class="level4">
