@@ -395,6 +395,7 @@ You should have an active VS Code session. If not, follow these steps <em>(Click
 </section>
 <section id="our-fastq-files" class="level3" data-number="1.2">
 <h3 data-number="1.2" class="anchored" data-anchor-id="our-fastq-files"><span class="header-section-number">1.2</span> Our FASTQ files</h3>
+<p>Our FASTQ files contain reads from 2x300 bp (i.e.&nbsp;paired-end with 300 bp forward and 300 bp reverse reads) sequencing on an Illumina MiSeq machine.</p>
 <p>Let’s take a look at our list of FASTQ files:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> data/fastq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>total 150M
@@ -1286,7 +1287,8 @@ Need to identify the samples with a specific percentage? <em>(Click to expand)</
 </div>
 <div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Use this command to print the 7 lines preceding each match, so you can see the file name. (Of course, you could also scroll through the entire file.)</p>
+<p>Use this command to print the 7 lines preceding each match, so you can see the file names (samples) that correspond to each percentage of reads with primers — in the box below, you’ll have to scroll all the way to the right to see those file names.</p>
+<p>(An alternative way, of course, would just be to scroll through the entire output file, but this is (even) more of a hassle, as Cutadapt has quite some output.)</p>
 <div class="sourceCode" id="cb59"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-B7</span> <span class="st">"with adapter:"</span> results/cutadapt/logs/slurm-cutadapt.out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>Command line parameters: -a GTGTGYCAGCMGCCGCGGTAA...ATTAGAWACCCBNGTAGTCC -A GGACTACNVGGGTWTCTAAT...TTACCGCGGCKGCTGRCACAC --trimmed-only --cores 8 --output results/cutadapt/NW102AB_R1.fastq.gz --paired-output results/cutadapt/NW102AB_R2.fastq.gz data/fastq/NW102AB_R1.fastq.gz data/fastq/NW102AB_R2.fastq.gz
 Processing paired-end reads on 8 cores ...
