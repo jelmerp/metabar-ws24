@@ -141,7 +141,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="./02_osc.html">
- <span class="dropdown-text">2: Intro to OSC</span></a>
+ <span class="dropdown-text">2: Intro to OSC &amp; VS Code</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./03_qc-trim.html">
@@ -160,11 +160,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="./05_dada.html">
- <span class="dropdown-text">5: Calling ASVs with DADA2</span></a>
+ <span class="dropdown-text">5: Calling ASVs with the DADA2 pipeline</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./06_div.html">
- <span class="dropdown-text">6: Alpha &amp; beta diversity</span></a>
+ <span class="dropdown-text">6: Alpha &amp; beta diversity statistics</span></a>
   </li>  
     </ul>
   </li>
@@ -179,11 +179,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="./08_networks.html">
- <span class="dropdown-text">8: Network analysis</span></a>
+ <span class="dropdown-text">8: Intro to network analysis</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./09_core.html">
- <span class="dropdown-text">9: Core microbiome analysis</span></a>
+ <span class="dropdown-text">9: Defining a core microbiome</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./10_sra-sub.html">
@@ -338,7 +338,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="open-your-rstudio-project" class="level4">
 <h4 class="anchored" data-anchor-id="open-your-rstudio-project">Open your RStudio Project</h4>
 <ul>
-<li>Your RStudio Project in <code>/fs/ess/PAS2714</code> may have automatically opened. You can see whether a Project is open, and if so, which one, in the top-right of your screen (left screenshot below)</li>
+<li>Your RStudio Project at <code>/fs/ess/PAS2714/users/&lt;user&gt;</code> may have automatically opened. You can see whether a Project is open, and if so, which one, in the top-right of your screen (left screenshot below)</li>
 <li>If your Project isn’t open, click on the R-in-a-box icon to open it (right screenshot below):</li>
 </ul>
 <div class="columns">
@@ -414,7 +414,7 @@ Don’t have an RStudio Project yet? Click here to create one.
 </figure>
 </div>
 <ol start="6" type="1">
-<li>Now you should be able to browse/click the rest of the way to your personal directory, something like <code>/fs/ess/PAS2714/users/jelmer</code>.</li>
+<li>Now you should be able to browse/click the rest of the way to your personal directory, <code>/fs/ess/PAS2714/users/&lt;username&gt;</code>.</li>
 <li>Click <strong><code>Choose</code></strong> to pick your selected directory.</li>
 <li>Click <strong><code>Create Project</code></strong>.</li>
 </ol>
@@ -451,6 +451,25 @@ Don’t have an RStudio Project yet? Click here to create one.
 <li><a href="https://joey711.github.io/phyloseq/"><em>phyloseq</em></a> - A package for organizing, analyzing and visualizing microbial community analysis.</li>
 <li><a href="https://www.tidyverse.org"><em>tidyverse</em></a> - A package for speeding up, organizing, streamlining and visualizing data science.</li>
 </ul>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+If you see a message like this one, do <em>not</em> click “Install”
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>…but click “Don’t show again”.</p>
+<hr style="height:1pt; visibility:hidden;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/rstudio_install.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%"></p>
+</figure>
+</div>
+</div>
+</div>
 <hr style="height:1pt; visibility:hidden;">
 </section>
 </section>
@@ -483,7 +502,7 @@ Don’t have an RStudio Project yet? Click here to create one.
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>metadata_file <span class="ot">&lt;-</span> <span class="st">"data/meta/meta.tsv"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -492,7 +511,7 @@ Don’t have the input files? Click here to copy them.
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Next to the <code>Console</code> in R, click the <code>Terminal</code> to access a Unix shell. In the Terminal, run the following <code>cp</code> commands to copy the necessary data.</p>
 <ul>
@@ -805,7 +824,7 @@ Key parameters: OMEGA_A = 1e-40, OMEGA_C = 1e-40, BAND_SIZE = 16</code></pre>
 <pre class="bash-out"><code> 240  249  251  253 
 1999    2    1    2 </code></pre>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -814,7 +833,7 @@ If you want to filter your ASVs to be within a certain range length <em>(Click t
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>You can do that as follows:</p>
 <div class="cell">

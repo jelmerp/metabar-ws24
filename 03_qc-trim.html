@@ -141,7 +141,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="./02_osc.html">
- <span class="dropdown-text">2: Intro to OSC</span></a>
+ <span class="dropdown-text">2: Intro to OSC &amp; VS Code</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./03_qc-trim.html">
@@ -160,11 +160,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="./05_dada.html">
- <span class="dropdown-text">5: Calling ASVs with DADA2</span></a>
+ <span class="dropdown-text">5: Calling ASVs with the DADA2 pipeline</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./06_div.html">
- <span class="dropdown-text">6: Alpha &amp; beta diversity</span></a>
+ <span class="dropdown-text">6: Alpha &amp; beta diversity statistics</span></a>
   </li>  
     </ul>
   </li>
@@ -179,11 +179,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="./08_networks.html">
- <span class="dropdown-text">8: Network analysis</span></a>
+ <span class="dropdown-text">8: Intro to network analysis</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./09_core.html">
- <span class="dropdown-text">9: Core microbiome analysis</span></a>
+ <span class="dropdown-text">9: Defining a core microbiome</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./10_sra-sub.html">
@@ -338,7 +338,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><br></p>
 <section id="introduction" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="introduction">Introduction</h2>
-<p>The first series of steps our analysis workflow concerns the quality control (QC) &amp; “pre-processing” of the sequence reads, which are stored in FASTQ files.</p>
+<p>The first series of steps our analysis workflow concerns the quality control (QC) &amp; “pre-processing” of the raw sequence reads, which are stored in FASTQ files.</p>
 <p>The QC part will leave the data untouched, whereas the pre-processing involves the removal of unwanted bits of sequence: in our case, amplicon primers. After the pre-processing step, we will still have FASTQ files, just with somewhat less content.</p>
 <p>Specifically, we will go through the following steps:</p>
 <ol type="1">
@@ -408,7 +408,7 @@ You should have an active VS Code session. If not, follow these steps <em>(Click
 # [...output truncated...]</code></pre>
 <p>Note in the file listing above that:</p>
 <ul>
-<li>There are two files per sample: <code>_R1</code> (forward reads) and <code>_R2</code> (reverse reads). This indicates that we have data from <strong>paired-end reads</strong>, as is customary with amplicon metabarcoding.</li>
+<li>There are two files per sample: <code>_R1</code> (forward reads) and <code>_R2</code> (reverse reads). This indicates that we have data from <strong>paired-end reads</strong>, as is customary when doing amplicon metabarcoding.</li>
 <li>The files all have a <code>.gz</code> extension, indicating they have been <em>compressed</em> with the gzip utility.</li>
 </ul>
 <div class="callout callout-style-default callout-warning callout-titled">
@@ -417,13 +417,14 @@ You should have an active VS Code session. If not, follow these steps <em>(Click
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Don’t have the input files? Click here to copy them.
+Don’t have the FASTQ files? Click here for instructions to copy them.
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Run the following two <code>cp</code> commands to copy the necessary data:</p>
+<p>At the top of the pane that has the RStudio <code>Console</code>, there is another tab called <code>Terminal</code>, which will allow you to access a Unix shell — click on that.</p>
+<p>Then, run the following two <code>cp</code> commands in this terminal to copy the necessary data:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="at">-rv</span> /fs/ess/PAS2714/share/data /fs/ess/PAS2714/users/<span class="va">$USER</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="at">-rv</span> /fs/ess/PAS2714/share/results /fs/ess/PAS2714/users/<span class="va">$USER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -455,7 +456,7 @@ Conda and software management
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>We won’t have time to get into this now, but you want to learn more about Conda / software usage at supercomputers, see <a href="ref/ref_software.qmd">this reference page elsewhere on the website</a>.</p>
+<p>We won’t have time to get into this now, but you want to learn more about Conda / software usage at supercomputers, see <a href="./ref/software.html">this reference page elsewhere on the website</a>.</p>
 </div>
 </div>
 <hr style="height:1pt; visibility:hidden;">
@@ -499,11 +500,11 @@ Analysis complete for NW102AB_R1.fastq.gz</code></pre>
 <p>Let’s take a look at the files in the output dir we specified:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> results/fastqc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>total 1.2M
--rw-r--r-- 1 jelmer PAS0471 713K Feb  4 14:02 NW102AB_R1_fastqc.html
--rw-r--r-- 1 jelmer PAS0471 431K Feb  4 14:02 NW102AB_R1_fastqc.zip</code></pre>
+-rw-r--r-- 1 jelmer PAS0471 241K Mar 13 14:50 NW102AB_R1_fastqc.html
+-rw-r--r-- 1 jelmer PAS0471 256K Mar 13 14:50 NW102AB_R1_fastqc.zip</code></pre>
 <ul>
-<li>There is a <code>.zip</code> file, which contains <strong>tables</strong> with FastQC’s data summaries</li>
-<li>There is an <code>.html</code> (HTML) file, which contains <strong>plots</strong> — this is what we’ll look at next</li>
+<li>There is a <code>.zip</code> file, which contains <strong>tables</strong> with FastQC’s data summaries.</li>
+<li>There is an <code>.html</code> (HTML) file, which contains <strong>plots</strong> — this is what we’ll look at next.</li>
 </ul>
 <hr style="height:1pt; visibility:hidden;">
 <section id="exercise-another-fastqc-run" class="level4 exercise">
@@ -538,8 +539,7 @@ Analysis complete for NW102AB_R2.fastq.gz</code></pre>
 <section id="fastqc-html-modules" class="level3" data-number="2.1">
 <h3 data-number="2.1" class="anchored" data-anchor-id="fastqc-html-modules"><span class="header-section-number">2.1</span> FastQC HTML modules</h3>
 <p>We’ll now go through a couple of the FastQC plots/modules with example plots<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> with good/bad results for reference.</p>
-<p>FastQC has “<strong>pass</strong>” (checkmark in green), “<strong>warning</strong>” (exclamation mark in orange), and “<strong>fail</strong>” (cross in red) assessments for each module, as you can see below.</p>
-<p>These assessments are handy, but <em>a “warning”/“fail” is not necessarily the bad news it may appear to be:</em></p>
+<p>FastQC has “<strong>pass</strong>” (checkmark in green), “<strong>warning</strong>” (exclamation mark in orange), and “<strong>fail</strong>” (cross in red) assessments for each module. These assessments are handy, but a “warning”/“fail” is not necessarily the bad news it may appear to be:</p>
 <ul>
 <li>Some of these modules are perhaps overly strict.</li>
 <li>Some warnings and fails are easily remedied or simply not a very big deal.</li>
@@ -564,7 +564,7 @@ Analysis complete for NW102AB_R2.fastq.gz</code></pre>
 </section>
 <section id="per-base-quality-sequence-quality" class="level4">
 <h4 class="anchored" data-anchor-id="per-base-quality-sequence-quality">Per base quality sequence quality</h4>
-<p>This figure visualize the mean per-base quality score (y-axis) along the length of the reads (x-axis). Note that:</p>
+<p>This figure visualizes the mean per-base quality score (y-axis) along the length of the reads (x-axis). Note that:</p>
 <ul>
 <li>A decrease in sequence quality along the reads (from left to right) is normal.</li>
 <li>R2 (reverse) reads are usually of worse quality than R1 (forward) reads.</li>
@@ -706,13 +706,13 @@ What is a tile? <em>(Click to expand)</em>
 </section>
 <section id="other-fastqc-modules" class="level4">
 <h4 class="anchored" data-anchor-id="other-fastqc-modules">Other FastQC modules</h4>
-<p>Another module to check the overall quality of your reads is <strong>Per base N content</strong>. This line graph should typically not visibly rise above 0%.</p>
+<p>Another module that can help to check the overall quality of your reads is <strong>Per base N content</strong>: its line graph should typically not visibly rise above 0%.</p>
 <p>The remaining modules are not that useful for metabarcoding data:</p>
 <ul>
-<li><strong>Adapter content</strong><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></li>
-<li><strong>Sequence duplication levels</strong><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></li>
-<li><strong>Overrepresented sequences</strong><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></li>
-<li><strong>Per sequence GC content</strong><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></li>
+<li>Adapter content<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></li>
+<li>Sequence duplication levels<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></li>
+<li>Overrepresented sequences<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></li>
+<li>Per sequence GC content<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></li>
 </ul>
 <hr style="height:1pt; visibility:hidden;">
 </section>
@@ -822,7 +822,7 @@ What is a tile? <em>(Click to expand)</em>
 </section>
 <section id="checking-the-output" class="level3" data-number="3.3">
 <h3 data-number="3.3" class="anchored" data-anchor-id="checking-the-output"><span class="header-section-number">3.3</span> Checking the output</h3>
-<p>Earlier, FastQC logging output (“10% complete”, etc.) was printed to screen, but because this job now runs remotely on another compute node, such output will end up in the “Slurm log file” whose name we specified in the script. Let’s take a look:</p>
+<p>In our earlier two FastQC runs, FastQC logging output (“10% complete”, etc.) was printed to screen. But because this job now runs remotely on another compute node, such output will end up in the “Slurm log file” whose name we specified in the script. Let’s take a look:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">less</span> slurm-fastqc.out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>application/gzip
 Started analysis of NW102AB_R1.fastq.gz
@@ -880,7 +880,7 @@ NW103C_R1_fastqc.html   NW203A_R1_fastqc.zip    NW304BC_R2_fastqc.html  NW403A_R
 <p>Here are some challenges you may run into after running FastQC:</p>
 <ul>
 <li>When you have many FASTQ files, you’ll generate a lot of FastQC HTML files to sort through (as we did above).</li>
-<li>Even if you do diligently go through each file, it’s not that easy to compare the results across samples in detail, since they are not drawn in the same graphs.</li>
+<li>Even if you diligently go through each file, it’s not that easy to compare the results across samples in detail, since they are not drawn in the same graphs.</li>
 </ul>
 <p>MultiQC addresses these problems by aggregating FastQC results from many files, and summarizing them into a single HTML file with (still) one graph per FastQC module.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -920,7 +920,19 @@ These are the files with forward (top lines, better quality) and reverse (bottom
 <section id="running-multiqc" class="level3" data-number="4.1">
 <h3 data-number="4.1" class="anchored" data-anchor-id="running-multiqc"><span class="header-section-number">4.1</span> Running MultiQC</h3>
 <p>We will only need to run MultiQC once (because it will aggregate all FastQC results at once), and that will only take a few seconds — therefore, we can run the command interactively without using a script.</p>
-<p>Let’s start by running MultiQC (command <code>multiqc</code>) with the <code>--help</code> option:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Side note: Checking the MultiQC help <em>(Click to expand)</em>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We can check MultiQC’s help with the <code>--help</code> option:</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">multiqc</span> <span class="at">--help</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (Only the top part of the output is shown in the screenshot below)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
@@ -928,7 +940,11 @@ These are the files with forward (top lines, better quality) and reverse (bottom
 <p><img src="img/multiqc_help.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
-<p>As the first couple of help lines in the paler gray color explain, MultiQC will search the <code>[ANALYSIS DIRECTORY]</code>, a dir that we pass to it as an argument at the end of the command line. That is, if we tell MultiQC about the <code>results/fastqc</code> directory like so, it should find and then aggregate all the FastQC results in there:</p>
+<p>As the first couple of help lines in the paler gray color explain, MultiQC will search the <code>[ANALYSIS DIRECTORY]</code>, a dir that we pass to it as an argument at the end of the command line.</p>
+</div>
+</div>
+</div>
+<p>If we tell MultiQC (command <code>multiqc</code>) about the <code>results/fastqc</code> directory like so, it should find and then aggregate all the FastQC results in there:</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># (Don't run this - we'll complete the command in a second)</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="ex">multiqc</span> results/fastqc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The default output directory of MultiQC is the current working directory, so just like with FastQC, we do want to use the option for the output dir — this is our final command and you can go ahead and execute it:</p>
@@ -963,7 +979,7 @@ drwxr-xr-x 2 jelmer PAS2250 4.0K Mar  13 14:57 multiqc_data
 <p><i class="fa-solid fa-user-edit" aria-label="user-edit"></i> Open a new text file and save it as <code>scripts/cutadapt.sh</code>.</p>
 <section id="primer-sequences" class="level3" data-number="5.1">
 <h3 data-number="5.1" class="anchored" data-anchor-id="primer-sequences"><span class="header-section-number">5.1</span> Primer sequences</h3>
-<p>When we run Cutadapt, we need to tell it about our primer sequences as well as their reverse complements. We’ll start by storing the primer sequences in variables:</p>
+<p>When we run Cutadapt, we need to tell it about our primer sequences as well as their reverse complements. We’ll start by storing our particular primer sequences in variables:</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Primer sequences</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="va">primer_f</span><span class="op">=</span>GTGTGYCAGCMGCCGCGGTAA</span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="va">primer_r</span><span class="op">=</span>GGACTACNVGGGTWTCTAAT</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -994,7 +1010,7 @@ Ambiguity codes
 <pre class="bash-out"><code>TTACCGCGGCKGCTGRCACAC
 ATTAGAWACCCBNGTAGTCC</code></pre>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1003,7 +1019,7 @@ More about the above <code>tr | rev</code> command <em>(Click to expand)</em>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li><code>tr A T</code> changes every A to a T</li>
@@ -1210,7 +1226,7 @@ If you see much lower percentages here, then something is wrong, e.g.&nbsp;with 
 # [...output truncated...]</code></pre>
 <p><strong>You should always take a careful look at this output</strong>, to check if there are no samples with much lower percentages: it looks like there are no such samples in this case, fortunately.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1219,7 +1235,7 @@ Want to quickly see the lowest % of reads with adapter? <em>(Click to expand)</e
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Use this command to extract and sort the percentages:</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">"with adapter:"</span> slurm-cutadapt.out <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span><span class="st">"("</span> <span class="at">-f2</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-n</span> <span class="kw">|</span> <span class="fu">head</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1234,7 +1250,7 @@ Want to quickly see the lowest % of reads with adapter? <em>(Click to expand)</e
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1243,7 +1259,7 @@ Need to identify the samples with a specific percentage? <em>(Click to expand)</
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Use this command to print the 7 lines preceding each match, so you can see the file name. (Of course, you could also scroll through the entire file.)</p>
 <div class="sourceCode" id="cb56"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-B7</span> <span class="st">"with adapter:"</span> results/cutadapt/logs/slurm-cutadapt.out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1312,7 +1328,7 @@ NW103AB_R2.fastq.gz  NW201C_R2.fastq.gz   NW304A_R2.fastq.gz   NW305C_R2.fastq.g
 </div>
 <p>The “Q” in FASTQ stands for “<em>quality</em>”, to contrast this format with FASTA, a more basic and generic sequence data format that does not include base quality scores. FASTQ files have the extension <code>.fastq</code> or <code>.fq</code>, but they are very commonly gzip-compressed, in which case their name ends in <code>.fastq.gz</code> or <code>.fq.gz</code>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1321,7 +1337,7 @@ FASTQ quality scores <em>(Click to expand)</em>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The quality scores we saw in the read above represent an <strong>estimate of the error probability of the base call</strong>. Specifically, they correspond to a numeric “Phred” quality score (<code>Q</code>), which is a function of the estimated probability that a base call is erroneous (<code>P</code>):</p>
 <blockquote class="blockquote">
@@ -1426,7 +1442,7 @@ CGAGCAATCCACTCGAGTGTCAGCCGCCGCGGTAATACAGAGGTCCCGAGCGTTGTTCGGATTCATTGGGCGTAAAGGGT
 +
 CCCCCCGFGFGGGC-FFFGFGFFGGDFFGGGGGECGEGGAEGGGGGGGFGGDGG7CFFGGDCCFGGFCF8FGGGGGGCEGDGGGGGCGGGGGGDEGGGGBFGGDFGGGDG&lt;DFGGGGCEGGGD:FFGGGGFFGFGGFFFFGGGFGGCFGGFGGGGG9CGCGGGG7FGGC:FFGGGGGFGG&lt;?FCGGGGGGGGGGG9CG&lt;ACC?EG5CFGGGGF8CCCC:C@FGCFGGGGGC58=EEG8??77:9@:&lt;3A&gt;7AGFGGGGC?DFC?5&lt;5&gt;&gt;BGGGFGGGGG&gt;4?C42::3:DG=&gt;&lt;&lt;*)*</code></pre>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1435,7 +1451,7 @@ CCCCCCGFGFGGGC-FFFGFGFFGGDFFGGGGGECGEGGAEGGGGGGGFGGDGG7CFFGGDCCFGGFCF8FGGGGGGCEG
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 
 </div>

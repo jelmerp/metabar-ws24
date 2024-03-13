@@ -9,7 +9,7 @@
 <meta name="author" content="Melanie Medina López">
 <meta name="dcterms.date" content="2024-03-15">
 
-<title>dada2</title>
+<title>Differential abundance</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -141,7 +141,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="./02_osc.html">
- <span class="dropdown-text">2: Intro to OSC</span></a>
+ <span class="dropdown-text">2: Intro to OSC &amp; VS Code</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./03_qc-trim.html">
@@ -160,11 +160,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="./05_dada.html">
- <span class="dropdown-text">5: Calling ASVs with DADA2</span></a>
+ <span class="dropdown-text">5: Calling ASVs with the DADA2 pipeline</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./06_div.html">
- <span class="dropdown-text">6: Alpha &amp; beta diversity</span></a>
+ <span class="dropdown-text">6: Alpha &amp; beta diversity statistics</span></a>
   </li>  
     </ul>
   </li>
@@ -179,11 +179,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="./08_networks.html">
- <span class="dropdown-text">8: Network analysis</span></a>
+ <span class="dropdown-text">8: Intro to network analysis</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./09_core.html">
- <span class="dropdown-text">9: Core microbiome analysis</span></a>
+ <span class="dropdown-text">9: Defining a core microbiome</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./10_sra-sub.html">
@@ -259,11 +259,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#prep-for-analysis" id="toc-prep-for-analysis" class="nav-link active" data-scroll-target="#prep-for-analysis"><span class="header-section-number">1</span> Prep for analysis</a>
-  <ul class="collapse">
-  <li><a href="#load-packages" id="toc-load-packages" class="nav-link" data-scroll-target="#load-packages"><span class="header-section-number">1.1</span> Load packages</a></li>
-  <li><a href="#load-phyloseq-object" id="toc-load-phyloseq-object" class="nav-link" data-scroll-target="#load-phyloseq-object"><span class="header-section-number">1.2</span> Load phyloseq object</a></li>
-  </ul></li>
+  <li><a href="#setting-up" id="toc-setting-up" class="nav-link active" data-scroll-target="#setting-up"><span class="header-section-number">1</span> Setting up</a></li>
   <li><a href="#differential-abundance-analysis" id="toc-differential-abundance-analysis" class="nav-link" data-scroll-target="#differential-abundance-analysis"><span class="header-section-number">2</span> Differential abundance analysis</a></li>
   <li><a href="#deseq2" id="toc-deseq2" class="nav-link" data-scroll-target="#deseq2"><span class="header-section-number">3</span> DESeq2</a></li>
   </ul>
@@ -305,10 +301,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <hr>
 <p><br></p>
-<section id="prep-for-analysis" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="prep-for-analysis"><span class="header-section-number">1</span> Prep for analysis</h2>
-<section id="load-packages" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="load-packages"><span class="header-section-number">1.1</span> Load packages</h3>
+<section id="setting-up" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="setting-up"><span class="header-section-number">1</span> Setting up</h2>
+<p>If you need to start a new RStudio Server session at OSC or open your RStudio Project, see the box below.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Start an RStudio Server job at OSC &amp; open your RStudio Project <em>(Click to expand)</em>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<section id="start-an-rstudio-server-job" class="level4">
+<h4 class="anchored" data-anchor-id="start-an-rstudio-server-job">Start an RStudio Server job</h4>
+<ol type="1">
+<li>Log in to OSC at <a href="https://ondemand.osc.edu" class="uri">https://ondemand.osc.edu</a>.</li>
+<li>Click on <strong><code>Interactive Apps</code></strong> (top bar) and then <strong><code>RStudio Server</code></strong> (all the way at the bottom).</li>
+<li>Fill out the form as follows:
+<ul>
+<li>Cluster: <strong><code>Pitzer</code></strong></li>
+<li>R version: <strong><code>4.3.0</code></strong></li>
+<li>Project: <strong><code>PAS2714</code></strong></li>
+<li>Number of hours: <strong><code>4</code></strong></li>
+<li>Node type: <strong><code>any</code></strong></li>
+<li>Number of cores: <strong><code>4</code></strong></li>
+</ul></li>
+<li>Click <strong><code>Launch</code></strong> and once your job has started, click <strong><code>Connect to RStudio Server</code></strong>.</li>
+</ol>
+</section>
+<section id="open-your-rstudio-project" class="level4">
+<h4 class="anchored" data-anchor-id="open-your-rstudio-project">Open your RStudio Project</h4>
+<ul>
+<li>Your RStudio Project at <code>/fs/ess/PAS2714/users/&lt;user&gt;</code> may have automatically opened. You can see whether a Project is open, and if so, which one, in the top-right of your screen (left screenshot below)</li>
+<li>If your Project isn’t open, click on the R-in-a-box icon to open it (right screenshot below):</li>
+</ul>
+<div class="columns">
+<div class="column">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/rproj-open.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+<figcaption>Here, the project <code>jelmer</code> is open.<br>Your Project name is also your username.</figcaption>
+</figure>
+</div>
+</div><div class="column">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://mcic-osu.github.io/2020-12-microbiomics-workshop/img/rproj-dropdown.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+<figcaption>Opening an RStudio Project</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+<section id="create-a-new-script-optional" class="level4">
+<h4 class="anchored" data-anchor-id="create-a-new-script-optional">Create a new script (Optional)</h4>
+<p>Click <code>File</code> &gt; <code>New file</code> &gt; <code>R script</code>, and immediately save the new file (<code>File</code> &gt; <code>Save as</code>) as <code>diffabund.R</code> inside your <code>scripts</code> directory<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>We recommend that you copy-and-paste (or type, if you prefer) code from this webpage into your script and <em>then</em> execute the code. That way, you’ll have a nice record of what you did, exactly.</p>
+</section>
+<section id="load-packages" class="level4">
+<h4 class="anchored" data-anchor-id="load-packages">Load packages</h4>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the R library to load packages from</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">.libPaths</span>(<span class="st">"/fs/ess/PAS0471/jelmer/R/metabar"</span>)</span>
@@ -316,14 +374,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the packages (package startup messages are not printed below)</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phyloseq)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(microViz)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DESeq2)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DESeq2)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phyloseq)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(microViz)</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="load-phyloseq-object" class="level3" data-number="1.2">
-<h3 data-number="1.2" class="anchored" data-anchor-id="load-phyloseq-object"><span class="header-section-number">1.2</span> Load phyloseq object</h3>
+<section id="load-the-phyloseq-object" class="level4">
+<h4 class="anchored" data-anchor-id="load-the-phyloseq-object">Load the phyloseq object</h4>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loading data from RDS</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>bac22rot_phy <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"results/ps_fulldata/bac22rot_w_ASV.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -449,7 +507,7 @@ Tip
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the groups to contrast </span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">results</span>(dds, <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">"Group"</span>, <span class="st">"CSNWARS"</span>, <span class="st">"CSWWARS"</span>)) </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">results</span>(dds, <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">"Group"</span>, <span class="st">"CSWARS"</span>, <span class="st">"CSWWARS"</span>)) </span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># First look at the results </span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -457,11 +515,11 @@ Tip
 <pre class="styled-output"><code>
 out of 7097 with nonzero total read count
 adjusted p-value &lt; 0.1
-LFC &gt; 0 (up)       : 226, 3.2%
-LFC &lt; 0 (down)     : 338, 4.8%
+LFC &gt; 0 (up)       : 6, 0.085%
+LFC &lt; 0 (down)     : 4, 0.056%
 outliers [1]       : 273, 3.8%
-low counts [2]     : 5329, 75%
-(mean count &lt; 3)
+low counts [2]     : 6538, 92%
+(mean count &lt; 12)
 [1] see 'cooksCutoff' argument of ?results
 [2] see 'independentFiltering' argument of ?results</code></pre>
 </div>
@@ -470,12 +528,12 @@ low counts [2]     : 5329, 75%
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of taxa with significantly higher abundance in CSWWARS :</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(res<span class="sc">$</span>padj <span class="sc">&lt;</span> <span class="fl">0.1</span> <span class="sc">&amp;</span> res<span class="sc">$</span>log2FoldChange <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="styled-output"><code>[1] 226</code></pre>
+<pre class="styled-output"><code>[1] 6</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of taxa with significantly lower abundance in CSWWARS:</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(res<span class="sc">$</span>padj <span class="sc">&lt;</span> <span class="fl">0.1</span> <span class="sc">&amp;</span> res<span class="sc">$</span>log2FoldChange <span class="sc">&lt;</span> <span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="styled-output"><code>[1] 338</code></pre>
+<pre class="styled-output"><code>[1] 4</code></pre>
 </div>
 </div>
 <p>Let’s have a look at the most significantly different taxa</p>
@@ -483,17 +541,17 @@ low counts [2]     : 5329, 75%
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>res.order <span class="ot">&lt;-</span> res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ]</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res.order)[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">6</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="styled-output"><code>log2 fold change (MLE): Group CSNWARS vs CSWWARS 
+<pre class="styled-output"><code>log2 fold change (MLE): Group CSWARS vs CSWWARS 
  
 DataFrame with 6 rows and 3 columns
           baseMean log2FoldChange        padj
          &lt;numeric&gt;      &lt;numeric&gt;   &lt;numeric&gt;
-ASV_5747   14.8891      -20.73380 4.33570e-12
-ASV_2670   17.6327      -21.37384 7.13623e-11
-ASV_4512  113.5368      -10.09561 2.00116e-10
-ASV_4623   23.1544       23.16017 1.70517e-09
-ASV_4583   78.1619       -9.49250 3.14939e-09
-ASV_3577   71.1380       -9.32154 8.73084e-09</code></pre>
+ASV_4341  51.49725      -22.17580 2.01506e-22
+ASV_7363  83.80914      -22.47159 1.12391e-19
+ASV_3604   6.49914      -31.65201          NA
+ASV_4623  23.15436       22.28713 6.82191e-09
+ASV_4434  10.19797      -20.30476          NA
+ASV_2821  53.82453       -7.09153 2.58989e-03</code></pre>
 </div>
 </div>
 <hr style="height:1pt; visibility:hidden;">
@@ -515,20 +573,14 @@ ASV_3577   71.1380       -9.32154 8.73084e-09</code></pre>
 <span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Making sure our new table has everything we need </span></span>
 <span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res05)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="styled-output"><code>          baseMean log2FoldChange    lfcSE      stat       pvalue         padj
-ASV_2670 17.632654      -21.37384 2.848559 -7.503388 6.218933e-14 7.136226e-11
-ASV_2691 10.505220      -20.25029 3.446421 -5.875746 4.209438e-09 3.315296e-07
-ASV_2880  9.021911       22.53396 3.417098  6.594474 4.267664e-11 1.351933e-08
-ASV_3604  6.499140      -17.48004 3.944959 -4.430981 9.380529e-06 2.266138e-04
-ASV_3836 18.147815      -21.20240 3.562883 -5.950910 2.666560e-09 2.353752e-07
-ASV_4121 12.235491      -20.26726 3.248611 -6.238747 4.410885e-10 6.326864e-08
-                               Tax
-ASV_2670 ASV_2670 Oxalobacteraceae
-ASV_2691 ASV_2691 Oxalobacteraceae
-ASV_2880          ASV_2880 BIrii41
-ASV_3604      ASV_3604 Bacillaceae
-ASV_3836               ASV_3836 NA
-ASV_4121               ASV_4121 NA</code></pre>
+<pre class="styled-output"><code>         baseMean log2FoldChange    lfcSE       stat       pvalue         padj
+ASV_4341 51.49725      -22.17580 2.126648 -10.427583 1.855490e-25 2.015062e-22
+ASV_4623 23.15436       22.28713 3.319153   6.714702 1.884507e-11 6.821914e-09
+ASV_7363 83.80914      -22.47159 2.307547  -9.738303 2.069809e-22 1.123906e-19
+                                 Tax
+ASV_4341 ASV_4341 Micromonosporaceae
+ASV_4623    ASV_4623 Nocardioidaceae
+ASV_7363                 ASV_7363 NA</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generating a dataframe from our table</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>res05.df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(res05)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -560,7 +612,13 @@ ASV_4121               ASV_4121 NA</code></pre>
 </section>
 </section>
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p> (you can create that dir in the dialog box if needed<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
