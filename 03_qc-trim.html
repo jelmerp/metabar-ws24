@@ -1197,7 +1197,7 @@ Spreading commands across multiple lines with <code>\</code>
 <section id="check-the-output" class="level3" data-number="5.5">
 <h3 data-number="5.5" class="anchored" data-anchor-id="check-the-output"><span class="header-section-number">5.5</span> Check the output</h3>
 <p>Once we see the “<em>Done with script</em>” line when we use <code>tail</code> on the Slurm log file, we know the job has finished:</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> slurm-cutadapt.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> slurm-cutadapt.out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>22      4       0.0     2       0 3 1
 24      1       0.0     2       0 1
 25      1       0.0     2       0 0 1
@@ -1209,7 +1209,7 @@ Spreading commands across multiple lines with <code>\</code>
 Done with script cutadapt.sh
 Wed Mar  6 14:46:56 EST 2024</code></pre>
 <p>Let’s use <code>less</code> to take a closer look at the logging output:</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">less</span> slurm-cutadapt.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">less</span> slurm-cutadapt.out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>Input files: data/fastq/NW102AB_R1.fastq.gz data/fastq/NW102AB_R2.fastq.gz
 This is cutadapt 4.6 with Python 3.10.13
 Command line parameters: -a GTGTGYCAGCMGCCGCGGTAA...ATTAGAWACCCBNGTAGTCC -A GGACTACNVGGGTWTCTAAT...TTACCGCGGCKGCTGRCACAC --trimmed-only --cores 8 --output results/cutadapt/NW102AB_R1.fastq.gz --paired-output results/cutadapt/NW102AB_R2.fast
@@ -1242,7 +1242,7 @@ If you see much lower percentages here, then something is wrong, e.g.&nbsp;with 
 </div>
 </div>
 <p>We will use the <code>grep</code> command to print all lines that contain the information on numbers and percentages of reads with the primer sequences:</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">"with adapter:"</span> slurm-cutadapt.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">"with adapter:"</span> slurm-cutadapt.out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>  Read 1 with adapter:                  12,798 (99.6%)
   Read 2 with adapter:                  12,541 (97.6%)
   Read 1 with adapter:                  14,499 (99.7%)
