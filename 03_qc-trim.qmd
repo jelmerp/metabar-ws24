@@ -1,5 +1,5 @@
 ---
-title: "Read QC and Trimming"
+title: "Read QC and primer trimming"
 subtitle: "With FastQC, MultiQC, and Cutadapt"
 pagetitle: "QC & Trimming"
 author: Jelmer Poelstra
@@ -21,7 +21,7 @@ editor_options:
 ## Introduction {-}
 
 The first series of steps our analysis workflow concerns
-the quality control (QC) & "pre-processing" of the sequence reads,
+the quality control (QC) & "pre-processing" of the raw sequence reads,
 which are stored in FASTQ files.
 
 The QC part will leave the data untouched,
@@ -78,6 +78,9 @@ The y-axis shows Phred quality scores (higher is better, see also the color-codi
 
 ### Our FASTQ files
 
+Our FASTQ files contain reads from 2x300 bp (i.e. paired-end with 300 bp
+forward and 300 bp reverse reads) sequencing on an Illumina MiSeq machine.
+
 Let's take a look at our list of FASTQ files:
 
 ``` bash
@@ -99,12 +102,12 @@ total 150M
 Note in the file listing above that:
 
 -   There are two files per sample: `_R1` (forward reads) and `_R2` (reverse reads).
-    This indicates that we have data from **paired-end reads**, as is customary
-    with amplicon metabarcoding.
+    This indicates that we have data from **paired-end reads**,
+    as is customary when doing amplicon metabarcoding.
 -   The files all have a `.gz` extension, indicating they have been _compressed_ with the gzip utility.
 
 ::: {.callout-warning collapse="true"}
-#### Don't have the input files? Click here to copy them.
+#### Don't have the FASTQ files? Click here for instructions to copy them.
 
 Run the following two `cp` commands to copy the necessary data:
 
@@ -164,7 +167,7 @@ source activate /fs/ess/PAS0471/jelmer/conda/mbar24
 #### Conda and software management
 We won't have time to get into this now,
 but you want to learn more about Conda / software usage at supercomputers,
-see [this reference page elsewhere on the website](ref/ref_software.qmd).
+see [this reference page elsewhere on the website](ref/software.qmd).
 :::
 
 <hr style="height:1pt; visibility:hidden;" />
@@ -233,12 +236,12 @@ ls -lh results/fastqc
 ```
 ``` bash-out
 total 1.2M
--rw-r--r-- 1 jelmer PAS0471 713K Feb  4 14:02 NW102AB_R1_fastqc.html
--rw-r--r-- 1 jelmer PAS0471 431K Feb  4 14:02 NW102AB_R1_fastqc.zip
+-rw-r--r-- 1 jelmer PAS0471 241K Mar 13 14:50 NW102AB_R1_fastqc.html
+-rw-r--r-- 1 jelmer PAS0471 256K Mar 13 14:50 NW102AB_R1_fastqc.zip
 ```
 
--   There is a `.zip` file, which contains **tables** with FastQC's data summaries
--   There is an `.html` (HTML) file, which contains **plots** --- this is what we'll look at next
+-   There is a `.zip` file, which contains **tables** with FastQC's data summaries.
+-   There is an `.html` (HTML) file, which contains **plots** --- this is what we'll look at next.
 
 <hr style="height:1pt; visibility:hidden;" />
 
@@ -292,10 +295,9 @@ Attribution: Some of the FastQC example plots were taken from [here](https://rts
 with good/bad results for reference.
 
 FastQC has "**pass**" (checkmark in green), "**warning**" (exclamation mark in orange),
-and "**fail**" (cross in red) assessments for each module, as you can see below.
-
-These assessments are handy, but
-*a "warning"/"fail" is not necessarily the bad news it may appear to be:*
+and "**fail**" (cross in red) assessments for each module.
+These assessments are handy,
+but a "warning"/"fail" is not necessarily the bad news it may appear to be:
 
 -   Some of these modules are perhaps overly strict.
 -   Some warnings and fails are easily remedied or simply not a very big deal.
@@ -318,7 +320,8 @@ This contains, among other things, the number of sequences (reads) and the read 
 
 #### Per base quality sequence quality
 
-This figure visualize the mean per-base quality score (y-axis) along the length of the reads (x-axis). Note that:
+This figure visualizes the mean per-base quality score (y-axis) along the length of the reads (x-axis). 
+Note that:
 
 -   A decrease in sequence quality along the reads (from left to right) is normal.
 -   R2 (reverse) reads are usually of worse quality than R1 (forward) reads.
@@ -402,16 +405,16 @@ but having reads with a slightly shorter read length is normal and does not matt
 
 #### Other FastQC modules
 
-Another module to check the overall quality of your reads is **Per base N content**. 
-This line graph should typically not visibly rise above 0%.
+Another module that can help to check the overall quality of your reads is
+**Per base N content**: its line graph should typically not visibly rise above 0%.
 
 The remaining modules are not that useful for metabarcoding data:
 
-- **Adapter content**^[Checks for adapters at the ends of reads. Since we have to remove primers anyway, any adapters past the primers will be automatically removed.]
-- **Sequence duplication levels**^[
+- Adapter content^[Checks for adapters at the ends of reads. Since we have to remove primers anyway, any adapters past the primers will be automatically removed.]
+- Sequence duplication levels^[
   Will throw a Fail but this is not meaningful here: metabarcoding data has many duplicate sequences by design.]
-- **Overrepresented sequences**^[As with the previous module, this will throw a Fail but this is not meaningful here: metabarcoding data has many duplicate sequences by design.]
-- **Per sequence GC content**^[Useful in a whole-genome sequencing context or to detect contamination.]
+- Overrepresented sequences^[As with the previous module, this will throw a Fail but this is not meaningful here: metabarcoding data has many duplicate sequences by design.]
+- Per sequence GC content^[Useful in a whole-genome sequencing context or to detect contamination.]
 
 <hr style="height:1pt; visibility:hidden;" />
 
@@ -447,13 +450,9 @@ rather than running FastQC "interactively" like we did for the first sample.
 This is especially true for a complete data set,
 which would have much larger FASTQ files and possibly more samples.
 
-### Building our script
+### The components of our script
 
-First, we will put our earlier FastQC code inside a script.
-
-1. Open a new file in VS Code: click <i class="fa fa-bars"></i>, then `File`, then `New File`.
-2. Save the file (e.g. press <kbd>Ctrl/⌘</kbd>+<kbd>S</kbd>) in your `scripts` directory as `fastqc.sh`.
-3. Paste the following code (same as we used above) in the script:
+Here is all the code we needed for out first FastQC run:
 
 ```bash
 # Load the software
@@ -469,7 +468,8 @@ fastqc --outdir results/fastqc data/fastq/NW102AB_R1.fastq.gz
 
 <hr style="height:1pt; visibility:hidden;" />
 
-However, we will need to modify our call to `fastqc` ---
+We will need that same code in the script,
+except that we will need to modify our call to `fastqc` ---
 we will **loop over all FASTQ files** as follows:
 
 ```bash
@@ -487,7 +487,7 @@ done
 
 <hr style="height:1pt; visibility:hidden;" />
 
-We will be submitting this script as a batch job to the Slurm compute job scheduler.
+We will be **submitting this script as a batch job** to the Slurm compute job scheduler.
 To do so, we should also add some lines at the top of the script:
 
 ```bash
@@ -510,7 +510,7 @@ To do so, we should also add some lines at the top of the script:
 <hr style="height:1pt; visibility:hidden;" />
 
 We will also add the following line to change some shell script settings,
-which will cause the script to stop running if any errors occur:
+which will cause the script to stop running if any **errors** occur:
 
 ```bash
 # Strict bash settings
@@ -519,7 +519,11 @@ set -euo pipefail
 
 <hr style="height:1pt; visibility:hidden;" />
 
-All in all, our script should read:
+### Our final script
+
+1. Open a new file in VS Code: click <i class="fa fa-bars"></i>, then `File`, then `New File`.
+2. Save the file (e.g. press <kbd>Ctrl/⌘</kbd>+<kbd>S</kbd>) in your `scripts` directory as `fastqc.sh`.
+3. Paste the following code in the script:
 
 ```bash
 #!/bin/bash
@@ -569,8 +573,9 @@ the Slurm job should start and create the output file that we specified at the t
 
 ### Checking the output
 
-Earlier, FastQC logging output ("10% complete", etc.) was printed to screen,
-but because this job now runs remotely on another compute node,
+In our earlier two FastQC runs,
+FastQC logging output ("10% complete", etc.) was printed to screen.
+But because this job now runs remotely on another compute node,
 such output will end up in the "Slurm log file" whose name we specified in the script.
 Let's take a look:
 
@@ -655,7 +660,7 @@ Here are some challenges you may run into after running FastQC:
 
 - When you have many FASTQ files, you'll generate a lot of FastQC HTML files to sort through
   (as we did above).
-- Even if you do diligently go through each file,
+- Even if you diligently go through each file,
   it's not that easy to compare the results across samples in detail,
   since they are not drawn in the same graphs.
 
@@ -693,7 +698,10 @@ We will only need to run MultiQC once (because it will aggregate all FastQC resu
 and that will only take a few seconds ---
 therefore, we can run the command interactively without using a script.
 
-Let's start by running MultiQC (command `multiqc`) with the `--help` option:
+::: {.callout-note collapse="true"}
+#### Side note: Checking the MultiQC help _(Click to expand)_
+
+We can check MultiQC's help with the `--help` option:
 
 ```bash
 multiqc --help
@@ -705,13 +713,27 @@ multiqc --help
 As the first couple of help lines in the paler gray color explain,
 MultiQC will search the `[ANALYSIS DIRECTORY]`,
 a dir that we pass to it as an argument at the end of the command line.
-That is, if we tell MultiQC about the `results/fastqc` directory like so,
+:::
+
+If we tell MultiQC (command `multiqc`) about the `results/fastqc` directory like so,
 it should find and then aggregate all the FastQC results in there:
 
 ```bash
 # (Don't run this - we'll complete the command in a second)
 multiqc results/fastqc
 ```
+
+::: callout-warning
+#### Need to active the Conda environment?
+
+If you don't/no longer have the `mbar24` Conda environment active,
+(re-)activate it as follows:
+
+```bash
+module load miniconda3
+source activate /fs/ess/PAS0471/jelmer/conda/mbar24
+```
+:::
 
 The default output directory of MultiQC is the current working directory,
 so just like with FastQC, we do want to use the option for the output dir ---
@@ -762,13 +784,11 @@ which we can do with the program Cutadapt.
 We will write a script with a loop to run Cutadapt for all samples and submit
 it as a batch job like we did with FastQC.
 
-{{< fa user-edit >}} Open a new text file and save it as `scripts/cutadapt.sh`.
-
 ### Primer sequences
 
 When we run Cutadapt, we need to tell it about our primer sequences as well as their
 reverse complements.
-We'll start by storing the primer sequences in variables:
+We'll start by storing our particular primer sequences in variables:
 
 ```bash
 # Primer sequences
@@ -852,6 +872,7 @@ First, here is how we can tell Cutadapt about the primer sequences:
 All in all, our primer specification looks like this:
 
 ```bash
+# (Don't run this - this will be part of our script)
 cutadapt \
     -a "$primer_f"..."$primer_r_rc" \
     -A "$primer_r"..."$primer_f_rc"
@@ -876,6 +897,7 @@ We will also:
   that can save quite some time.
 
 ```bash
+# (Don't run this - this will be part of our script)
 cutadapt \
     -a "$primer_f"..."$primer_r_rc" \
     -A "$primer_r"..."$primer_f_rc" \
@@ -889,6 +911,7 @@ for a single example sample.
 With that, we have a final example command of running Cutadapt for a single sample:
 
 ```bash
+# (Don't run this - this will be part of our script)
 cutadapt \
     -a "$primer_f"..."$primer_r_rc" \
     -A "$primer_r"..."$primer_f_rc" \
@@ -913,6 +936,8 @@ We will do that by **looping over the R1 (forward read) files only**,
 and inside the loop, inferring the name of the R2 file:
 
 ```bash
+# (Don't run this - this will be part of our script)
+
 # Loop over the R1 files
 for R1_in in data/fastq/*R1.fastq.gz; do
     # Get the R2 file name with "parameter expansion"
@@ -941,6 +966,9 @@ done
 <hr style="height:1pt; visibility:hidden;" />
 
 ### The final script
+
+{{< fa user-edit >}} Open a new text file and save it as `scripts/cutadapt.sh`.
+Then paste the following code into the script:
 
 ```bash
 #!/bin/bash
@@ -994,6 +1022,15 @@ done
 # Report
 echo "Done with script cutadapt.sh"
 date
+```
+
+Now we **submit the script** as a batch job in the same way we did with the FastQC script:
+
+```bash
+sbatch scripts/cutadapt.sh
+```
+```bash-out
+Submitted batch job 27047247
 ```
 
 <hr style="height:1pt; visibility:hidden;" />
@@ -1096,8 +1133,12 @@ grep "with adapter:" slurm-cutadapt.out | cut -d"(" -f2 | sort -n | head
 ::: {.callout-tip collapse="true"}
 #### Need to identify the samples with a specific percentage? _(Click to expand)_
 
-Use this command to print the 7 lines preceding each match, so you can see the file name.
-(Of course, you could also scroll through the entire file.)
+Use this command to print the 7 lines preceding each match,
+so you can see the file names (samples) that correspond to each percentage of reads with primers ---
+in the box below, you'll have to scroll all the way to the right to see those file names.
+
+(An alternative way, of course, would just be to scroll through the entire output file,
+but this is (even) more of a hassle, as Cutadapt has quite some output.)
 
 ```bash
 grep -B7 "with adapter:" results/cutadapt/logs/slurm-cutadapt.out

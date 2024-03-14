@@ -99,14 +99,17 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Wed</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-wed">    
-        <li class="dropdown-header">Intro to metabarcoding (TBA)</li>
+        <li>
+    <a class="dropdown-item" href="./01_intro.pdf">
+ <span class="dropdown-text">1: Intro to metabarcoding (slides as PDF)</span></a>
+  </li>  
         <li>
     <a class="dropdown-item" href="./02_osc.html">
- <span class="dropdown-text">Intro to OSC</span></a>
+ <span class="dropdown-text">2: Intro to OSC &amp; VS Code</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./03_qc-trim.html">
- <span class="dropdown-text">QC &amp; trimmming</span></a>
+ <span class="dropdown-text">3: Read QC &amp; primer trimmming</span></a>
   </li>  
     </ul>
   </li>
@@ -115,12 +118,18 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Thu</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-thu">    
-        <li class="dropdown-header">ASV/OTU calling and pipeline considerations (TBA)</li>
+        <li>
+    <a class="dropdown-item" href="./04_pipeline.pdf">
+ <span class="dropdown-text">4: ASV/OTU calling and pipeline considerations (slides as PDF)</span></a>
+  </li>  
         <li>
     <a class="dropdown-item" href="./05_dada.html">
- <span class="dropdown-text">Calling ASVs with DADA2</span></a>
+ <span class="dropdown-text">5: Calling ASVs with the DADA2 pipeline</span></a>
   </li>  
-        <li class="dropdown-header">Alpha &amp; beta diversity (TBA)</li>
+        <li>
+    <a class="dropdown-item" href="./06_div.html">
+ <span class="dropdown-text">6: Alpha &amp; beta diversity statistics</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -128,8 +137,22 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Fri</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-fri">    
-        <li class="dropdown-header">Network analysis (TBA)</li>
-        <li class="dropdown-header">Core microbiome analysis (TBA)</li>
+        <li>
+    <a class="dropdown-item" href="./07_diffabund.html">
+ <span class="dropdown-text">7: Differential abundance analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./08_networks.html">
+ <span class="dropdown-text">8: Intro to network analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./09_core.html">
+ <span class="dropdown-text">9: Defining a core microbiome</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./10_sra-sub.html">
+ <span class="dropdown-text">10: SRA data submission</span></a>
+  </li>  
     </ul>
   </li>
 </ul>
@@ -159,9 +182,8 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-reference-pages">    
         <li class="dropdown-header">Literature (TBA)</li>
-        <li class="dropdown-header">Metadata &amp; data submission (TBA)</li>
         <li>
-    <a class="dropdown-item" href="./ref/ref_software.html">
+    <a class="dropdown-item" href="./ref/software.html">
  <span class="dropdown-text">Software management at OSC</span></a>
   </li>  
     </ul>
@@ -228,6 +250,7 @@ ul.task-list li input[type="checkbox"] {
 <th>Day</th>
 <th>Time</th>
 <th>Topic</th>
+<th>Type</th>
 <th>By</th>
 </tr>
 </thead>
@@ -235,55 +258,71 @@ ul.task-list li input[type="checkbox"] {
 <tr class="odd">
 <td>Wed</td>
 <td>1 - 2 pm</td>
-<td>Lecture: <strong>Intro to metabarcoding</strong></td>
+<td><a href="01_intro.pdf"><strong>01: Intro to metabarcoding</strong></a></td>
+<td>Lecture</td>
 <td>Tim</td>
 </tr>
 <tr class="even">
 <td></td>
 <td>2:15 - 3 pm</td>
-<td>Lab: <a href="./02_osc.html"><strong>Intro to OSC</strong></a></td>
+<td><a href="./02_osc.html"><strong>02: Intro to OSC &amp; VS Code</strong></a></td>
+<td>Lab</td>
 <td>Jelmer</td>
 </tr>
 <tr class="odd">
 <td></td>
 <td>3 - 4:30 pm</td>
-<td>Lab: <a href="./03_qc-trim.html"><strong>QC &amp; trimming</strong></a></td>
+<td><a href="./03_qc-trim.html"><strong>03: Read QC &amp; primer trimmming</strong></a></td>
+<td>Lab</td>
 <td>Jelmer</td>
 </tr>
 <tr class="even">
 <td>Thu</td>
 <td>1 - 2 pm</td>
-<td>Lecture: <strong>ASV/OTU calling and pipeline considerations</strong></td>
+<td><a href="04_pipeline.pdf"><strong>04: ASV/OTU calling and pipeline considerations</strong></a></td>
+<td>Lecture</td>
 <td>Soledad</td>
 </tr>
 <tr class="odd">
 <td></td>
 <td>2:15 - 3:15 pm</td>
-<td>Lab: <a href="./05_dada.html"><strong>Calling ASVs with the DADA2 pipeline</strong></a></td>
+<td><a href="./05_dada.html"><strong>05: Calling ASVs with the DADA2 pipeline</strong></a></td>
+<td>Lab</td>
 <td>Tim</td>
 </tr>
 <tr class="even">
 <td></td>
 <td>3:30 - 4:30 pm</td>
-<td>Lab: <strong>Alpha &amp; beta diversity</strong></td>
+<td><a href="./06_div.html"><strong>06: Alpha &amp; beta diversity statistics</strong></a></td>
+<td>Lab</td>
 <td>Tim</td>
 </tr>
 <tr class="odd">
 <td>Fri</td>
 <td>1 - 1:30 pm</td>
-<td>Lab: <strong>Differential abundance with DESeq2</strong></td>
+<td><a href="./07_diffabund.html"><strong>07: Differential abundance analysis</strong></a></td>
+<td>Lab</td>
 <td>Melanie</td>
 </tr>
 <tr class="even">
 <td></td>
 <td>1:30 - 3 pm</td>
-<td>Lab: <strong>Network analysis</strong></td>
+<td><a href="./08_networks.html"><strong>08: Intro to network analysis</strong></a></td>
+<td>Lab</td>
 <td>Melanie</td>
 </tr>
 <tr class="odd">
 <td></td>
-<td>3 - 4:40 pm</td>
-<td>Lab: <strong>Core microbiome analysis</strong></td>
+<td>3 - 4 pm</td>
+<td><a href="./09_core.html"><strong>09: Defining a core microbiome</strong></a></td>
+<td>Lab</td>
+<td>Fiama</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>4 - 4:30 pm</td>
+<td><a href="./10_sra-sub.html"><strong>10: SRA data submission</strong></a></td>
+<td>Lab</td>
 <td>Fiama</td>
 </tr>
 </tbody>

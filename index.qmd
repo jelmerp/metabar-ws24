@@ -9,14 +9,15 @@ subtitle: "March 13-15, 2024 --- Wooster Campus, OSU"
 
 <br>
 
-| Day | Time           | Topic                                                        | By      |
-|-----|----------------|--------------------------------------------------------------|---------|
-| Wed | 1 - 2 pm       | Lecture: **Intro to metabarcoding**                          | Tim     |
-|     | 2:15 - 3 pm    | Lab: [**Intro to OSC**](02_osc.qmd)                          | Jelmer  |
-|     | 3 - 4:30 pm    | Lab: [**QC & trimming**](03_qc-trim.qmd)                     | Jelmer  |
-| Thu | 1 - 2 pm       | Lecture: **ASV/OTU calling and pipeline considerations**     | Soledad |
-|     | 2:15 - 3:15 pm | Lab: [**Calling ASVs with the DADA2 pipeline**](05_dada.qmd) | Tim     |
-|     | 3:30 - 4:30 pm | Lab: **Alpha & beta diversity**                              | Tim     |
-| Fri | 1 - 1:30 pm    | Lab: **Differential abundance with DESeq2**                  | Melanie |
-|     | 1:30 - 3 pm    | Lab: **Network analysis**                                    | Melanie |
-|     | 3 - 4:40 pm    | Lab: **Core microbiome analysis**                            | Fiama   |
+| Day | Time           | Topic                                                                  | Type    | By      |
+|----------------|----------------|-------------------------------------|----------------|----------------|
+| Wed | 1 - 2 pm       | [**01: Intro to metabarcoding**](01_intro.pdf)                         | Lecture | Tim     |
+|     | 2:15 - 3 pm    | [**02: Intro to OSC & VS Code**](02_osc.qmd)                           | Lab     | Jelmer  |
+|     | 3 - 4:30 pm    | [**03: Read QC & primer trimmming**](03_qc-trim.qmd)                                | Lab     | Jelmer  |
+| Thu | 1 - 2 pm       | [**04: ASV/OTU calling and pipeline considerations**](04_pipeline.pdf) | Lecture | Soledad |
+|     | 2:15 - 3:15 pm | [**05: Calling ASVs with the DADA2 pipeline**](05_dada.qmd)            | Lab     | Tim     |
+|     | 3:30 - 4:30 pm | [**06: Alpha & beta diversity statistics**](06_div.qmd)                           | Lab     | Tim     |
+| Fri | 1 - 1:30 pm    | [**07: Differential abundance analysis**](07_diffabund.qmd)                     | Lab     | Melanie |
+|     | 1:30 - 3 pm    | [**08: Intro to network analysis**](08_networks.qmd)                            | Lab     | Melanie |
+|     | 3 - 4 pm       | [**09: Defining a core microbiome**](09_core.qmd)                        | Lab     | Fiama   |
+|     | 4 - 4:30 pm    | [**10: SRA data submission**](10_sra-sub.qmd)                          | Lab     | Fiama   |

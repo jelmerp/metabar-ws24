@@ -22,7 +22,7 @@ editor_options:
 
 <br>
 
-## A computational infrastructure for genomics
+## Background: a computational infrastructure for genomics
 
 A laptop or desktop computer is often not sufficient to work with large-scale genomics data.
 Additionally, many of the specialized programs that help you analyze your data can
@@ -38,10 +38,12 @@ Those are some of the reasons that a typical computational infrastructure to do 
 4.  **R**[^1] for interactive statistical analysis and visualization *\[[homework](homework/R.qmd)
     and Thu + Fri\]*
 
-[^1]: Or Python
+[^1]: Or Python.
 
-We will be using all of these components during this workshop. **This session** will provide an
-introduction to supercomputers in general and to the Ohio Supercomputer Center (OSC) specifically.
+We will be using all of these components during this workshop.
+
+**This session** provides an introduction to high-performance computing in general,
+and to OSC specifically.
 In all of the lab sessions at this workshop, we'll continue to work at OSC,
 so you will get a fair bit of experience with it.
 
@@ -73,7 +75,7 @@ provide a solution.
 
 #### The Ohio Supercomputer Center (OSC)
 
-The Ohio Supercomputer Center (OSC) is a facility provided by the state of Ohio in the US.
+The Ohio Supercomputer Center (OSC) is an HPC facility provided by the state of Ohio.
 It has two supercomputers, lots of storage space,
 and an excellent infrastructure for accessing these resources.
 
@@ -85,7 +87,7 @@ you should ask your PI to create an OSC project for this purpose if you don't ha
 <hr style="height:1pt; visibility:hidden;" />
 
 ::: {.callout-note collapse="true"}
-#### OSC websites _(Click to expand)_
+#### The three OSC websites _(Click to expand)_
 
 OSC has **three main websites** --- we will mostly or only use the first:
 
@@ -118,6 +120,8 @@ Let's start with some (super)computing terminology, going from smaller things to
 -   **Supercomputer Center**\
     A facility like OSC that has one or more supercomputers.
 
+![](img/hpc_terminology.png){fig-align="center" width="95%"}
+
 ### Supercomputer components
 
 We can think of a supercomputer as having three main parts:
@@ -133,8 +137,8 @@ We can think of a supercomputer as having three main parts:
 #### File systems
 
 While OSC has several distinct file systems,
-we will only be working in a so-called project directory (located in `/fs/ess`)
-for our workshop's OSC Project, `PAS2714`.
+we will only be working in a so-called "project directory" (with directory meaning folder)
+for our workshop's OSC Project, `PAS2714`, at: `/fs/ess/PAS2714`.
 
 ::: {.callout-note collapse="true"}
 #### Overview of OSC file systems _(Click to expand)_
@@ -144,10 +148,6 @@ for our workshop's OSC Project, `PAS2714`.
 | **Home**    | `/users/`      | 500 GB / 1 M files | Yes        | User            |
 | **Project** | `/fs/ess/`     | Flexible           | Yes        | OSC Project     |
 | **Scratch** | `/fs/scratch/` | 100 TB             | No         | OSC Project     |
-:::
-
-::: callout-tip
-#### Directory is just another word for folder, often written as "dir" for short
 :::
 
 <hr style="height:1pt; visibility:hidden;" />
@@ -168,20 +168,18 @@ to start a VS Code session on a compute node.
 ::: {.callout-caution collapse="true"}
 ## Side note: What works differently on a supercomputer like at OSC? *(Click to expand)*
 
-Compared to command-line computing on a laptop or desktop, a number of aspects are different when
-working on a supercomputer like at OSC. We'll learn much more about these later on in the course,
-but here is an overview:
+Compared to command-line computing on a laptop or desktop,
+a number of aspects work differently at a supercomputer like OSC:
 
 -   **"Non-interactive" computing is common**\
-    It is common to write and "submit" scripts to a queue instead of running programs interactively.
--   **Software**\
-    You generally can't install "the regular way", and a lot of installed software needs to be
-    "loaded".
--   **Operating system**\
-    Supercomputers run on the Linux operating system.
+    It is common to write and "submit" scripts to a compute job queue instead of running programs interactively.
 -   **Login versus compute nodes**\
     As mentioned, the nodes you end up on after logging in are not meant for heavy computing and you
     have to *request access to "compute nodes"* to run most analyses.\
+-   **Software**\
+    You generally can't install "the regular way", and even software that is installed software often needs to be "loaded".
+-   **Operating system**\
+    Supercomputers run on the Linux operating system.
 :::
 
 <hr style="height:1pt; visibility:hidden;" />
@@ -195,8 +193,7 @@ The OSC OnDemand web portal allows you to use a web browser to access OSC resour
 -   "**Interactive Apps**": programs such as RStudio, Jupyter, VS Code and QGIS.
 
 {{< fa user-edit >}} **Go to <https://ondemand.osc.edu> and log in** (use the boxes on the left-hand
-side)
-
+side).
 You should see a landing page similar to the one below:
 
 ![](img/ondemand_home.png){fig-align="center" width="90%"}
@@ -207,13 +204,13 @@ We will now go through some of the dropdown menus in the **blue bar along the to
 
 ### Files: File system access
 
-Hovering over the **Files** dropdown menu gives a list of directories that you have access to. If
-your account is brand new, and you were added to `PAS2714`, you should only have three directories
-listed:
+Hovering over the **Files** dropdown menu gives a list of directories that you have access to.
+If your account is brand new, and you were added to `PAS2714` for this workshop,
+you should only have three directories listed:
 
-1.  A **Home** directory (starts with `/users/`)
-2.  The `PAS2714` project's "**scratch**" directory (`/fs/scratch/PAS2714`)
-3.  The `PAS2714` project's "**project**" directory (`/fs/ess/PAS2714`)
+1.  A **Home** directory --- starts with `/users/`
+2.  The `PAS2714` project's "**scratch**" (temporary) directory --- `/fs/scratch/PAS2714`
+3.  The `PAS2714` project's "**project**" (permanent, backed-up) directory --- `/fs/ess/PAS2714`
 
 You will only ever have one Home directory at OSC, but for every additional project you are a member
 of, you should usually see additional `/fs/ess` and `/fs/scratch` directories appear.
@@ -235,7 +232,7 @@ delete, move and copy files and folders, and even upload (from your computer to 
 ::: {.callout-important collapse="true"}
 #### Didn't create your own dir in the Unix shell homework? Click here and follow these instructions to do it now.
 
--   Click on the `users` dir in `/fs/ess/PAS714`.
+-   Click on the `users` dir in `/fs/ess/PAS2714`.
 -   Create your own dir by clicking the `New Directory` button towards the top.
 -   Please give it the **exact same name as your OSC username** (also match the capitalization!).
 
@@ -276,16 +273,14 @@ via the **Interactive Apps** dropdown menu:
   Because compute nodes always need to be "reserved",
   we have to fill out a form and specify the following details:
   - The OSC "_Project_" that we want to bill for the compute node usage: `PAS2714`.
-  - The "_Number of hours_" we want to make a reservation for: `3`
-  - The "_Working Directory_" for the program:  your personal folder in `/fs/ess/PAS2714/users`.
-  - The "_Codeserver Version_": `4.8` (most recent)                                                                                     
-[^9]: Note that we'll be kicked off as soon as that amount of time has passed!
-[^10]: This will be your starting location in the file system; we'll talk more about working dirs in a little bit.
+  - The "_Number of hours_" we want to make a reservation for: `3`^[
+    Note that we'll be kicked off as soon as that amount of time has passed!].
+  - The "_Working Directory_" for the program: your personal folder `/fs/ess/PAS2714/users/<username>`.
+  - The "_Codeserver Version_": `4.8` (most recent).
 
 ![](img/ondemand_vscode_form2.png){fig-align="center" width="55%"}
 
 - Click on **Launch** at the bottom, which will send your request to the "compute job" scheduler.
-
 - First, your job will be "*Queued*" — that is, waiting for the job scheduler to allocate compute node resources to it:
 
 ![](img/ondemand_vscode_queued.png){fig-align="center" width="75%"}
@@ -296,7 +291,6 @@ via the **Interactive Apps** dropdown menu:
 ![](img/ondemand_vscode_running.png){fig-align="center" width="75%"}
 
 - Once it appears, click on the blue **Connect to VS Code** button to open VS Code in a new browser tab.
-
 - When VS Code opens, you may get these two pop-ups (and possibly some others) ---
   click "Yes" (and check the box) and "Don't Show Again", respectively:
 
@@ -321,8 +315,8 @@ To emphasize the additional functionality relative to basic text editors like No
 editors like VS Code are also referred to as "**IDEs**": *Integrated Development Environments*.
 The RStudio program is another good example of an IDE. For our purposes:
 
--   VS code will be our IDE for Unix shell code
--   RStudio will be our IDE for R
+-   VS code will be our IDE for Unix shell code.
+-   RStudio will be our IDE for R.
 
 <hr style="height:1pt; visibility:hidden;" />
 

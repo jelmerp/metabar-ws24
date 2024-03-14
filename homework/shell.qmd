@@ -1,6 +1,6 @@
 ---
 title: "Homework: Intro to the Unix Shell"
-pagetitle: "Unix shell"
+pagetitle: "Unix shell homework"
 author: Jelmer Poelstra
 date: 2024-03-04
 execute: 

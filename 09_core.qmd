@@ -1,44 +1,140 @@
 ---
-title: "Core-Microbiome"
+title: "Defining a core microbiome"
 author: "Fiama Guevara"
-format: html
-editor: visual
+date: 2024-03-15
+execute: 
+  eval: true
+  cache: false
+knitr:
+  opts_chunk:
+    out.width: "85%"
+    class-output: styled-output
 editor_options: 
   chunk_output_type: console
 ---
 
-::: callout-warning
-#### THIS PAGE IS STILL UNDER CONSTRUCTION
-:::
-
 ----------------------------------------------------------------------------------------------------
 
-```{r}
-#Library needed
-library("phyloseq")
-library("ggplot2")
-library("microbiome")
-library("ggvenn")
-```
+<br>
 
-## Defining a Core Microbiome {.unnumbered}
+## Introduction: The core microbiome {.unnumbered}
 
-Let's start *defining* what is considered a core microbiome. A ***core microbiome*** comprises the
-members shared among two or more microbial assemblages associated with a habitat.
+
+Let's start *understanding* what is considered a ***core microbiome***.
+It comprises the members shared among two or more microbial assemblages associated with a habitat.
+To define a core microbiome we can consider parameters such as composition
+(taxonomic membership or community function),
+phylogeny, persistence, connectivity (biotic/abiotic interactions).
+
+*Why is important to define a core microbiome?*
+Important to know the role of key microorganisms and their functions within and across ecosystems.
+Commonly occurring microorganisms are likely critical to the function of that community.
+Also, it helps us to define what is a ‘healthy’ community and predict its responses to perturbation.
 
 There are several approaches to define a core microbiome[^1]:
 
-[^1]: Cantoran et al. 2023 DOI:<https://doi.org/10.1093/femsec/fiad098>
+[^1]: Shade et al. 2012 DOI:<https://doi.org/10.1111/j.1462-2920.2011.02585.x>
 
-1.  Membership (shared taxa)
-2.  Composition (relative abundance)
-3.  Phylogenetic and functional redundancy
-4.  Persistence (temporal and spatial)
-5.  Connectivity (co-variation within and shared communities)
+#### 1. Membership (taxonomically defined shared taxa)
 
-## We will learn two approaches:
+Based on presence/absence of taxa. The Sørenson’s index could be applied to determine a membership-based core microbiome since it accounts for the number of shared and unique OTUs/ASVs per group. Membership-based core microbiome definition depends on sequencing efforts. Sequencing depth could change proportions.
 
-Start reading the **`phyloseq`** object containing your data:
+![Figure from Shade et al. 2012](img/Membership.png){fig-align="center"}
+
+#### 2. Composition (relative abundance)
+
+Accounts for the representation in the community using relative abundance of each OTU/ASV. Dominant and rare members can contribute in different ways to the community. You might focus your analysis in a specific group.
+
+![Figure from Shade et al. 2012](img/Composition.png){fig-align="center"}
+
+#### 3. Phylogenetic and functional redundancy
+
+Phylogenetic redundancy refers to multiple members from the same lineage present in a microbiome, whereas functional redundancy to members within a microbiome are performing the same functions (e.g. nitrogen fixation). Functional redundancy can help the microbiome buffer disturbance responses.
+
+![Figure from Shade et al. 2012](img/Phylogeny.png){fig-align="center"}
+
+#### 4. Persistence (temporal and spatial)
+
+Persistence/transience concepts are similar to dominance/rarity. For example: when determining plant-associated microbiomes present across developmental stages.
+
+![Figure from Shade et al. 2012](img/Persistence.png){fig-align="center"}
+
+#### 5. Connectivity (co-variation within and shared communities)
+
+Networks analyses can generate hypotheses about interacting members. We can assess the number or strength of interactions within a microbial community. This information could be more informative for predicting and managing core microbiomes across systems.
+
+![Figure from Shade et al. 2012](img/Connectivity.png){fig-align="center"}
+
+<br>
+
+## Setting up
+
+If you need to start a new RStudio Server session at OSC or open your RStudio Project,
+see the box below.
+
+::: {.callout-note collapse="true"}
+#### Start an RStudio Server job at OSC & open your RStudio Project _(Click to expand)_
+
+#### Start an RStudio Server job
+
+1.  Log in to OSC at <https://ondemand.osc.edu>.
+2.  Click on **`Interactive Apps`** (top bar) and then **`RStudio Server`** (all the way at the bottom).
+3.  Fill out the form as follows:
+    -   Cluster: **`Pitzer`**
+    -   R version: **`4.3.0`**
+    -   Project: **`PAS2714`**
+    -   Number of hours: **`4`**
+    -   Node type: **`any`**
+    -   Number of cores: **`4`**
+4.  Click **`Launch`** and once your job has started, click **`Connect to RStudio Server`**.
+
+#### Open your RStudio Project
+
+- Your RStudio Project at `/fs/ess/PAS2714/users/<user>` may have automatically opened.
+  You can see whether a Project is open, and if so, which one, in the top-right of your screen
+  (left screenshot below)
+- If your Project isn’t open, click on the R-in-a-box icon to open it
+  (right screenshot below):
+
+::: columns
+::: column
+![Here, the project `jelmer` is open.<br>Your Project name is also your username.](img/rproj-open.png){fig-align="center"}
+:::
+::: column
+![Opening an RStudio Project](https://mcic-osu.github.io/2020-12-microbiomics-workshop/img/rproj-dropdown.png){fig-align="center"}
+:::
+:::
+:::
+
+#### Create a new script (Optional)
+
+Click `File` > `New file` > `R script`, and immediately save the new file
+(`File` > `Save as`) as `core.R` inside your `scripts` directory^[
+(you can create that dir in the dialog box if needed].
+
+We recommend that you copy-and-paste (or type, if you prefer) code from this webpage
+into your script and _then_ execute the code.
+That way, you'll have a nice record of what you did, exactly.
+
+#### Load packages
+
+```{r, eval=FALSE}
+# Set the R library to load packages from
+.libPaths("/fs/ess/PAS0471/jelmer/R/metabar")
+dyn.load("/fs/ess/PAS0471/jelmer/software/GLPK/lib/libglpk.so.40", local = FALSE)
+```
+
+```{r, message=FALSE}
+# Load the packages
+library(tidyverse)
+library(microbiome)
+library(phyloseq)
+library(ggvenn)
+```
+
+#### Load the phyloseq object
+
+Read the **`phyloseq`** object containing your data:
 
 ```{r}
 ps.dataset <- readRDS("results/ps_fulldata/bac22rot_w_ASV.rds")
@@ -50,7 +146,9 @@ Take a look of your metadata and the variables you want to analyse. We will focu
 sample_data(ps.dataset)
 ```
 
-### Composition (relative abundance)
+<br>
+
+## Approach 1: Composition (relative abundance)
 
 1.  Transform the ASV count table to compositional data (relative abundance). For that we will use
     the R package **`microbiome`** (previously installed) with the function **`transform`**.
@@ -70,8 +168,10 @@ ps.CSW <- subset_samples(ps.dataset.cm, Rotation == "CSW")
 Then, get the core taxa using the function **`core_members`** from the R package **`microbiome`**.
 
 ```{r}
+
 core.taxa.CS <- core_members(ps.CS, detection = 0.001, prevalence = 95/100)
 core.taxa.CSW <- core_members(ps.CSW, detection = 0.001, prevalence = 95/100)
+
 ```
 
 ::: callout-tip
@@ -81,7 +181,6 @@ core.taxa.CSW <- core_members(ps.CSW, detection = 0.001, prevalence = 95/100)
 be selected. This can be set by the user or determined empirically based on sequencing depth.
 
 **Prevalence** is the proportion of samples that will be selected given a detection threshold.
-:::
 
 <details>
 
@@ -112,103 +211,102 @@ prevalence:
 | 0.01      | 9/10       |
 
 </details>
+:::
 
-3.  Create a list with the selected core taxa for both subsets
+3.  Create a list with the selected core taxa for both subsets.
 
 ```{r}
-cores.list <- list(CS = core.taxa.CS, CSW = core.taxa.CSW)
-cores.list #To see the list of core taxa by Rotation
+cores.list <<- list(CS = core.taxa.CS, CSW = core.taxa.CSW)
+cores.list #To see the list of core taxa (ASVs) by Rotation
 ```
 
-Get the list of shared taxa from the taxa table of your dataset
+4.  Get the list of shared taxa from the taxa table of your dataset.
 
-```{r, echo=FALSE}
+```{r}
 tax.table.ps <- as.data.frame(tax_table(ps.dataset))
 
 shared.taxa <-  core.taxa.CS[core.taxa.CS %in% core.taxa.CSW]
 tax <- tax.table.ps[which(row.names(tax.table.ps) %in% shared.taxa ),]
-tax
 ```
 
-Get the list of unique taxa in Rotation CS
+5.  Get the list of unique taxa in Rotation CS.
 
-```{r, echo=FALSE}
+```{r}
 unique.taxa.CS <-  core.taxa.CS[!core.taxa.CS %in% core.taxa.CSW]
 tax.CS <- tax.table.ps[which(row.names(tax.table.ps) %in% unique.taxa.CS),]
-tax.CS
 ```
 
-Get the list of unique taxa in Rotation CSW
+6.  Get the list of unique taxa in Rotation CSW.
 
-```{r, echo=FALSE}
+```{r}
 unique.taxa.CSW <-  core.taxa.CSW[!core.taxa.CSW %in% core.taxa.CS]
 tax.CSW <- tax.table.ps[which(row.names(tax.table.ps) %in% unique.taxa.CSW),]
-tax.CSW
 ```
 
-4.  Plot a Venn Diagram
+7.  Plot a Venn Diagram.
 
-```{r, echo=FALSE}
+```{r, height= 0.5, width= 0.5}
 plot <- ggvenn(cores.list, fill_color = c("#0073C2FF", "#EFC000FF"),
-            stroke_size = 0.5, set_name_size = 5, text_size = 3,
+            stroke_size = 0.5, set_name_size = 5, text_size = 5,
             show_percentage = T)
 print(plot)
 ```
 
-### Membership and Composition
+<br>
+
+## Approach 2: Membership and Composition
 
 This approach takes into account presence/absence and relative abundance to select shared taxa. The
-threshold could arbitrary be set but here we will follow the 95th percentile approach\[\^2\]. That
+threshold could arbitrary be set but here we will follow the 95th percentile approach[^2]. That
 means that we will assign core membership to taxa that fell within the 95th percentile of the ranked
 frequency and ranked relative abundance within the whole data.
 
+[^2]: Cantoran et al. 2023 DOI:<https://doi.org/10.1093/femsec/fiad098>
+
 ::: {.callout-note collapse="true"}
-#### Side note: 95th Percentile approach. *(Click to expand)*
+#### Side note: How the 95th Percentile approach works. *(Click to expand)*
 
 Diagram of how the 95th percentile frequency and abundance core taxa were identified. The
 distribution of total relative abundance and frequency of taxa is assessed and the those ranked
-within the 95th percentile (top 5%) are selected as core.
+within the 95th percentile (top 5%) are selected as core. Figure from Cantoran et al. 2023.
 
-![](img/Percentile.95.approach.Cantoran2023.png){fig-align="center" width="50%"}
+![](img/Percentile.95.approach.Cantoran2023.png){fig-align="center" width="80%"}
 :::
 
-1.  Create a data frame from the **`phyloseq`** object
+1.  Create a data frame from the **`phyloseq`** object.
 
 ```{r}
 df <- psmelt(ps.dataset.cm)
 ```
 
-2.  Take the total Relative Abundance sum of each genus
+2.  Take the total Relative Abundance sum of each genus.
 
 ```{r}
 df.RA <- aggregate(df$Abundance, by = list(Genus = df$Genus), FUN=sum) 
 df.RA <- dplyr::rename(df.RA, TotalRA = `x`)
 ```
 
-3.  Determining 95th quantile of the RA data
+3.  Determining 95th quantile of the RA data.
 
-```{r, echo=FALSE}
+```{r}
 quantile.95.abund <- quantile(df.RA$TotalRA, 0.95)
-quantile.95.abund
 ```
 
-4.  Selecting for genera that fit the 95th cutoff
+4.  Selecting for genera that fit the 95th cutoff.
 
 ```{r}
 taxa.95 <- subset(df.RA, TotalRA >= quantile.95.abund) 
 taxa.95.genus <- taxa.95$Genus
-
 ```
 
 5.  Determine the frequency 95th cutoff. We go back and use the original phyloseq object and
-    agglomerate the data by Genus tax rank (it could be any tax rank you want e.g., Phylum, Family)
+    agglomerate the data by Genus tax rank (it could be any tax rank you want e.g., Phylum, Family).
 
-```{r, echo=FALSE}
+```{r}
 ps.genus <- tax_glom(ps.dataset, "Genus")
 ASVs.genus <- otu_table(ps.genus)
 df.ASVs.genus <- as.data.frame(ASVs.genus)
 rownames(df.ASVs.genus) <- as.data.frame(tax_table(ps.genus))$Genus
-
 ```
 
 6.  Create a table of presence/abundance of ASVs. We will use 1 if present, 0 if not.
@@ -217,35 +315,32 @@ rownames(df.ASVs.genus) <- as.data.frame(tax_table(ps.genus))$Genus
 df.PA <- 1*((df.ASVs.genus>0)==1)
 Occupancy <- rowSums(df.PA)/ncol(df.PA) #Calculate occupancy
 df.Freq <- as.data.frame(cbind(df.PA, Occupancy))
-df.Freq <- tibble::rownames_to_column(df.Freq, 'Genus')
-
+df.Freq <- tibble::rownames_to_column(df.Freq, "Genus")
 ```
 
-7.  Determining 95th quantile of the presence/abundance table
-
-```{r, echo=FALSE}
-quantile.95.freq <- quantile(df.Freq$Occupancy, 0.95)
-quantile.95.freq
-```
-
-8.  Select the genera that fit the 95th cutoff
+7.  Determining 95th quantile of the presence/abundance table.
 
 ```{r}
-#
+quantile.95.freq <- quantile(df.Freq$Occupancy, 0.95)
+```
+
+8.  Select the genera that fit the 95th cutoff.
+
+```{r}
 Freq.95 <- subset(df.Freq, Occupancy >= quantile.95.freq) #select cutoff 
 Freq.95.genus <- Freq.95$Genus
 
 Quantile.95 <- merge.data.frame(Freq.95, taxa.95, by = "Genus")  
-
 ```
 
 ::: {.callout-note collapse="true"}
-#### Side note: You can plot a Venn Diagram to see how many taxa made the cutoffs. *(Click to expand)*
+#### Side note: Plot a Venn Diagram to see how many taxa made the cutoffs. *(Click to expand)*
 
-Use the **Core.list** data:
+Use the **Freq.95.genus** and **taxa.95.genus** data:
 
-```{r}
+```{r, height= 1, width= 1}
 Core.95.list <- list(Frequency = Freq.95.genus, Relative_abundance = taxa.95.genus)
+
 plot.VennD <- ggvenn(Core.95.list,
             stroke_size = 0.5, set_name_size = 3.2, text_size = 3)
 
@@ -253,44 +348,43 @@ print(plot.VennD)
 ```
 :::
 
-9.  Get the list of your core taxa based on the 95th percentile
+9.  Get the list of your core taxa based on the 95th percentile.
 
-```{r, echo=FALSE}
+```{r}
 Core.95.intersect <- Reduce(intersect, Core.95.list)
 ```
 
-10. Subset your original phyloseq object for core taxa
+10. Subset your original phyloseq object for core taxa.
 
-```{r, echo=FALSE}
+```{r}
 ps.Core <- subset_taxa(ps.dataset, Genus %in% c(Core.95.intersect))
 ```
 
-11. Fix the relative abundance of the core taxa to continue with the plot
+11. Fix the relative abundance of the core taxa to continue with the plot.
 
-```{r, echo=FALSE}
+```{r}
 # Agglomerate taxa by genus level
-Core_genera <- tax_glom(ps.Core, taxrank = 'Genus', NArm = FALSE)
+Core_genera <- tax_glom(ps.Core, taxrank = "Genus", NArm = FALSE)
 
 # Get relative abundance in %
 Core_genera.RA <- transform_sample_counts(Core_genera , function(x) 100 * x/sum(x))
 
 #Transform to a data frame
 df.Core_genera <- psmelt(Core_genera.RA)
-
 ```
 
-12. Create a bubble plot You can customize your plot using *`ggplot2`* package available options.
+12. Create a bubble plot. You can customize your plot using **`ggplot2`** package available options.
 
-```{r, warning=FALSE, message=FALSE, echo=FALSE}
-
+```{r, warning=FALSE, message=FALSE}
 df.Core_genera %>%
-  dplyr::group_by(Genus, Rotation, Location,) %>%
-  dplyr::summarize(abundance = mean(Abundance)) %>%
+  group_by(Genus, Rotation, Location,) %>%
+  summarize(abundance = mean(Abundance)) %>%
   ggplot(aes(Rotation, Genus)) +
   facet_wrap(~Location) +
-    geom_point(aes(size = abundance), color = "grey30", fill = "#66A61E", alpha = 0.5, shape = 21, stroke = 0.1) +
-        scale_size_continuous(range = c(0,8), breaks = c(1, 3, 5, 8, 10), name="Relative\nAbundance (%)") +
-          scale_x_discrete(name ="Rotation") +
-            theme_bw()
-
+  geom_point(aes(size = abundance), color = "grey30", fill = "#66A61E",
+             alpha = 0.5, shape = 21, stroke = 0.1) +
+  scale_size_continuous(range = c(0,8), breaks = c(1, 3, 5, 8, 10),
+                        name="Relative\nAbundance (%)") +
+  scale_x_discrete(name ="Rotation") +
+  theme_bw()
 ```

@@ -2,7 +2,7 @@
 title: "Calling ASVs with the DADA2 pipeline"
 pagetitle: "dada2"
 author: Timothy Frey
-date: 2024-03-13
+date: 2024-03-14
 execute: 
   eval: false
 knitr:
@@ -19,24 +19,61 @@ editor_options:
 
 ## Setting up
 
+#### Copy the Cutadapt results
+
+1. Log in to OSC at <https://ondemand.osc.edu>.
+2. In the `Clusters` dropdown menu in the blue top bar, click `Pitzer Shell Access`.
+3. Paste (<kbd>Ctrl/Cmd</kbd>+<kbd>V</kbd>) the following command into the shell^[
+   It doesn't matter what your working dir is, this will work regardless.]:
+
+```bash
+cp -rv /fs/ess/PAS2714/share/results /fs/ess/PAS2714/users/$USER
+```
+```bash-out
+‘/fs/ess/PAS2714/share/results/ps_fulldata/bac22rot_w_ASV.rds’ -> ‘/fs/ess/PAS2714/users/jelmer/results/ps_fulldata/bac22rot_w_ASV.rds’
+‘/fs/ess/PAS2714/share/results/ps_fulldata/bac22rot_phyloseq.rds’ -> ‘/fs/ess/PAS2714/users/jelmer/results/ps_fulldata/bac22rot_phyloseq.rds’
+‘/fs/ess/PAS2714/share/results/cutadapt/W404A_R2.fastq.gz’ -> ‘/fs/ess/PAS2714/users/jelmer/results/cutadapt/W404A_R2.fastq.gz’
+‘/fs/ess/PAS2714/share/results/cutadapt/NW203A_R2.fastq.gz’ -> ‘/fs/ess/PAS2714/users/jelmer/results/cutadapt/NW203A_R2.fastq.gz’
+‘/fs/ess/PAS2714/share/results/cutadapt/W205BC_R2.fastq.gz’ -> ‘/fs/ess/PAS2714/users/jelmer/results/cutadapt/W205BC_R2.fastq.gz’
+# [...output truncated...]
+```
+
+::: {.callout-tip collapse="true"}
+#### The `$USER` environment variable and the command above _(Click to expand)_
+
+You can either use the command _exactly as is_,
+or you can replace `$USER` by your username, e.g.:
+
+```bash
+cp -rv /fs/ess/PAS2714/share/results /fs/ess/PAS2714/users/jelmer
+```
+
+But do _not_ use a "hybrid approach" like `$jelmer`.
+`$USER` is a so-called "environment variable" that contains your user name,
+and since we're at OSC, that will be your OSC user name, specifically.
+A variable like `$jelmer` (anything that starts with a `$` is a variable) will not exist
+unless you assigned it.
+:::
+
+<hr style="height:1pt; visibility:hidden;" />
+
 #### Start an RStudio Server job at OSC
 
-1.  Log in to OSC at <https://ondemand.osc.edu>.
-2.  Click on **`Interactive Apps`** (top bar) and then **`RStudio Server`** (all the way at the bottom).
-3.  Fill out the form as follows:
+1.  At OnDemand, click on **`Interactive Apps`** (top bar) and then **`RStudio Server`** (all the way at the bottom).
+2.  Fill out the form as follows:
     -   Cluster: **`Pitzer`**
     -   R version: **`4.3.0`**
     -   Project: **`PAS2714`**
     -   Number of hours: **`4`**
     -   Node type: **`any`**
     -   Number of cores: **`4`**
-4.  Click **`Launch`** and once your job has started, click **`Connect to RStudio Server`**.
+3.  Click **`Launch`** and once your job has started, click **`Connect to RStudio Server`**.
 
 <hr style="height:1pt; visibility:hidden;" />
 
 #### Open your RStudio Project
 
-- Your RStudio Project in `/fs/ess/PAS2714` may have automatically opened.
+- Your RStudio Project at `/fs/ess/PAS2714/users/<user>` may have automatically opened.
   You can see whether a Project is open, and if so, which one, in the top-right of your screen
   (left screenshot below)
 - If your Project isn’t open, click on the R-in-a-box icon to open it
@@ -82,7 +119,7 @@ editor_options:
 ![](homework/img/rstudio_proj_path2.png){fig-align="center" width="35%"}
 
 6.  Now you should be able to browse/click the rest of the way to your personal directory,
-    something like `/fs/ess/PAS2714/users/jelmer`.
+    `/fs/ess/PAS2714/users/<username>`.
 7.  Click **`Choose`** to pick your selected directory.
 8.  Click **`Create Project`**.
 
@@ -135,6 +172,15 @@ library(tidyverse)
 - [_tidyverse_](https://www.tidyverse.org) -
   A package for speeding up, organizing, streamlining and visualizing data science.
 
+::: callout-important
+#### If you see a message like this one, do _not_ click "Install"
+
+...but click "Don't show again".
+
+<hr style="height:1pt; visibility:hidden;" />
+![](img/rstudio_install.png){fig-align="center" width="70%"}
+:::
+
 <hr style="height:1pt; visibility:hidden;" />
 
 ## Preparing to run the workflow
@@ -142,16 +188,16 @@ library(tidyverse)
 #### Set the number of cores
 
 Most dada2 functions can use multiple cores.
-Because we are on a cluster and we have reserved only
-part of a node, auto-detection of the number of cores will not be appropriate
+Because we are on a cluster and we have reserved only part of a node,
+auto-detection of the number of cores will not be appropriate
 (the program will detect more cores than we have available).
 Therefore, we should specify the appropriate number of cores in our function calls below.
 
-We will set the number of cores here,
+We will save the number of cores in a variable that we will then use throughout this session ---
 assuming you requested 4 cores in your job submission (change if needed):
 
 ```{r, eval=TRUE}
-# Set the number of cores
+# Save the number of cores in a variable
 n_cores <- 4
 ```
 
@@ -174,27 +220,6 @@ tax_key <- "data/ref/silva_nr99_v138.1_train_set.fa.gz"
 # File with sample metadata (data about your samples, treatments, blocking, etc):
 metadata_file <- "data/meta/meta.tsv"
 ```
-
-::: {.callout-warning collapse="true"}
-#### Don't have the input files? Click here to copy them.
-
-Next to the `Console` in R, click the `Terminal` to access a Unix shell.
-In the Terminal, run the following `cp` commands to copy the necessary data.
-
-- If you're missing the `cutadapt` results because you didn't manage to run this
-  in the previous session:
-  
-  ```bash
-  cp -rv /fs/ess/PAS2714/share/results2/cutadapt /fs/ess/PAS2714/users/$USER/results
-  ```
-
-- You really should have the `data` and (other) `results` already, but if not:
-
-  ```bash
-  cp -rv /fs/ess/PAS2714/share/data /fs/ess/PAS2714/users/$USER
-  cp -rv /fs/ess/PAS2714/share/results /fs/ess/PAS2714/users/$USER
-  ```
-:::
 
 **Output files:**
 
@@ -782,12 +807,75 @@ by Matthew Willman, with further edits by Soledad Benitez Ponce, Timothy Frey an
 
 <hr style="height:1pt; visibility:hidden;" />
 
-## Bonus: Phylogenetic tree
+## Bonus: Phylogenetic tree estimation
 
-[_phangorn_](https://cran.r-project.org/web/packages/phangorn/index.html) is a package for estimation of phylogenetic trees in R.
+A phylogenetic tree can be estimated for the ASVs you inferred.
+Depending on the number of ASVs recovered and the phylogenetic tree algorithm of choice,
+this step could take many hours.
+Simpler trees will be less computationally intensive.
+Depending on the marker gene you are working on, you may or may not choose to perform this step.
+
+This step should be conducted with the final sequence table `seqtab` after removing chimeras.
+Then, the tree can be included in the *phyloseq* object, so if you have a tree,
+you should rerun the `phyloseq()` function to create an object that includes it.
+
+First, we'll need to load the
+[_phangorn_](https://cran.r-project.org/web/packages/phangorn/index.html) package
+for estimation of phylogenetic trees in R.
   
 ```{r}
+# Load the phangorn package
 library(phangorn)
+```
+
+Now, run the following steps to estimate a phylogenetic tree:
+
+```{r}
+# Extract the ASV sequences from the seqtab object
+seqs <- getSequences(seqtab)
+
+# The names() propagate to the tip labels of the tree.
+# At this stage ASV labels are full ASV sequences
+names(seqs) <- seqs
+
+# Align the sequences and store the alignment
+alignment <- AlignSeqs(DNAStringSet(seqs),
+                       anchor = NA,
+                       iterations = 5,
+                       refinements = 5)
+phang.align <- phyDat(as(alignment, "matrix"), type = "DNA")
+
+# Based on the alignment, compute pairwise distances among ASVs
+dm <- dist.ml(phang.align)
+
+# Build a neighbor-joining tree
+treeNJ <- NJ(dm)
+
+# Compute the likelihood of the tree
+fit <- pml(treeNJ, data = phang.align)
+
+# Fit a GTR model
+fitGTR <- update(fit, k = 4, inv = 0.2)
+
+# Optimize the tree
+fitGTR <- optim.pml(fitGTR,
+                    model = "GTR",
+                    optInv = TRUE,
+                    optGamma = TRUE,
+                    rearrangement = "stochastic",
+                    control = pml.control(trace = 0))
+
+# Root the tree
+rooted_tree <- root_by_longest_edge(fitGTR)
+```
+
+To create a phyloseq object that includes the tree:
+
+```{r}
+ps <- phyloseq(otu_table(seqtab, taxa_are_rows = FALSE),
+               sample_data(metadata_df),
+               tax_table(tax),
+               phy_tree(rooted_tree))
 ```
 
 <br> <br>

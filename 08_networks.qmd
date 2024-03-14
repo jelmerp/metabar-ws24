@@ -1,0 +1,310 @@
+---
+title: "Intro to network analysis"
+pagetitle: "Network analysis"
+author: Melanie Medina López
+date: 2024-03-15
+execute: 
+  eval: true
+knitr:
+  opts_chunk:
+    out.width: "85%"
+    class-output: styled-output
+editor_options: 
+  chunk_output_type: console
+---
+
+----------------------------------------------------------------------------------------------------
+
+<br>
+
+## Setting up
+
+If you need to start a new RStudio Server session at OSC or open your RStudio Project,
+see the box below.
+
+::: {.callout-note collapse="true"}
+#### Start an RStudio Server job at OSC & open your RStudio Project _(Click to expand)_
+
+#### Start an RStudio Server job
+
+1.  Log in to OSC at <https://ondemand.osc.edu>.
+2.  Click on **`Interactive Apps`** (top bar) and then **`RStudio Server`** (all the way at the bottom).
+3.  Fill out the form as follows:
+    -   Cluster: **`Pitzer`**
+    -   R version: **`4.3.0`**
+    -   Project: **`PAS2714`**
+    -   Number of hours: **`4`**
+    -   Node type: **`any`**
+    -   Number of cores: **`4`**
+4.  Click **`Launch`** and once your job has started, click **`Connect to RStudio Server`**.
+
+#### Open your RStudio Project
+
+- Your RStudio Project at `/fs/ess/PAS2714/users/<user>` may have automatically opened.
+  You can see whether a Project is open, and if so, which one, in the top-right of your screen
+  (left screenshot below)
+- If your Project isn’t open, click on the R-in-a-box icon to open it
+  (right screenshot below):
+
+::: columns
+::: column
+![Here, the project `jelmer` is open.<br>Your Project name is also your username.](img/rproj-open.png){fig-align="center"}
+:::
+::: column
+![Opening an RStudio Project](https://mcic-osu.github.io/2020-12-microbiomics-workshop/img/rproj-dropdown.png){fig-align="center"}
+:::
+:::
+:::
+
+#### Create a new script (Optional)
+
+Click `File` > `New file` > `R script`, and immediately save the new file
+(`File` > `Save as`) as `networks.R` inside your `scripts` directory^[
+You can create that dir in the dialog box if needed.].
+
+We recommend that you copy-and-paste (or type, if you prefer) code from this webpage
+into your script and _then_ execute the code.
+That way, you'll have a nice record of what you did, exactly.
+
+#### Load packages
+
+```{r, eval=FALSE}
+# Set the R library to load packages from
+.libPaths("/fs/ess/PAS0471/jelmer/R/metabar")
+dyn.load("/fs/ess/PAS0471/jelmer/software/GLPK/lib/libglpk.so.40", local = FALSE)
+```
+
+```{r, message=FALSE}
+# Load the packages (package startup messages are not printed below)
+library(ggnetwork)
+library(phyloseq)
+library(NetCoMi)
+```
+
+#### Load the phyloseq object
+
+```{r}
+# Loading data from RDS
+bac22rot_phy <- readRDS("results/ps_fulldata/bac22rot_w_ASV.rds")
+```
+
+<br>
+
+## Network analysis
+
+![](img_melanie/6.jpg){fig-align="center" width="95%"}
+
+![](img_melanie/7.jpg){fig-align="center" width="95%"}
+
+![](img_melanie/10.jpg){fig-align="center" width="95%"}
+
+![](img_melanie/12.jpg){fig-align="center" width="95%"}
+
+![](img_melanie/8.jpg){fig-align="center" width="95%"}
+
+![](img_melanie/9.jpg){fig-align="center" width="95%"}
+
+![Extended version of the network analysis steps. From:
+<https://doi.org/10.1093/bib/bbaa290>](img_melanie/Netcomi.jpg){fig-align="center" width="95%"}
+
+<hr style="height:1pt; visibility:hidden;" />
+
+### Data filtering and network construction
+
+In constructing networks it is important to understand that different questions will require
+different network construction parameters. It is also imperative to understand the biology of your
+system to select the most optimal parameters. We will be using the "NetCoMi" package which has great
+flexibility for network construction and includes the documentation of the available methods which
+allows you to decide which is more appropriate for your data.
+
+Here we will select the method by which to construct your network. It is recommended to filter out
+low abundance taxa as they may increase the noise in the network. In this example only the 50 most
+frequent taxa will be included in the network. Additionally we will be filtering samples with less
+than 500 reads to exclude those with poor sequencing depth. We will select the methods to normalize
+our data, to handle zeros and to calculate correlations.
+
+For this exercise we will analyze the differences in the bacterial networks from different
+**Rotation** schemes.
+
+```{r}
+# Get group names to parse onto network construction 
+group_vec <- get_variable(bac22rot_phy, "Rotation")
+
+# Construct the network 
+bac22rot_net <- netConstruct(bac22rot_phy,
+                             group = group_vec,
+                             filtTax = "highestFreq",
+                             filtTaxPar = list(highestFreq = 50),
+                             filtSamp = "totalReads",
+                             filtSampPar = list(totalReads = 500),
+                             zeroMethod = "pseudo",
+                             normMethod = "clr",
+                             measure = "pearson",
+                             sparsMethod = "none",
+                             dissFunc = "signed",
+                             verbose = 0,
+                             seed = 123456)
+```
+
+::: callout-important
+To ensure reproducibility of your network it is useful to set a seed in your settings, this will
+ensure that your network is constructed from the same starting point in the data each time you run
+the analysis.
+:::
+
+<hr style="height:1pt; visibility:hidden;" />
+
+### Network analysis
+
+We will now analyze the constructed network.
+This will evaluate network features and compare them between the two rotation groups.
+
+```{r}
+bac22rot_net_aly <- netAnalyze(bac22rot_net,
+                               clustMethod = "cluster_fast_greedy",
+                               graphlet = FALSE,
+                               verbose = 0)
+```
+
+Let's look at a summary of our analysis:
+
+```{r}
+summary(bac22rot_net_aly)
+```
+
+We see no significant differences between these networks, however we can visualize the networks and
+think about the results of our whole network measures in the analysis output.
+
+I have compiled and simplified the following definitions using NetCoMi's documentation to facilitate
+this practice however I recommend reading through the whole publication if you plan on using this
+approach in your own analyses. Reference: <https://doi.org/10.1093/bib/bbaa290>
+
+![](img_melanie/11.jpg){fig-align="center" width="95%"}
+
+![](img_melanie/13.jpg){fig-align="center" width="95%"}
+
+![](img_melanie/14.jpg){fig-align="center" width="95%"}
+
+<hr style="height:1pt; visibility:hidden;" />
+
+### Network visualization
+
+Now we can plot our networks to look at their structure.
+
+```{r}
+# Get number of modules to select colors 
+bac22rot_nclust <- as.numeric(max(names(table(bac22rot_net_aly$clustering$clust1))))
+
+# Set color palette 
+col <- c(topo.colors(bac22rot_nclust), rainbow(6))
+
+# Plot network
+plot(bac22rot_net_aly, 
+     colorVec = col,
+     borderCol = "gray40", 
+     nodeSize = "mclr", 
+     nodeSizeSpread = 3, 
+     labelScale = TRUE,
+     edgeTranspLow = 80, 
+     edgeTranspHigh = 50,
+     groupNames = c("CS", "CSW"), 
+     showTitle = TRUE, 
+     cexTitle = 1.2,
+     mar = c(1,1,3,1), 
+     repulsion = 0.9, 
+     shortenLabels = "simple", 
+     rmSingles = "inboth",
+     nodeFilter = "clustMin", 
+     nodeFilterPar = 10, 
+     nodeTransp = 50, 
+     hubTransp = 30)
+```
+
+<br>
+
+## Differential network analysis
+
+Although our networks do not significantly differ in overall structure,
+the node associations within the networks may differ in two ways:
+
+- The _direction_ of their relationship and/or
+- The _strength_ of the correlation.
+
+To assess this, we can perform a differential network analysis.
+Again, we will focus on the effect of **Rotation**.
+
+```{r}
+# Subsetting our data into their respective Rotations 
+CSW_subset <- phyloseq::subset_samples(bac22rot_phy, Rotation != "CS")
+CS_subset  <- phyloseq::subset_samples(bac22rot_phy, Rotation == "CS")
+
+# Construct the differential network 
+diff_net_const <- netConstruct(CSW_subset, CS_subset,
+                               filtTax = "highestVar",
+                               filtTaxPar = list(highestVar = 75),
+                               zeroMethod = "pseudo",
+                               normMethod = "clr",
+                               measure = "pearson",
+                               verbose = 1, 
+                               thresh = 0.3)
+
+# Analyze the network 
+diff_net_const_aly <- netAnalyze(diff_net_const,
+                                 clustMethod = "cluster_fast_greedy",
+                                 graphlet = FALSE,
+                                 verbose = 0)
+```
+
+```{r}
+# Compare the analysis of the networks 
+comp_nem <- netCompare(bac22rot_net_aly,
+                       permTest = FALSE, 
+                       verbose = FALSE,
+                       seed = 12345)
+
+```
+
+Now we can asses our results.
+This analysis now shows that the eigenvector centrality of the most
+central nodes in the differential network are significantly different from each other.
+This means that the most central nodes in the CS rotation network are more interconnected
+within their network than the most central nodes in the CSW rotation network.
+
+```{r}
+summary(comp_nem, 
+        groupNames = c("CS", "CSW"),
+        showCentr = c("degree", "between", "closeness"), 
+        numbNodes = 5)
+```
+
+<hr style="height:1pt; visibility:hidden;" />
+
+### Differential network visualization
+
+We can now plot our network and visually assess these differences.
+
+```{r}
+plot(diff_net_const_aly, 
+     sameLayout = TRUE, 
+     layoutGroup = "union", 
+     colorVec = col,
+     borderCol = "gray40", 
+     nodeSize = "mclr", 
+     nodeSizeSpread = 3, 
+     labelScale = TRUE,
+     edgeTranspLow = 80, 
+     edgeTranspHigh = 50,
+     groupNames = c("CS", "CSW"), 
+     showTitle = TRUE, 
+     cexTitle = 1.2,
+     mar = c(1,1,3,1), 
+     repulsion = 0.9, 
+     shortenLabels = "simple", 
+     rmSingles = "inboth",
+     nodeFilter = "clustMin", 
+     nodeFilterPar = 10, 
+     nodeTransp = 50, 
+     hubTransp = 30)
+```
+
+<br> <br>

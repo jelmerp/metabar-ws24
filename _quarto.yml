@@ -14,21 +14,30 @@ website:
         text: "{{< fa home >}}"
       - text: Wed
         menu:
-        - text: Intro to metabarcoding (TBA)
-        - text: Intro to OSC
+        - text: "1: Intro to metabarcoding (slides as PDF)"
+          href: 01_intro.pdf
+        - text: "2: Intro to OSC & VS Code"
           href: 02_osc.qmd
-        - text: QC & trimmming
+        - text: "3: Read QC & primer trimmming"
           href: 03_qc-trim.qmd
       - text: Thu
         menu:
-        - text: ASV/OTU calling and pipeline considerations (TBA)
-        - text: Calling ASVs with DADA2
+        - text: "4: ASV/OTU calling and pipeline considerations (slides as PDF)"
+          href: 04_pipeline.pdf
+        - text: "5: Calling ASVs with the DADA2 pipeline"
           href: 05_dada.qmd
-        - text: Alpha & beta diversity (TBA)
+        - text: "6: Alpha & beta diversity statistics"
+          href: 06_div.qmd
       - text: Fri
         menu:
-        - text: Network analysis (TBA)
-        - text: Core microbiome analysis (TBA)
+        - text: "7: Differential abundance analysis"
+          href: 07_diffabund.qmd
+        - text: "8: Intro to network analysis"
+          href: 08_networks.qmd
+        - text: "9: Defining a core microbiome"
+          href: 09_core.qmd
+        - text: "10: SRA data submission"
+          href: 10_sra-sub.qmd
     right:
       - text: Homework
         menu:
@@ -41,9 +50,8 @@ website:
       - text: Reference pages
         menu:
           - text: Literature (TBA)
-          - text: Metadata & data submission (TBA)
           - text: Software management at OSC
-            href: ref/ref_software.qmd
+            href: ref/software.qmd
       - text: About
         href: about.qmd
     tools:

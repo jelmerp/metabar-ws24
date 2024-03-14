@@ -3,7 +3,7 @@ title: "Software management"
 subtitle: "Loading 'modules' and activating _Conda_ environments,<br> with extra reading on installation with _Conda_ and using _Apptainer_ containers"
 pagetitle: "Software"
 author: Jelmer Poelstra
-date: 2024-02-07
+date: 2024-03-11
 execute: 
   eval: false
 knitr:

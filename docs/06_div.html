@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Timothy Frey">
+<meta name="dcterms.date" content="2024-03-14">
+
+<title>Diversity stats</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Metabarcoding Workshop</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text"><i class="fa-solid fa-home" aria-label="home"></i></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-wed" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Wed</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-wed">    
+        <li>
+    <a class="dropdown-item" href="./01_intro.pdf">
+ <span class="dropdown-text">1: Intro to metabarcoding (slides as PDF)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./02_osc.html">
+ <span class="dropdown-text">2: Intro to OSC &amp; VS Code</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./03_qc-trim.html">
+ <span class="dropdown-text">3: Read QC &amp; primer trimmming</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-thu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Thu</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-thu">    
+        <li>
+    <a class="dropdown-item" href="./04_pipeline.pdf">
+ <span class="dropdown-text">4: ASV/OTU calling and pipeline considerations (slides as PDF)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./05_dada.html">
+ <span class="dropdown-text">5: Calling ASVs with the DADA2 pipeline</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./06_div.html">
+ <span class="dropdown-text">6: Alpha &amp; beta diversity statistics</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-fri" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Fri</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-fri">    
+        <li>
+    <a class="dropdown-item" href="./07_diffabund.html">
+ <span class="dropdown-text">7: Differential abundance analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./08_networks.html">
+ <span class="dropdown-text">8: Intro to network analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./09_core.html">
+ <span class="dropdown-text">9: Defining a core microbiome</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./10_sra-sub.html">
+ <span class="dropdown-text">10: SRA data submission</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-homework" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Homework</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-homework">    
+        <li>
+    <a class="dropdown-item" href="./homework/instructions.html">
+ <span class="dropdown-text">Instructions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./homework/shell.html">
+ <span class="dropdown-text">Unix Shell</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./homework/R.html">
+ <span class="dropdown-text">R</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference-pages" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Reference pages</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-reference-pages">    
+        <li class="dropdown-header">Literature (TBA)</li>
+        <li>
+    <a class="dropdown-item" href="./ref/software.html">
+ <span class="dropdown-text">Software management at OSC</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label=""><i class="bi bi-github"></i></a>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="https://github.com/jelmerp/metabar-ws24">
+            Source Code
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="https://github.com/jelmerp/metabar-ws24/issues/new">
+            Report an Issue
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#setting-up" id="toc-setting-up" class="nav-link" data-scroll-target="#setting-up"><span class="header-section-number">2</span> Setting up</a></li>
+  <li><a href="#filter-samples" id="toc-filter-samples" class="nav-link" data-scroll-target="#filter-samples"><span class="header-section-number">3</span> Filter samples</a></li>
+  <li><a href="#plotting-relative-abundances" id="toc-plotting-relative-abundances" class="nav-link" data-scroll-target="#plotting-relative-abundances"><span class="header-section-number">4</span> Plotting relative abundances</a></li>
+  <li><a href="#alpha-diversity" id="toc-alpha-diversity" class="nav-link" data-scroll-target="#alpha-diversity"><span class="header-section-number">5</span> Alpha Diversity</a></li>
+  <li><a href="#beta-diversity" id="toc-beta-diversity" class="nav-link" data-scroll-target="#beta-diversity"><span class="header-section-number">6</span> Beta Diversity</a>
+  <ul class="collapse">
+  <li><a href="#ordination-plotting" id="toc-ordination-plotting" class="nav-link" data-scroll-target="#ordination-plotting"><span class="header-section-number">6.1</span> Ordination plotting</a></li>
+  <li><a href="#redundancy-analysis" id="toc-redundancy-analysis" class="nav-link" data-scroll-target="#redundancy-analysis"><span class="header-section-number">6.2</span> Redundancy Analysis</a></li>
+  </ul></li>
+  <li><a href="#permutational-anova-permanova" id="toc-permutational-anova-permanova" class="nav-link" data-scroll-target="#permutational-anova-permanova"><span class="header-section-number">7</span> Permutational ANOVA: PERMANOVA</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Alpha &amp; beta diversity statistics</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Timothy Frey </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 14, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<hr>
+<p><br></p>
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>Goal: Learn some basic analysis and visualizations that are possible in phyloseq and vegan packages.</p>
+<p>Answer some of the following questions:</p>
+<ul>
+<li><em>Relative abundance</em> — What are some of the larger genera present in my dataset and are they more represented in some samples than others?</li>
+<li><em>Alpha diversity</em> — How diverse is my community?</li>
+<li><em>Beta diversity</em> — How different are the communities across my treatments?</li>
+<li><em>Permutational ANOVA (PERMANOVA)</em> — Are my communities structured by a known environmental factor (sampling location, rotation treatment)?</li>
+</ul>
+<p><br></p>
+</section>
+<section id="setting-up" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="setting-up"><span class="header-section-number">2</span> Setting up</h2>
+<p>If you need to start a new RStudio Server session at OSC or open your RStudio Project, see the box below.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Start an RStudio Server job at OSC &amp; open your RStudio Project <em>(Click to expand)</em>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<section id="start-an-rstudio-server-job" class="level4">
+<h4 class="anchored" data-anchor-id="start-an-rstudio-server-job">Start an RStudio Server job</h4>
+<ol type="1">
+<li>Log in to OSC at <a href="https://ondemand.osc.edu" class="uri">https://ondemand.osc.edu</a>.</li>
+<li>Click on <strong><code>Interactive Apps</code></strong> (top bar) and then <strong><code>RStudio Server</code></strong> (all the way at the bottom).</li>
+<li>Fill out the form as follows:
+<ul>
+<li>Cluster: <strong><code>Pitzer</code></strong></li>
+<li>R version: <strong><code>4.3.0</code></strong></li>
+<li>Project: <strong><code>PAS2714</code></strong></li>
+<li>Number of hours: <strong><code>4</code></strong></li>
+<li>Node type: <strong><code>any</code></strong></li>
+<li>Number of cores: <strong><code>4</code></strong></li>
+</ul></li>
+<li>Click <strong><code>Launch</code></strong> and once your job has started, click <strong><code>Connect to RStudio Server</code></strong>.</li>
+</ol>
+</section>
+<section id="open-your-rstudio-project" class="level4">
+<h4 class="anchored" data-anchor-id="open-your-rstudio-project">Open your RStudio Project</h4>
+<ul>
+<li>Your RStudio Project at <code>/fs/ess/PAS2714/users/&lt;user&gt;</code> may have automatically opened. You can see whether a Project is open, and if so, which one, in the top-right of your screen (left screenshot below)</li>
+<li>If your Project isn’t open, click on the R-in-a-box icon to open it (right screenshot below):</li>
+</ul>
+<div class="columns">
+<div class="column">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/rproj-open.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+<figcaption>Here, the project <code>jelmer</code> is open.<br>Your Project name is also your username.</figcaption>
+</figure>
+</div>
+</div><div class="column">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://mcic-osu.github.io/2020-12-microbiomics-workshop/img/rproj-dropdown.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+<figcaption>Opening an RStudio Project</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+<section id="create-a-new-script-optional" class="level4">
+<h4 class="anchored" data-anchor-id="create-a-new-script-optional">Create a new script (Optional)</h4>
+<p>Click <code>File</code> &gt; <code>New file</code> &gt; <code>R script</code>, and immediately save the new file (<code>File</code> &gt; <code>Save as</code>) as <code>diversity.R</code> inside your <code>scripts</code> directory<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>We recommend that you copy-and-paste (or type, if you prefer) code from this webpage into your script and <em>then</em> execute the code. That way, you’ll have a nice record of what you did, exactly.</p>
+</section>
+<section id="loading-packages" class="level4">
+<h4 class="anchored" data-anchor-id="loading-packages">Loading packages</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the R library to load packages from</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">.libPaths</span>(<span class="st">"/fs/ess/PAS0471/jelmer/R/metabar"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dyn.load</span>(<span class="st">"/fs/ess/PAS0471/jelmer/software/GLPK/lib/libglpk.so.40"</span>, <span class="at">local =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the packages (package startup messages are not printed below)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phyloseq)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(microViz)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We’re loading the following packages:</p>
+<ul>
+<li><a href="https://www.tidyverse.org"><em>tidyverse</em></a> - A package for speeding up, organizing, streamlining and visualizing data science.</li>
+<li><a href="https://joey711.github.io/phyloseq/"><em>phyloseq</em></a> - A package for organizing, analyzing and visualizing microbial community analysis.</li>
+<li><a href="https://peat-clark.github.io/BIO381/veganTutorial.html">vegan</a> - Community ecology data analysis</li>
+<li><a href="https://david-barnett.github.io/microViz/">microViz</a> - We’re only using this package for its <code>distinct_palette()</code> function to generate a large color palette.</li>
+</ul>
+<hr style="height:1pt; visibility:hidden;">
+</section>
+<section id="settings" class="level4">
+<h4 class="anchored" data-anchor-id="settings">Settings</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the ggplot plot theme</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_bw</span>())</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_update</span>(<span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Set a random seed for ordination analyses</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3131</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="define-our-directories" class="level4">
+<h4 class="anchored" data-anchor-id="define-our-directories">Define our directories</h4>
+<p>First, let’s set up our directories:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dir with input files:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>indir <span class="ot">&lt;-</span> <span class="st">"results/ps_fulldata"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Dir for output:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>outdir <span class="ot">&lt;-</span> <span class="st">"data/postASV_analysis"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr style="height:1pt; visibility:hidden;">
+</section>
+<section id="load-the-phyloseq-object" class="level4">
+<h4 class="anchored" data-anchor-id="load-the-phyloseq-object">Load the phyloseq object</h4>
+<p>Lets load our phyloseq object. This is a different object than the one we generated in the <a href="./05_dada.html">DADA2 workflow in the previous session</a>. The object in part one was generated using a subset of data in order to speed up the analysis. The object here contains all of the data from the experiment.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ps <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(indir, <span class="st">"bac22rot_w_ASV.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Our phyloseq object is made up of the following components (“slots”):</p>
+<ul>
+<li><em>otu_table</em> - OTU/ASV abundance table - how many copies of each ASV are present in each of our samples</li>
+<li><em>sample_data</em> - metadata table contains information about the samples including treatments such as location and rotation treatment</li>
+<li><em>tax_table</em> - a table of taxonomic assignments for each ASV, typically containing taxonomic assignments at different levels (phylum, order, class, etc)</li>
+<li><em>phy_tree</em> - a phylogenetic tree of the ASV (optional)</li>
+<li><em>refseq</em> - the nucletotide sequences for each ASV</li>
+</ul>
+<p>Let’s have a look at the object:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ps</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="styled-output"><code>phyloseq-class experiment-level object
+otu_table()   OTU Table:         [ 8088 taxa and 30 samples ]
+sample_data() Sample Data:       [ 30 samples by 7 sample variables ]
+tax_table()   Taxonomy Table:    [ 8088 taxa by 9 taxonomic ranks ]
+phy_tree()    Phylogenetic Tree: [ 8088 tips and 8078 internal nodes ]
+refseq()      DNAStringSet:      [ 8088 reference sequences ]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># And the assigned taxon names:</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">taxa_names</span>(ps)[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="styled-output"><code>[1] "ASV_1" "ASV_2" "ASV_3"</code></pre>
+</div>
+</div>
+<p><br></p>
+</section>
+</section>
+<section id="filter-samples" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="filter-samples"><span class="header-section-number">3</span> Filter samples</h2>
+<p>Filtering out any uninformative samples – those with low total taxon counts. First, how many counts do we have for each sample?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(<span class="fu">sample_sums</span>(ps))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="styled-output"><code>T22NW403BC  T22NW404A T22NW103AB T22NW203BC T22NW404BC  T22NW203A  T22W205BC 
+     42998      44212      46909      48149      48452      49440      53456 
+ T22NW201C  T22NW403A   T22W101C   T22W103C  T22W101AB T22NW201AB   T22W205A 
+     54378      56468      57650      58325      58696      59083      59975 
+ T22NW305C T22NW305AB T22NW102AB  T22W303AB   T22W303C   T22W204A  T22NW103C 
+     60127      60746      60750      61205      67292      69701      70054 
+ T22NW102C  T22W103AB  T22W204BC  T22W404BC  T22W304AB  T22W403AB   T22W404A 
+     70956      73787      80628      80900      81796      87470      94857 
+  T22W304C   T22W403C 
+    100448     124441 </code></pre>
+</div>
+</div>
+<p>To remove uninformative samples, we will only keep those with over 1,000 counts — though note that in our case, this won’t remove any samples.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove samples with low counts:</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>ps <span class="ot">&lt;-</span> <span class="fu">subset_samples</span>(ps, <span class="fu">sample_sums</span>(ps) <span class="sc">&gt;</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s take a look at some of the components of our current phyloseq object:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The sample data (metadata)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_data</span>(ps)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="styled-output"><code>           Year Location Rotation  Plot TRT Block Sampling.Date
+T22NW102AB 2022    NWARS       CS 102AB   2   100    June, 2022
+T22NW102C  2022    NWARS       CS  102C   7   100    June, 2022
+T22NW103AB 2022    NWARS      CSW 103AB   3   100    June, 2022
+T22NW103C  2022    NWARS      CSW  103C   8   100    June, 2022
+T22NW201AB 2022    NWARS      CSW 201AB   3   200    June, 2022
+T22NW201C  2022    NWARS      CSW  201C   8   200    June, 2022
+T22NW203A  2022    NWARS       CS  203A   7   200    June, 2022
+T22NW203BC 2022    NWARS       CS 203BC   2   200    June, 2022
+T22NW305AB 2022    NWARS       CS 305AB   2   300    June, 2022
+T22NW305C  2022    NWARS       CS  305C   7   300    June, 2022</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The count table</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">t</span>(<span class="fu">otu_table</span>(ps)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="styled-output"><code>OTU Table:          [10 taxa and 6 samples]
+                     taxa are columns
+           ASV_1 ASV_2 ASV_3 ASV_4 ASV_5 ASV_6 ASV_7 ASV_8 ASV_9 ASV_10
+T22NW102AB     0     0     0     0     0     0     0     0     0      0
+T22NW102C      0     0     0     0     0     0     0     0     0      0
+T22NW103AB     0     2     0     2     0     0     0     0     0      0
+T22NW103C      0     0     0     0     0     0     2     0     0      0
+T22NW201AB    13     0     0     0     0     0     0     0     0      0
+T22NW201C      0     0     0     0     0     0     0     0     0      0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The taxonomy table</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">tax_table</span>(ps))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="styled-output"><code>Taxonomy Table:     [6 taxa by 9 taxonomic ranks]:
+      Kingdom    Phylum           Class                 Order Family Genus
+ASV_1 "Bacteria" NA               NA                    NA    NA     NA   
+ASV_2 "Bacteria" "Proteobacteria" "Alphaproteobacteria" NA    NA     NA   
+ASV_3 "Bacteria" "Proteobacteria" NA                    NA    NA     NA   
+ASV_4 "Bacteria" "Proteobacteria" NA                    NA    NA     NA   
+ASV_5 "Bacteria" "Proteobacteria" NA                    NA    NA     NA   
+ASV_6 "Bacteria" NA               NA                    NA    NA     NA   
+      Species Species_exact confidence
+ASV_1 NA      NA            "0.70"    
+ASV_2 NA      NA            "0.50"    
+ASV_3 NA      NA            "0.56"    
+ASV_4 NA      NA            "0.56"    
+ASV_5 NA      NA            "0.57"    
+ASV_6 NA      NA            "0.99"    </code></pre>
+</div>
+</div>
+<p><br></p>
+</section>
+<section id="plotting-relative-abundances" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="plotting-relative-abundances"><span class="header-section-number">4</span> Plotting relative abundances</h2>
+<p>What are some of the larger genera present in my dataset and are they more represented in some samples than others?</p>
+<p>Subset to only keep bacteria:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>bacteria <span class="ot">&lt;-</span> <span class="fu">subset_taxa</span>(ps, Kingdom <span class="sc">==</span> <span class="st">"Bacteria"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>bacteria</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="styled-output"><code>phyloseq-class experiment-level object
+otu_table()   OTU Table:         [ 8088 taxa and 30 samples ]
+sample_data() Sample Data:       [ 30 samples by 7 sample variables ]
+tax_table()   Taxonomy Table:    [ 8088 taxa by 9 taxonomic ranks ]
+phy_tree()    Phylogenetic Tree: [ 8088 tips and 8078 internal nodes ]
+refseq()      DNAStringSet:      [ 8088 reference sequences ]</code></pre>
+</div>
+</div>
+<p>Process and filter to only keep abundant genera and sort alphabetically:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>bacteria_genera <span class="ot">&lt;-</span> bacteria <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tax_glom</span>(<span class="at">taxrank =</span> <span class="st">"Genus"</span>) <span class="sc">%&gt;%</span>                      <span class="co"># agglomerate at Genus level</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transform_sample_counts</span>(<span class="cf">function</span>(x) {x <span class="sc">/</span> <span class="fu">sum</span>(x)} ) <span class="sc">%&gt;%</span> <span class="co"># Transform to rel. abundance</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">psmelt</span>() <span class="sc">%&gt;%</span>                                         <span class="co"># Melt to long format</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Abundance <span class="sc">&gt;</span> <span class="fl">0.03</span>) <span class="sc">%&gt;%</span>                         <span class="co"># Filter out low abundance taxa</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Genus)                                       <span class="co"># Sort data frame alphabetically by Genus</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Generate a relative abundance plot, by sample:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Relative abundance by sample and rotation treatment</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bacteria_genera, <span class="fu">aes</span>(<span class="at">x =</span> Sample, <span class="at">y =</span> Abundance, <span class="at">fill =</span> Genus)) <span class="sc">+</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(Rotation), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> microViz<span class="sc">::</span><span class="fu">distinct_palette</span>(<span class="at">pal =</span> <span class="st">"kelly"</span>)) <span class="sc">+</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">reverse =</span> <span class="cn">TRUE</span>, <span class="at">keywidth =</span> <span class="dv">1</span>, <span class="at">keyheight =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Relative Abundance (Genera &gt; 2%)"</span>,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Relative Abundance of Bacteria"</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="06_div_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><br></p>
+</section>
+<section id="alpha-diversity" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="alpha-diversity"><span class="header-section-number">5</span> Alpha Diversity</h2>
+<p>Alpha diversity analysis asks the question, how diverse is my community?</p>
+<p>Usually expressed in terms of species richness (number of species or number of ASVs). It defines the biological diversity within a ecosystem, community, etc.</p>
+<p>Alpha diversity has been given different definitions by several ecologists. And these various definitions might be influenced by different assumptions of species diversity. This is the reason why most researchers have been utilizing more than one index of diversity.</p>
+<p><strong>Measurements for species richness</strong>: <em>Observed richness</em>, <em>Chao1</em></p>
+<p>Can also be expressed by diversity indices which take into account species richness and evenness. Evenness provides information about the equity in species abundance in each sample, to put another way: is there one dominant species or are there a lot of species that have similar abundances?</p>
+<p><strong>Diversity indices:</strong> <em>Simpson</em>, <em>Shannon</em>, <em>Inverse Simpson</em></p>
+<p>Phyloseq has a lot of options for plotting alpha diversity. We will take a looks at a few here.</p>
+<p>First, alpha diversity by sample, using observed richness (# of ASVs):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot alpha diversity by sample</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_richness</span>(ps, <span class="at">measures =</span> <span class="st">"Observed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in estimate_richness(physeq, split = TRUE, measures = measures): The data you have provided does not have
+any singletons. This is highly suspicious. Results of richness
+estimates (for example) are probably unreliable, or wrong, if you have already
+trimmed low-abundance taxa from the data.
+
+We recommended that you find the un-trimmed data and retry.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="06_div_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can combine multiple diversity measures into one graph. Here we also combine samples by treatment, such as our rotational scheme. Adding color to take a look at if location stands out as a potential difference maker here.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot multiple indices </span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_richness</span>(ps,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">x =</span> <span class="st">"Rotation"</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"Location"</span>, </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">measures =</span> <span class="fu">c</span>(<span class="st">"Observed"</span>, <span class="st">"Shannon"</span>, <span class="st">"Simpson"</span>, <span class="st">"InvSimpson"</span>)) <span class="sc">+</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"top"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="06_div_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Lets compare plots combining rotational treatments across sites and the diversity at the individual sites.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_richness</span>(ps, <span class="at">x =</span> <span class="st">"Rotation"</span>, <span class="at">measures =</span> <span class="fu">c</span>(<span class="st">"Observed"</span>, <span class="st">"Shannon"</span>)) <span class="sc">+</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="06_div_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_richness</span>(ps, <span class="at">x =</span> <span class="st">"Location"</span>, <span class="at">measures =</span> <span class="fu">c</span>(<span class="st">"Observed"</span>, <span class="st">"Shannon"</span>)) <span class="sc">+</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="06_div_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Using <em>ggplot</em> to add some color to the figure:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make alpha diversity figure</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_richness</span>(ps,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">x =</span> <span class="st">"Location"</span>,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">measures =</span> <span class="fu">c</span>(<span class="st">"Observed"</span>, <span class="st">"Shannon"</span>),</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"Location"</span>,</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">nrow =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Location"</span>, <span class="at">y =</span> <span class="st">"Diversity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="06_div_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Calculate differences between alpha diversity metrics between samples</p>
+<p>Here we used a non-parametric pairwise Wilcoxon test to compare diversity between our locations:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate diversity metrics using estimate_richness and store the data using a vector</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>rich <span class="ot">&lt;-</span> <span class="fu">estimate_richness</span>(ps, <span class="at">measures =</span> <span class="fu">c</span>(<span class="st">"Observed"</span>, <span class="st">"Shannon"</span>))</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare observed diversity between our sample location</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>wilcox.observed <span class="ot">&lt;-</span> <span class="fu">pairwise.wilcox.test</span>(rich<span class="sc">$</span>Observed, </span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>                                        <span class="fu">sample_data</span>(ps)<span class="sc">$</span>Location, </span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">p.adjust.method =</span> <span class="st">"BH"</span>)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>wilcox.observed</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="styled-output"><code>
+    Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  rich$Observed and sample_data(ps)$Location 
+
+     NWARS 
+WARS 0.0083
+
+P value adjustment method: BH </code></pre>
+</div>
+</div>
+<p>What needs to change in order to test for differences in the Shannon index?</p>
+<p>How about between our rotational treatments?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>wilcox.shannon <span class="ot">&lt;-</span> <span class="fu">pairwise.wilcox.test</span>(rich<span class="sc">$</span>Shannon, </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>                                       <span class="fu">sample_data</span>(ps)<span class="sc">$</span>Rotation, </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">p.adjust.method =</span> <span class="st">"BH"</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>wilcox.shannon</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="styled-output"><code>
+    Pairwise comparisons using Wilcoxon rank sum exact test 
+
+data:  rich$Shannon and sample_data(ps)$Rotation 
+
+    CS  
+CSW 0.35
+
+P value adjustment method: BH </code></pre>
+</div>
+</div>
+<p><br></p>
+</section>
+<section id="beta-diversity" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="beta-diversity"><span class="header-section-number">6</span> Beta Diversity</h2>
+<p>How different are my communities?</p>
+<p>Beta diversity basically tells us how similar or dissimilar samples are to one another. Phyloseq offers several ordination methods and distance metrics. Some examples of distance metrics are <em>Bray-Curtis</em> which is based on abundance and <em>jaccard</em> distance which is based on presence absences, <em>unifrac</em> takes into account the occurance table and phylogenetic diversity. Here we use non metric multidimensional scaling (NMDS) to visualize beta diversity coupled with <em>Jensen–Shannon divergence</em> a distance metric based on probability distributions that account for the occurance data.</p>
+<p>Multidimensional scaling (MDS) is a unique coordination technique in that a (small) number of ordination axes are explicitly chosen prior to the analysis and the data are thenfitted to those dimensions. Thus, if only 2 or 3 axes are chosen, there will be no nondisplayed axes of variation at the end of the analysis. Similar to PCoA, a matrix of object dissimilarities is first calculated using a chosen distance metric. In non metric multidimensional scaling (NMDS), ranks of these distances among all objects are calculated. The algorithm then finds a configuration of objects in the chosen N-dimensional ordination space that best matches differences in ranks.</p>
+<hr style="height:1pt; visibility:hidden;">
+<section id="ordination-plotting" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="ordination-plotting"><span class="header-section-number">6.1</span> Ordination plotting</h3>
+<p>Microbiome data is compositional and sparse, NMDS is one option for ordination method in these cases. NMDS makes few assumptions about the nature of data and allows the use of any distance measure of the samples which are the exact opposite of other ordination methods.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Non-metric MultiDimensional Scaling (NMDS)</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>ord.nmds.jsd_slv <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(ps, <span class="at">method =</span> <span class="st">"NMDS"</span>, <span class="at">distance =</span> <span class="st">"jsd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre class="bash-out"><code>Run 0 stress 0.06127255 
+Run 1 stress 0.06106308 
+... New best solution
+... Procrustes: rmse 0.006378707  max resid 0.0243293
+# [...output truncated...]</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a "stressplot"</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">stressplot</span>(ord.nmds.jsd_slv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="06_div_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>What would we change to use Bray-curtis dissimilarity instead of Jensen-Shannon distance?</p>
+<p>Here we plot results from the Jensen-Shannon divergence that we calculated.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ordination</span>(ps, ord.nmds.jsd_slv,</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">"Location"</span>, <span class="at">shape =</span> <span class="st">"Rotation"</span>) <span class="sc">+</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>() <span class="sc">+</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ellipse</span>(<span class="at">type =</span> <span class="st">"t"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="06_div_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>What seems to be driving the clustering in this experiment?</p>
+<p>It can be more convincing if more than one type of beta diversity analysis comes up with a similar solution, so lets try another type of analysis.</p>
+<hr style="height:1pt; visibility:hidden;">
+</section>
+<section id="redundancy-analysis" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="redundancy-analysis"><span class="header-section-number">6.2</span> Redundancy Analysis</h3>
+<p>Redundancy analysis is a type of constrained ordination that assesses how much of the variation in one set of variables can be explained by the variation in another set of variables. It is the multivariate extension of simple linear regression that is applied to sets of variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Redundancy Analysis</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>ord.rda <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(ps,</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">formula =</span> o <span class="sc">~</span> Rotation <span class="sc">+</span> Location,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">method =</span> <span class="st">"CAP"</span>,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">distance =</span> <span class="st">"bray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the RDA</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ordination</span>(ps,</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>                vegan<span class="sc">::</span><span class="fu">scores</span>(ord.rda, <span class="at">scaling =</span> <span class="dv">1</span>),</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">type =</span> <span class="st">"sites"</span>,</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">"Location"</span>,</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">shape =</span> <span class="st">"Rotation"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="06_div_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In both analysis we can see some clustering within groups and spread between groups, but this is not a test for statistical differences. Do microbial communities differ significantly by host taxa?</p>
+<p><br></p>
+</section>
+</section>
+<section id="permutational-anova-permanova" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="permutational-anova-permanova"><span class="header-section-number">7</span> Permutational ANOVA: PERMANOVA</h2>
+<p>Do communities cluster by a known environmental factor (rotation, location)?</p>
+<p>Finally, we’ll test whether there is a statistically significant ecological level treatment effect. PERMANOVA sounds fancy, but it is just an ANOVA performed using permutations. Permutations are used to determine how data may appear if there is no treatment effect and group differences are due to random chance. Observed data are then compared to the randomized data to calculate a p-value.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Storing our metadata in a data frame</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>sampledf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(ps))</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Selecting our distance method (in this case the same as we used for NMDS,</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Jensen-Shannon divergence, but we could use different options here)</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>dist.mat <span class="ot">&lt;-</span> phyloseq<span class="sc">::</span><span class="fu">distance</span>(ps, <span class="at">method =</span> <span class="st">"jsd"</span>)</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Selecting the number of permutations to perform</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>perm <span class="ot">&lt;-</span> <span class="fu">how</span>(<span class="at">nperm =</span> <span class="dv">999</span>)</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Selecting blocks from the experiment</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a><span class="fu">setBlocks</span>(perm) <span class="ot">&lt;-</span> <span class="fu">with</span>(sampledf, Block)</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Run PERMANOVA with the selected distance method and your variables of interest</span></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a><span class="co"># (in this case, location and rotation)</span></span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a><span class="fu">adonis2</span>(dist.mat <span class="sc">~</span> Location <span class="sc">*</span> Rotation,</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> sampledf, <span class="at">permutations =</span> perm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre class="styled-output"><code>Permutation test for adonis under reduced model
+Terms added sequentially (first to last)
+Blocks:  with(sampledf, Block) 
+Permutation: free
+Number of permutations: 999
+
+adonis2(formula = dist.mat ~ Location * Rotation, data = sampledf, permutations = perm)
+                  Df SumOfSqs      R2       F Pr(&gt;F)    
+Location           1  0.52765 0.49807 27.8874  0.001 ***
+Rotation           1  0.02225 0.02100  1.1759  0.252    
+Location:Rotation  1  0.01755 0.01657  0.9278  0.381    
+Residual          26  0.49194 0.46436                   
+Total             29  1.05940 1.00000                   
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>So, sampling location has a statistically significant effect on bacterial community composition, consistent with the patterns we saw in the ordination plots.</p>
+<p><br> <br></p>
+<hr>
+<section id="attribution" class="level4">
+<h4 class="anchored" data-anchor-id="attribution">Attribution</h4>
+<p>Information for this document was adapted by Timothy Frey from several excellent tutorials, most of which have more details than this one. These included:</p>
+<ul>
+<li><a href="https://mcic-osu.github.io/2020-12-microbiomics-workshop/08-postASV-analysis.html">A tutorial from an earlier version of this workshop from Matthew Willman</a></li>
+<li><a href="https://projectdigest.github.io/4_diversity.html#correlations_with_diversity" class="uri">https://projectdigest.github.io/4_diversity.html#correlations_with_diversity</a></li>
+<li><a href="https://www.yanh.org/2021/01/01/microbiome-r" class="uri">https://www.yanh.org/2021/01/01/microbiome-r</a></li>
+<li><a href="https://www.gdc-docs.ethz.ch/MDA/handouts/MDA20_PhyloseqFormation_Mahendra_Mariadassou.pdf" class="uri">https://www.gdc-docs.ethz.ch/MDA/handouts/MDA20_PhyloseqFormation_Mahendra_Mariadassou.pdf</a></li>
+<li><a href="https://f5webserv.wright.edu/~oleg.paliy/Papers/Paliy_ME2016.pdf">A breakdown of multivariate statistics used in these analysis</a></li>
+</ul>
+
+
+</section>
+</section>
+
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p> (you can create that dir in the dialog box if needed<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>2024, Jelmer Poelstra</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/jelmerp/pracs-sp24">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

@@ -1,0 +1,481 @@
+---
+title: "Alpha & beta diversity statistics"
+pagetitle: "Diversity stats"
+author: Timothy Frey
+date: 2024-03-14
+execute: 
+  eval: true
+  cache: false
+knitr:
+  opts_chunk:
+    out.width: "90%"
+    class-output: styled-output
+editor_options: 
+  chunk_output_type: console
+---
+
+----------------------------------------------------------------------------------------------------
+
+<br>
+
+## Introduction
+
+Goal: Learn some basic analysis and visualizations that are possible in phyloseq and vegan packages.
+
+Answer some of the following questions:
+
+- *Relative abundance* --- What are some of the larger genera present in my dataset
+  and are they more represented in some samples than others?
+- *Alpha diversity* --- How diverse is my community?
+- *Beta diversity* --- How different are the communities across my treatments?
+- *Permutational ANOVA (PERMANOVA)* --- Are my communities structured by a known environmental
+  factor (sampling location, rotation treatment)?
+
+<br>
+
+## Setting up
+
+If you need to start a new RStudio Server session at OSC or open your RStudio Project,
+see the box below.
+
+::: {.callout-note collapse="true"}
+#### Start an RStudio Server job at OSC & open your RStudio Project _(Click to expand)_
+
+#### Start an RStudio Server job
+
+1.  Log in to OSC at <https://ondemand.osc.edu>.
+2.  Click on **`Interactive Apps`** (top bar) and then **`RStudio Server`** (all the way at the bottom).
+3.  Fill out the form as follows:
+    -   Cluster: **`Pitzer`**
+    -   R version: **`4.3.0`**
+    -   Project: **`PAS2714`**
+    -   Number of hours: **`4`**
+    -   Node type: **`any`**
+    -   Number of cores: **`4`**
+4.  Click **`Launch`** and once your job has started, click **`Connect to RStudio Server`**.
+
+#### Open your RStudio Project
+
+- Your RStudio Project at `/fs/ess/PAS2714/users/<user>` may have automatically opened.
+  You can see whether a Project is open, and if so, which one, in the top-right of your screen
+  (left screenshot below)
+- If your Project isn’t open, click on the R-in-a-box icon to open it
+  (right screenshot below):
+
+::: columns
+::: column
+![Here, the project `jelmer` is open.<br>Your Project name is also your username.](img/rproj-open.png){fig-align="center"}
+:::
+::: column
+![Opening an RStudio Project](https://mcic-osu.github.io/2020-12-microbiomics-workshop/img/rproj-dropdown.png){fig-align="center"}
+:::
+:::
+:::
+
+#### Create a new script (Optional)
+
+Click `File` > `New file` > `R script`, and immediately save the new file
+(`File` > `Save as`) as `diversity.R` inside your `scripts` directory^[
+(you can create that dir in the dialog box if needed].
+
+We recommend that you copy-and-paste (or type, if you prefer) code from this webpage
+into your script and _then_ execute the code.
+That way, you'll have a nice record of what you did, exactly.
+
+#### Loading packages
+
+```{r, eval=FALSE}
+# Set the R library to load packages from
+.libPaths("/fs/ess/PAS0471/jelmer/R/metabar")
+dyn.load("/fs/ess/PAS0471/jelmer/software/GLPK/lib/libglpk.so.40", local = FALSE)
+```
+
+```{r, message=FALSE}
+# Load the packages (package startup messages are not printed below)
+library(vegan)
+library(tidyverse)
+library(phyloseq)
+library(microViz)
+```
+
+We're loading the following packages:
+
+- [_tidyverse_](https://www.tidyverse.org) -
+  A package for speeding up, organizing, streamlining and visualizing data science.
+- [_phyloseq_](https://joey711.github.io/phyloseq/) -
+  A package for organizing, analyzing and visualizing microbial community analysis.
+- [vegan](https://peat-clark.github.io/BIO381/veganTutorial.html) -
+  Community ecology data analysis
+- [microViz](https://david-barnett.github.io/microViz/) -
+  We're only using this package for its `distinct_palette()` function to generate
+  a large color palette.
+
+<hr style="height:1pt; visibility:hidden;" />
+
+#### Settings
+
+```{r}
+# Set the ggplot plot theme
+theme_set(theme_bw())
+theme_update(panel.grid.minor = element_blank())
+
+# Set a random seed for ordination analyses
+set.seed(3131)
+```
+
+#### Define our directories
+
+First, let's set up our directories:
+
+```{r}
+# Dir with input files:
+indir <- "results/ps_fulldata"
+
+# Dir for output:
+outdir <- "data/postASV_analysis"
+```
+
+<hr style="height:1pt; visibility:hidden;" />
+
+#### Load the phyloseq object
+
+Lets load our phyloseq object.
+This is a different object than the one we generated in the [DADA2 workflow in the previous session](05_dada.qmd). 
+The object in part one was generated using a subset of data in order to speed up the analysis.
+The object here contains all of the data from the experiment.
+
+```{r}
+ps <- readRDS(file.path(indir, "bac22rot_w_ASV.rds"))
+```
+
+Our phyloseq object is made up of the following components ("slots"):
+
+- *otu_table* - OTU/ASV abundance table - how many copies of each ASV are present in each of our samples
+- *sample_data* - metadata table contains information about the samples including treatments such as location and rotation treatment
+- *tax_table* - a table of taxonomic assignments for each ASV,
+  typically containing taxonomic assignments at different levels (phylum, order, class, etc)
+- *phy_tree* - a phylogenetic tree of the ASV (optional)
+- _refseq_ - the nucletotide sequences for each ASV
+
+Let’s have a look at the object:
+
+```{r}
+ps
+
+# And the assigned taxon names:
+taxa_names(ps)[1:3]
+```
+
+<br>
+
+## Filter samples
+
+Filtering out any uninformative samples – those with low total taxon counts.
+First, how many counts do we have for each sample?
+
+```{r}
+sort(sample_sums(ps))
+```
+
+To remove uninformative samples, we will only keep those with over 1,000 counts ---
+though note that in our case, this won't remove any samples.
+
+```{r}
+# Remove samples with low counts:
+ps <- subset_samples(ps, sample_sums(ps) > 1000)
+```
+
+Let’s take a look at some of the components of our current phyloseq object:
+
+```{r}
+# The sample data (metadata)
+sample_data(ps)[1:10]
+
+# The count table
+head(t(otu_table(ps)[1:10]))
+
+# The taxonomy table
+head(tax_table(ps))
+```
+
+<br>
+
+## Plotting relative abundances
+
+What are some of the larger genera present in my dataset and are they more represented in some samples than others?
+
+Subset to only keep bacteria:
+
+```{r}
+bacteria <- subset_taxa(ps, Kingdom == "Bacteria")
+bacteria
+```
+
+Process and filter to only keep abundant genera and sort alphabetically:
+
+```{r}
+bacteria_genera <- bacteria %>%
+  tax_glom(taxrank = "Genus") %>%                      # agglomerate at Genus level
+  transform_sample_counts(function(x) {x / sum(x)} ) %>% # Transform to rel. abundance
+  psmelt() %>%                                         # Melt to long format
+  filter(Abundance > 0.03) %>%                         # Filter out low abundance taxa
+  arrange(Genus)                                       # Sort data frame alphabetically by Genus
+```
+
+Generate a relative abundance plot, by sample:
+
+```{r, fig.height=6.5}
+# Relative abundance by sample and rotation treatment
+ggplot(bacteria_genera, aes(x = Sample, y = Abundance, fill = Genus)) + 
+  facet_wrap(vars(Rotation), nrow = 2, scales = "free_y") +
+  coord_flip() +
+  geom_col() +
+  scale_fill_manual(values = microViz::distinct_palette(pal = "kelly")) +
+  guides(fill = guide_legend(reverse = TRUE, keywidth = 1, keyheight = 1)) +
+  labs(y = "Relative Abundance (Genera > 2%)",
+       title = "Relative Abundance of Bacteria",
+       x = NULL)
+```
+
+<br>
+
+## Alpha Diversity
+
+Alpha diversity analysis asks the question, how diverse is my community?
+
+Usually expressed in terms of species richness (number of species or number of ASVs).
+It defines the biological diversity within a ecosystem, community, etc.
+
+Alpha diversity has been given different definitions by several ecologists.
+And these various definitions might be influenced by different assumptions of species diversity.
+This is the reason why most researchers have been utilizing more than one index of diversity.
+
+**Measurements for species richness**: *Observed richness*, *Chao1*
+
+Can also be expressed by diversity indices which take into account species richness and evenness.
+Evenness provides information about the equity in species abundance in each sample,
+to put another way: is there one dominant species or are there a lot of species that have similar abundances?
+
+**Diversity indices:** *Simpson*, *Shannon*, *Inverse Simpson*
+
+Phyloseq has a lot of options for plotting alpha diversity.
+We will take a looks at a few here.
+
+First, alpha diversity by sample, using observed richness (# of ASVs):
+
+```{r}
+# plot alpha diversity by sample
+plot_richness(ps, measures = "Observed")
+```
+
+We can combine multiple diversity measures into one graph.
+Here we also combine samples by treatment, such as our rotational scheme.
+Adding color to take a look at if location stands out as a potential difference maker here.
+
+```{r, warning=FALSE}
+# plot multiple indices 
+plot_richness(ps,
+              x = "Rotation",
+              color = "Location", 
+              measures = c("Observed", "Shannon", "Simpson", "InvSimpson")) +
+  theme(legend.position = "top")
+```
+
+Lets compare plots combining rotational treatments across sites and the diversity at the individual sites.
+
+```{r, warning=FALSE}
+plot_richness(ps, x = "Rotation", measures = c("Observed", "Shannon")) +
+  geom_boxplot()
+```
+
+```{r, warning=FALSE}
+plot_richness(ps, x = "Location", measures = c("Observed", "Shannon")) +
+  geom_boxplot()
+```
+
+Using _ggplot_ to add some color to the figure:
+
+```{r, warning=FALSE}
+# Make alpha diversity figure
+plot_richness(ps,
+              x = "Location",
+              measures = c("Observed", "Shannon"),
+              color = "Location",
+              nrow = 1) +
+  geom_boxplot() +
+  geom_jitter(width = 0.05) +
+  theme(legend.position = "none") +
+  labs(x = "Location", y = "Diversity")
+```
+
+Calculate differences between alpha diversity metrics between samples
+
+Here we used a non-parametric pairwise Wilcoxon test to compare diversity between our locations:
+
+```{r, warning=FALSE}
+# Calculate diversity metrics using estimate_richness and store the data using a vector
+rich <- estimate_richness(ps, measures = c("Observed", "Shannon"))
+
+# Compare observed diversity between our sample location
+wilcox.observed <- pairwise.wilcox.test(rich$Observed, 
+                                        sample_data(ps)$Location, 
+                                        p.adjust.method = "BH")
+wilcox.observed
+```
+
+What needs to change in order to test for differences in the Shannon index?
+
+How about between our rotational treatments?
+
+```{r}
+wilcox.shannon <- pairwise.wilcox.test(rich$Shannon, 
+                                       sample_data(ps)$Rotation, 
+                                       p.adjust.method = "BH")
+wilcox.shannon
+```
+
+<br>
+
+## Beta Diversity
+
+How different are my communities?
+
+Beta diversity basically tells us how similar or dissimilar samples are to one another.
+Phyloseq offers several ordination methods and distance metrics.
+Some examples of distance metrics are *Bray-Curtis* which is based on abundance
+and *jaccard* distance which is based on presence absences,
+*unifrac* takes into account the occurance table and phylogenetic diversity.
+Here we use non metric multidimensional scaling (NMDS) to visualize beta diversity
+coupled with *Jensen–Shannon divergence* a distance metric based on probability
+distributions that account for the occurance data.
+
+Multidimensional scaling (MDS) is a unique coordination technique in that a (small)
+number of ordination axes are explicitly chosen prior to the analysis and the
+data are thenfitted to those dimensions.
+Thus, if only 2 or 3 axes are chosen, there will be no nondisplayed axes of variation
+at the end of the analysis.
+Similar to PCoA, a matrix of object dissimilarities is first calculated using a chosen distance metric.
+In non metric multidimensional scaling (NMDS), ranks of these distances among all objects are calculated.
+The algorithm then finds a configuration of objects in the chosen N-dimensional
+ordination space that best matches differences in ranks.
+
+<hr style="height:1pt; visibility:hidden;" />
+
+### Ordination plotting
+
+Microbiome data is compositional and sparse,
+NMDS is one option for ordination method in these cases.
+NMDS makes few assumptions about the nature of data and allows the use of any
+distance measure of the samples which are the exact opposite of other ordination methods.
+
+```{r, message=FALSE, warning=FALSE, results='hide'}
+# Non-metric MultiDimensional Scaling (NMDS)
+ord.nmds.jsd_slv <- ordinate(ps, method = "NMDS", distance = "jsd")
+```
+```bash-out
+Run 0 stress 0.06127255 
+Run 1 stress 0.06106308 
+... New best solution
+... Procrustes: rmse 0.006378707  max resid 0.0243293
+# [...output truncated...]
+```
+
+```{r}
+# Create a "stressplot"
+stressplot(ord.nmds.jsd_slv)
+```
+
+What would we change to use Bray-curtis dissimilarity instead of Jensen-Shannon distance?
+
+Here we plot results from the Jensen-Shannon divergence that we calculated.
+
+```{r}
+plot_ordination(ps, ord.nmds.jsd_slv,
+                color = "Location", shape = "Rotation") +
+  geom_point(size = 4) +
+  coord_fixed() +
+  stat_ellipse(type = "t") 
+```
+
+What seems to be driving the clustering in this experiment?
+
+It can be more convincing if more than one type of beta diversity analysis comes
+up with a similar solution, so lets try another type of analysis.
+
+<hr style="height:1pt; visibility:hidden;" />
+
+### Redundancy Analysis
+
+Redundancy analysis is a type of constrained ordination that assesses how much of
+the variation in one set of variables can be explained by the variation in another set of variables.
+It is the multivariate extension of simple linear regression that is applied to sets of variables.
+
+```{r}
+# Redundancy Analysis
+ord.rda <- ordinate(ps,
+                    formula = o ~ Rotation + Location,
+                    method = "CAP",
+                    distance = "bray")
+```
+
+```{r}
+# plot the RDA
+plot_ordination(ps,
+                vegan::scores(ord.rda, scaling = 1),
+                type = "sites",
+                color = "Location",
+                shape = "Rotation") 
+```
+
+In both analysis we can see some clustering within groups and spread between groups,
+but this is not a test for statistical differences.
+Do microbial communities differ significantly by host taxa?
+
+<br>
+
+## Permutational ANOVA: PERMANOVA
+
+Do communities cluster by a known environmental factor (rotation, location)?
+
+Finally, we’ll test whether there is a statistically significant ecological level treatment effect.
+PERMANOVA sounds fancy, but it is just an ANOVA performed using permutations.
+Permutations are used to determine how data may appear if there is no treatment effect
+and group differences are due to random chance.
+Observed data are then compared to the randomized data to calculate a p-value.
+
+```{r}
+# Storing our metadata in a data frame
+sampledf <- data.frame(sample_data(ps))
+
+# Selecting our distance method (in this case the same as we used for NMDS,
+# Jensen-Shannon divergence, but we could use different options here)
+dist.mat <- phyloseq::distance(ps, method = "jsd")
+
+# Selecting the number of permutations to perform
+perm <- how(nperm = 999)
+# Selecting blocks from the experiment
+setBlocks(perm) <- with(sampledf, Block)
+
+# Run PERMANOVA with the selected distance method and your variables of interest
+# (in this case, location and rotation)
+adonis2(dist.mat ~ Location * Rotation,
+        data = sampledf, permutations = perm)
+```
+
+So, sampling location has a statistically significant effect on bacterial
+community composition, consistent with the patterns we saw in the ordination plots.
+
+<br> <br>
+
+-----
+
+#### Attribution
+
+Information for this document was adapted by Timothy Frey from several excellent tutorials,
+most of which have more details than this one. These included:
+
+- [A tutorial from an earlier version of this workshop from Matthew Willman](https://mcic-osu.github.io/2020-12-microbiomics-workshop/08-postASV-analysis.html)
+- <https://projectdigest.github.io/4_diversity.html#correlations_with_diversity>
+- <https://www.yanh.org/2021/01/01/microbiome-r>
+- <https://www.gdc-docs.ethz.ch/MDA/handouts/MDA20_PhyloseqFormation_Mahendra_Mariadassou.pdf>
+- [A breakdown of multivariate statistics used in these analysis](https://f5webserv.wright.edu/\~oleg.paliy/Papers/Paliy_ME2016.pdf)

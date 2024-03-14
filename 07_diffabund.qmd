@@ -1,0 +1,232 @@
+---
+title: "Differential abundance analysis"
+pagetitle: "Differential abundance"
+author: Melanie Medina López
+date: 2024-03-15
+execute: 
+  eval: true
+  cache: true
+knitr:
+  opts_chunk:
+    out.width: "85%"
+    class-output: styled-output
+editor_options: 
+  chunk_output_type: console
+---
+
+----------------------------------------------------------------------------------------------------
+
+<br>
+
+## Setting up
+
+If you need to start a new RStudio Server session at OSC or open your RStudio Project,
+see the box below.
+
+::: {.callout-note collapse="true"}
+#### Start an RStudio Server job at OSC & open your RStudio Project _(Click to expand)_
+
+#### Start an RStudio Server job
+
+1.  Log in to OSC at <https://ondemand.osc.edu>.
+2.  Click on **`Interactive Apps`** (top bar) and then **`RStudio Server`** (all the way at the bottom).
+3.  Fill out the form as follows:
+    -   Cluster: **`Pitzer`**
+    -   R version: **`4.3.0`**
+    -   Project: **`PAS2714`**
+    -   Number of hours: **`4`**
+    -   Node type: **`any`**
+    -   Number of cores: **`4`**
+4.  Click **`Launch`** and once your job has started, click **`Connect to RStudio Server`**.
+
+#### Open your RStudio Project
+
+- Your RStudio Project at `/fs/ess/PAS2714/users/<user>` may have automatically opened.
+  You can see whether a Project is open, and if so, which one, in the top-right of your screen
+  (left screenshot below)
+- If your Project isn’t open, click on the R-in-a-box icon to open it
+  (right screenshot below):
+
+::: columns
+::: column
+![Here, the project `jelmer` is open.<br>Your Project name is also your username.](img/rproj-open.png){fig-align="center"}
+:::
+::: column
+![Opening an RStudio Project](https://mcic-osu.github.io/2020-12-microbiomics-workshop/img/rproj-dropdown.png){fig-align="center"}
+:::
+:::
+:::
+
+#### Create a new script (Optional)
+
+Click `File` > `New file` > `R script`, and immediately save the new file
+(`File` > `Save as`) as `diffabund.R` inside your `scripts` directory^[
+(you can create that dir in the dialog box if needed].
+
+We recommend that you copy-and-paste (or type, if you prefer) code from this webpage
+into your script and _then_ execute the code.
+That way, you'll have a nice record of what you did, exactly.
+
+#### Load packages
+
+```{r, eval=FALSE}
+# Set the R library to load packages from
+.libPaths("/fs/ess/PAS0471/jelmer/R/metabar")
+dyn.load("/fs/ess/PAS0471/jelmer/software/GLPK/lib/libglpk.so.40", local = FALSE)
+```
+
+```{r, message=FALSE}
+# Load the packages (package startup messages are not printed below)
+library(DESeq2)
+library(phyloseq)
+library(microViz)
+library(ggplot2)
+```
+
+#### Load the phyloseq object
+
+```{r}
+# Loading data from RDS
+bac22rot_phy <- readRDS("results/ps_fulldata/bac22rot_w_ASV.rds")
+```
+
+<br>
+
+## Differential abundance analysis
+
+![](img_melanie/2.jpg){fig-align="center" width="95%"}
+
+![](img_melanie/3.jpg){fig-align="center" width="95%"}
+
+![From: <https://www.nature.com/articles/s41467-022-28034-z>](img_melanie/4.jpg){fig-align="center" width="95%"}
+
+<br>
+
+## DESeq2
+
+![From: <https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0085150>](img_melanie/5.jpg){fig-align="center" width="95%"}
+
+This method analyzes taxa individually to contrast abundance between "treatment" groups.
+A null and alternative hypothesis are set for each taxon:
+
+-   H~0~: The parameters to attain a normal distribution under a negative binomial model are the same for both treatments.
+-   H~a~: The parameters to attain a normal distribution using a negative binomial
+    distribution are the significantly different between treatments.
+
+If the null hypothesis can be rejected the taxon is considered differentially abundant.
+
+<hr style="height:1pt; visibility:hidden;" />
+
+#### Analysis set up
+
+Start by selecting the factors you will be using in your analysis.
+In this case we will focus on the effect of *Rotation* on a single *Location* of the experiment.
+Because of this both factors should be included in our model.
+
+```{r}
+# Converting phyloseq object to DESeq2 format 
+dds.df <- phyloseq_to_deseq2(bac22rot_phy, ~Rotation + Location)
+```
+
+```{r}
+# Identifying the groups in our experiment
+dds.df$Group <- factor(paste0(dds.df$Rotation, dds.df$Location))  
+
+# Setting our experimental desing in the DESeq2 object
+design(dds.df) <- formula(~Group) 
+
+# Generating our analysis
+dds <- DESeq(dds.df, quiet = TRUE) 
+
+results(dds) 
+```
+
+::: callout-note
+Your output will show each ASV and an associated **log2FoldChange** that indicates
+the magnitude of difference in abundance.
+Another important part of the output is the **padj** value which indicates the
+adjusted p-value which tells us if the difference is statistically significant.
+:::
+
+<hr style="height:1pt; visibility:hidden;" />
+
+#### Contrasting groups
+
+Once the full dataset has been analyzed you can contrast groups to identify
+differentially abundant taxa between them.
+We will focus on the comparison between rotation treatments in the WARS location.
+
+::: callout-tip
+If you need to remember your group names to make the contrast use:
+
+```{r}
+levels(dds$Group)
+```
+:::
+
+```{r}
+# Select the groups to contrast 
+res <- results(dds, contrast = c("Group", "CSWARS", "CSWWARS")) 
+
+# First look at the results 
+summary(res) 
+```
+
+```{r}
+# Number of taxa with significantly higher abundance in CSWWARS :
+sum(res$padj < 0.1 & res$log2FoldChange > 0, na.rm = TRUE)
+
+# Number of taxa with significantly lower abundance in CSWWARS:
+sum(res$padj < 0.1 & res$log2FoldChange < 0, na.rm = TRUE)
+```
+
+Let's have a look at the most significantly different taxa
+
+```{r}
+res.order <- res[order(res$pvalue), ]
+head(res.order)[c(1:2, 6)]
+
+```
+
+<hr style="height:1pt; visibility:hidden;" />
+
+#### Prepare samples for visualization 
+
+Let's tidy up our data for easy visualization
+
+```{r}
+# Create a data frame from your DESeq results 
+res.df <- as.data.frame(res)
+
+# Add the taxonomy of the ASVs to the new data frame 
+taxmelt <- as.data.frame(tax_table(bac22rot_phy))
+res.df$Tax <- paste(rownames(res.df), taxmelt$Family, sep= " ")
+
+# Filter to keep only log2folds > |10| and pvalues <= 0.05 
+res05 <- dplyr::filter(res.df, padj<=0.05, log2FoldChange<=-10 | log2FoldChange>=10) 
+
+# Making sure our new table has everything we need 
+head(res05)
+
+# Generating a dataframe from our table
+res05.df <- as.data.frame(res05)
+```
+
+<hr style="height:1pt; visibility:hidden;" />
+
+#### Plotting your data 
+
+Now you can use ggplot2 to generate a plot to visualize your data in any way you'd like,
+but here's an example:
+
+```{r}
+ggplot(data = res05.df,
+       aes(x = Tax, y = log2FoldChange, fill = log2FoldChange)) +
+  geom_bar(stat="identity") +
+  coord_flip() +
+  labs(title = "Taxa with significantly lower and higher abundance in CSW-WARS 
+                when contrasted with CS-WARS") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+<br> <br>
