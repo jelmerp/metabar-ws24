@@ -720,13 +720,14 @@ What is a tile? <em>(Click to expand)</em>
 </section>
 <section id="checking-your-fastqc-results" class="level3" data-number="2.2">
 <h3 data-number="2.2" class="anchored" data-anchor-id="checking-your-fastqc-results"><span class="header-section-number">2.2</span> Checking your FastQC results</h3>
-<p>First, you’ll unfortunately have to download FastQC’s output HTML files to your computer:</p>
+<p>First, you’ll unfortunately have to download FastQC’s output HTML files to your computer to be able to view them:</p>
 <ul>
 <li>Find the FastQC HTML files in the file explorer in the VS Code side bar.</li>
 <li>Right-click on one of them, click <code>Download...</code> and follow the prompt to download the file somewhere to your computer (doesn’t matter where).</li>
 <li>Repeat this for the second file.</li>
 <li>Then, open your computer’s file browser, find the downloaded files, and double-click on one. It should be <strong>opened in your default web browser</strong>.</li>
 </ul>
+<p>Alternatively, you can take a look at the FastQC output files on this website: <a href="results/fastqc/NW102AB_R1_fastqc.html">R1</a> and <a href="results/fastqc/NW102AB_R2_fastqc.html">R2</a>.</p>
 <section id="exercise-interpreting-your-fastqc-results" class="level4 exercise">
 <h4 class="anchored" data-anchor-id="exercise-interpreting-your-fastqc-results"><i class="fa-solid fa-user-edit" aria-label="user-edit"></i> <strong>Exercise</strong>: Interpreting your FastQC results</h4>
 <ul>
@@ -982,7 +983,8 @@ Need to active the Conda environment?
 <pre class="bash-out"><code>total 1.7M
 drwxr-xr-x 2 jelmer PAS2250 4.0K Mar  13 14:57 multiqc_data
 -rw-r--r-- 1 jelmer PAS2250 1.7M Mar  13 14:57 multiqc_report.html</code></pre>
-<p>Go ahead and find the HTML file in VS Code’s file browser, right-click on it and then download it to your computer, and click on the file in your own computer to open it in your browser (i.e., just like we did with the FastQC output).</p>
+<p>Go ahead and find the <code>multiqc_report.html</code> listed above in VS Code’s file browser, right-click on it and download it to your computer. Then, click on the file in your own computer to open it in your browser (i.e., just like we did with the FastQC output).</p>
+<p>You can also find a copy of the <a href="results/multiqc/multiqc_report.html">MultiQC HTML output file here</a>.</p>
 <section id="exercise-explore-the-multiqc-results" class="level4 exercise">
 <h4 class="anchored" data-anchor-id="exercise-explore-the-multiqc-results"><i class="fa-solid fa-user-edit" aria-label="user-edit"></i> <strong>Exercise</strong>: Explore the MultiQC results</h4>
 <p>Check for example whether patterns are consistent across samples, or if there are any outliers.</p>
