@@ -511,9 +511,9 @@ If you see a message like this one, do <em>not</em> click “Install”
 <section id="set-the-number-of-cores" class="level4">
 <h4 class="anchored" data-anchor-id="set-the-number-of-cores">Set the number of cores</h4>
 <p>Most dada2 functions can use multiple cores. Because we are on a cluster and we have reserved only part of a node, auto-detection of the number of cores will not be appropriate (the program will detect more cores than we have available). Therefore, we should specify the appropriate number of cores in our function calls below.</p>
-<p>We will set the number of cores here, assuming you requested 4 cores in your job submission (change if needed):</p>
+<p>We will save the number of cores in a variable that we will then use throughout this session — assuming you requested 4 cores in your job submission (change if needed):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the number of cores</span></span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the number of cores in a variable</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>n_cores <span class="ot">&lt;-</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
