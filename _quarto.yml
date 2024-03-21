@@ -49,7 +49,8 @@ website:
             href: homework/R.qmd
       - text: Reference pages
         menu:
-          - text: Literature (TBA)
+          - text: Literature
+            href: ref/lit.qmd
           - text: Software management at OSC
             href: ref/software.qmd
       - text: About

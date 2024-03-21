@@ -216,7 +216,7 @@ prevalence:
 3.  Create a list with the selected core taxa for both subsets.
 
 ```{r}
-cores.list <<- list(CS = core.taxa.CS, CSW = core.taxa.CSW)
+cores.list <- list(CS = core.taxa.CS, CSW = core.taxa.CSW)
 cores.list #To see the list of core taxa (ASVs) by Rotation
 ```
 

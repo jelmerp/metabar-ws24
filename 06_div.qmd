@@ -250,7 +250,7 @@ Alpha diversity has been given different definitions by several ecologists.
 And these various definitions might be influenced by different assumptions of species diversity.
 This is the reason why most researchers have been utilizing more than one index of diversity.
 
-**Measurements for species richness**: *Observed richness*, *Chao1*
+**Measurements for species richness**: *Observed richness*
 
 Can also be expressed by diversity indices which take into account species richness and evenness.
 Evenness provides information about the equity in species abundance in each sample,

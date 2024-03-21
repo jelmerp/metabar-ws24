@@ -1,0 +1,77 @@
+---
+title: "Reference list"
+---
+
+Antich, A., Palacin, C., Wangensteen, O. S., & Turon, X. (2021). To denoise or to cluster, that is not the question: Optimizing pipelines for COI metabarcoding and metaphylogeography. BMC Bioinformatics, 22(1), 177. <https://doi.org/10.1186/s12859-021-04115-6>
+
+Armour, C. R., Topçuoğlu, B. D., Garretto, A., & Schloss, P. D. (2022). A Goldilocks Principle for the Gut Microbiome: Taxonomic Resolution Matters for Microbiome-Based Classification of Colorectal Cancer. mBio, 13(1), e03161-21. <https://doi.org/10.1128/mbio.03161-21>
+
+Bahram, M., Anslan, S., Hildebrand, F., Bork, P., & Tedersoo, L. (2019). Newly designed 16S rRNA metabarcoding primers amplify diverse and novel archaeal taxa from the environment. Environmental Microbiology Reports, 11(4), 487–494. <https://doi.org/10.1111/1758-2229.12684>
+
+Beckers, B., Op De Beeck, M., Thijs, S., Truyens, S., Boerjan, W., & Vangronsveld, J. (2016). Performance of 16s rDNA Primer Pairs in the Study of Rhizosphere and Endosphere Bacterial Microbiomes in Metabarcoding Studies. Frontiers in Microbiology, 7. <https://doi.org/10.3389/fmicb.2016.00650>
+
+Berg, G., Rybakova, D., Fischer, D., Cernava, T., Vergès, M.-C. C., Charles, T., Chen, X., Cocolin, L., Eversole, K., Corral, G. H., Kazou, M., Kinkel, L., Lange, L., Lima, N., Loy, A., Macklin, J. A., Maguin, E., Mauchline, T., McClure, R., … Schloter, M. (2020). Microbiome definition re-visited: Old concepts and new challenges. Microbiome, 8(1), 103. <https://doi.org/10.1186/s40168-020-00875-0>
+
+Bodilis, J., Nsigue-Meilo, S., Besaury, L., & Quillet, L. (2012). Variable Copy Number, Intra-Genomic Heterogeneities and Lateral Transfers of the 16S rRNA Gene in Pseudomonas. PLOS ONE, 7(4), e35647. <https://doi.org/10.1371/journal.pone.0035647>
+
+Callahan, B. J., McMurdie, P. J., & Holmes, S. P. (2017). Exact sequence variants should replace operational taxonomic units in marker-gene data analysis. The ISME Journal, 11(12), Article 12. <https://doi.org/10.1038/ismej.2017.119>
+
+Callahan, B. J., McMurdie, P. J., Rosen, M. J., Han, A. W., Johnson, A. J. A., & Holmes, S. P. (2016). DADA2: High-resolution sample inference from Illumina amplicon data. Nature Methods, 13(7), Article 7. <https://doi.org/10.1038/nmeth.3869>
+
+Cantoran, A., Maillard, F., Baldrian, P., & Kennedy, P. G. (2023). Defining a core microbial necrobiome associated with decomposing fungal necromass. FEMS Microbiology Ecology, 99(9), fiad098. <https://doi.org/10.1093/femsec/fiad098>
+
+Caporaso, J. G., Lauber, C. L., Walters, W. A., Berg-Lyons, D., Lozupone, C. A., Turnbaugh, P. J., Fierer, N., & Knight, R. (2011). Global patterns of 16S rRNA diversity at a depth of millions of sequences per sample. Proceedings of the National Academy of Sciences, 108(supplement_1), 4516–4522. <https://doi.org/10.1073/pnas.1000080107>
+
+Castle, S. C., Samac, D. A., Sadowsky, M. J., Rosen, C. J., Gutknecht, J. L. M., & Kinkel, L. L. (2019). Impacts of Sampling Design on Estimates of Microbial Community Diversity and Composition in Agricultural Soils. Microbial Ecology, 78(3), 753–763. <https://doi.org/10.1007/s00248-019-01318-6>
+
+Chiarello, M., McCauley, M., Villéger, S., & Jackson, C. R. (2022). Ranking the biases: The choice of OTUs vs. ASVs in 16S rRNA amplicon data analysis has stronger effects on diversity measures than rarefaction and OTU identity threshold. PLOS ONE, 17(2), e0264443. <https://doi.org/10.1371/journal.pone.0264443>
+
+Davis, N. M., Proctor, D. M., Holmes, S. P., Relman, D. A., & Callahan, B. J. (2018). Simple statistical identification and removal of contaminant sequences in marker-gene and metagenomics data. Microbiome, 6(1), 226. <https://doi.org/10.1186/s40168-018-0605-2>
+
+Dundore-Arias, J. P., Eloe-Fadrosh, E. A., Schriml, L. M., Beattie, G. A., Brennan, F. P., Busby, P. E., Calderon, R. B., Castle, S. C., Emerson, J. B., Everhart, S. E., Eversole, K., Frost, K. E., Herr, J. R., Huerta, A. I., Iyer-Pascuzzi, A. S., Kalil, A. K., Leach, J. E., Leonard, J., Maul, J. E., … Kinkel, L. L. (2020). Community-Driven Metadata Standards for Agricultural Microbiome Research. Phytobiomes Journal, 4(2), 115–121. <https://doi.org/10.1094/PBIOMES-09-19-0051-P>
+
+Edgar, R. C. (2016). UNOISE2: Improved error-correction for Illumina 16S and ITS amplicon sequencing (p. 081257). bioRxiv. <https://doi.org/10.1101/081257>
+
+Giangacomo, C., Mohseni, M., Kovar, L., & Wallace, J. G. (2021). Comparing DNA Extraction and 16S rRNA Gene Amplification Methods for Plant-Associated Bacterial Communities. Phytobiomes Journal, 5(2), 190–201. <https://doi.org/10.1094/PBIOMES-07-20-0055-R>
+
+Hakimzadeh, A., Abdala Asbun, A., Albanese, D., Bernard, M., Buchner, D., Callahan, B., Caporaso, J. G., Curd, E., Djemiel, C., Brandström Durling, M., Elbrecht, V., Gold, Z., Gweon, H. S., Hajibabaei, M., Hildebrand, F., Mikryukov, V., Normandeau, E., Özkurt, E., M. Palmer, J., … Anslan, S. (n.d.). A pile of pipelines: An overview of the bioinformatics software for metabarcoding data analyses. Molecular Ecology Resources, n/a(n/a). <https://doi.org/10.1111/1755-0998.13847>
+
+Haro, C., Anguita-Maeso, M., Metsis, M., Navas-Cortés, J. A., & Landa, B. B. (2021). Evaluation of Established Methods for DNA Extraction and Primer Pairs Targeting 16S rRNA Gene for Bacterial Microbiota Profiling of Olive Xylem Sap. Frontiers in Plant Science, 12. <https://doi.org/10.3389/fpls.2021.640829>
+
+Hugerth, L. W., & Andersson, A. F. (2017). Analysing Microbial Community Composition through Amplicon Sequencing: From Sampling to Hypothesis Testing. Frontiers in Microbiology, 8. <https://doi.org/10.3389/fmicb.2017.01561>
+
+Joos, L., Beirinckx, S., Haegeman, A., Debode, J., Vandecasteele, B., Baeyen, S., Goormachtig, S., Clement, L., & De Tender, C. (2020). Daring to be differential: Metabarcoding analysis of soil and plant-related microbial communities using amplicon sequence variants and operational taxonomical units. BMC Genomics, 21(1), 733. <https://doi.org/10.1186/s12864-020-07126-4>
+
+Klappenbach, J. A., Saxman, P. R., Cole, J. R., & Schmidt, T. M. (2001). rrndb: The Ribosomal RNA Operon  Copy Number Database. Nucleic Acids Research, 29(1), 181–184.
+
+Lundberg, D. S., Lebeis, S. L., Paredes, S. H., Yourstone, S., Gehring, J., Malfatti, S., Tremblay, J., Engelbrektson, A., Kunin, V., Rio, T. G. del, Edgar, R. C., Eickhorst, T., Ley, R. E., Hugenholtz, P., Tringe, S. G., & Dangl, J. L. (2012). Defining the core Arabidopsis thaliana root microbiome. Nature, 488(7409), 86–90. <https://doi.org/10.1038/nature11237>
+
+McKnight, D. T., Huerlimann, R., Bower, D. S., Schwarzkopf, L., Alford, R. A., & Zenger, K. R. (2019). Methods for normalizing microbiome data: An ecological perspective. Methods in Ecology and Evolution, 10(3), 389–400. <https://doi.org/10.1111/2041-210X.13115>
+
+McMurdie, P. J., & Holmes, S. (2013). phyloseq: An R Package for Reproducible Interactive Analysis and Graphics of Microbiome Census Data. PLOS ONE, 8(4), e61217. <https://doi.org/10.1371/journal.pone.0061217>
+
+McMurdie, P. J., & Holmes, S. (2014). Waste Not, Want Not: Why Rarefying Microbiome Data Is Inadmissible. PLOS Computational Biology, 10(4), e1003531. <https://doi.org/10.1371/journal.pcbi.1003531>
+
+Nilsson, R. H., Anslan, S., Bahram, M., Wurzbacher, C., Baldrian, P., & Tedersoo, L. (2019a). Mycobiome diversity: High-throughput sequencing and identification of fungi. Nature Reviews Microbiology, 17(2), Article 2. <https://doi.org/10.1038/s41579-018-0116-y>
+
+Nilsson, R. H., Anslan, S., Bahram, M., Wurzbacher, C., Baldrian, P., & Tedersoo, L. (2019b). Mycobiome diversity: High-throughput sequencing and identification of fungi. Nature Reviews Microbiology, 17(2), 95–109. <https://doi.org/10.1038/s41579-018-0116-y>
+
+Pérez-Cobas, A. E., Gomez-Valero, L., & Buchrieser, C. (2020). Metagenomic approaches in microbial ecology: An update on whole-genome and marker gene sequencing analyses. Microbial Genomics, 6(8), mgen000409. <https://doi.org/10.1099/mgen.0.000409>
+
+Poudel, R., Jumpponen, A., Schlatter, D. C., Paulitz, T. C., Gardener, B. B. M., Kinkel, L. L., & Garrett, K. A. (2016). Microbiome Networks: A Systems Framework for Identifying Candidate Microbial Assemblages for Disease Management. Phytopathology®, 106(10), 1083–1096. <https://doi.org/10.1094/PHYTO-02-16-0058-FI>
+
+Salter, S. J., Cox, M. J., Turek, E. M., Calus, S. T., Cookson, W. O., Moffatt, M. F., Turner, P., Parkhill, J., Loman, N. J., & Walker, A. W. (2014). Reagent and laboratory contamination can critically impact sequence-based microbiome analyses. BMC Biology, 12(1), 87. <https://doi.org/10.1186/s12915-014-0087-z>
+
+Schloss, P. D. (2021). Amplicon Sequence Variants Artificially Split Bacterial Genomes into Separate Clusters. mSphere, 6(4), 10.1128/msphere.00191-21. <https://doi.org/10.1128/msphere.00191-21>
+
+Schloss, P. D. (2023). Waste not, want not: Revisiting the analysis that called into question the practice of rarefaction. mSphere, 9(1), e00355-23. <https://doi.org/10.1128/msphere.00355-23>
+
+Shade, A., & Handelsman, J. (2012). Beyond the Venn diagram: The hunt for a core microbiome. Environmental Microbiology, 14(1), 4–12. <https://doi.org/10.1111/j.1462-2920.2011.02585.x>
+
+Song, Z., Schlatter, D., Gohl, D. M., & Kinkel, L. L. (2018). Run-to-Run Sequencing Variation Can Introduce Taxon-Specific Bias in the Evaluation of Fungal Microbiomes. Phytobiomes Journal, 2(3), 165–170. <https://doi.org/10.1094/PBIOMES-09-17-0041-R>
+
+Sudermann, M. A., Foster, Z. S. L., Chang, J. H., & Grünwald, N. J. (2023). Metabarcoding for plant pathologists. Canadian Journal of Plant Pathology, 0(0), 1–19. <https://doi.org/10.1080/07060661.2023.2290041>
+
+Weiss, S., Xu, Z. Z., Peddada, S., Amir, A., Bittinger, K., Gonzalez, A., Lozupone, C., Zaneveld, J. R., Vázquez-Baeza, Y., Birmingham, A., Hyde, E. R., & Knight, R. (2017). Normalization and microbial differential abundance strategies depend upon data characteristics. Microbiome, 5(1), 27. <https://doi.org/10.1186/s40168-017-0237-y>
+
+Zinger, L., Bonin, A., Alsos, I. G., Bálint, M., Bik, H., Boyer, F., Chariton, A. A., Creer, S., Coissac, E., Deagle, B. E., Barba, M. D., Dickie, I. A., Dumbrell, A. J., Ficetola, G. F., Fierer, N., Fumagalli, L., Gilbert, M. T. P., Jarman, S., Jumpponen, A., … Taberlet, P. (2019). DNA metabarcoding—Need for robust experimental designs to draw sound ecological conclusions. Molecular Ecology, 28(8), 1857–1862. <https://doi.org/10.1111/mec.15060>

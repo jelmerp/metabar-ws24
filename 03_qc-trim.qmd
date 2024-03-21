@@ -420,7 +420,8 @@ The remaining modules are not that useful for metabarcoding data:
 
 ### Checking your FastQC results
 
-First, you'll unfortunately have to download FastQC's output HTML files to your computer:
+First, you'll unfortunately have to download FastQC's output HTML files to your computer
+to be able to view them:
 
 -   Find the FastQC HTML files in the file explorer in the VS Code side bar.
 -   Right-click on one of them, click `Download...` and follow the prompt to
@@ -428,6 +429,9 @@ First, you'll unfortunately have to download FastQC's output HTML files to your 
 -   Repeat this for the second file.
 -   Then, open your computer's file browser, find the downloaded files,
     and double-click on one. It should be **opened in your default web browser**.
+
+Alternatively, you can take a look at the FastQC output files on this website:
+[R1](results/fastqc/NW102AB_R1_fastqc.html) and [R2](results/fastqc/NW102AB_R2_fastqc.html).
 
 ::: exercise
 #### {{< fa user-edit >}} **Exercise**: Interpreting your FastQC results
@@ -761,9 +765,12 @@ drwxr-xr-x 2 jelmer PAS2250 4.0K Mar  13 14:57 multiqc_data
 -rw-r--r-- 1 jelmer PAS2250 1.7M Mar  13 14:57 multiqc_report.html
 ```
 
-Go ahead and find the HTML file in VS Code's file browser, right-click on it and then 
-download it to your computer, and click on the file in your own computer to open
-it in your browser (i.e., just like we did with the FastQC output).
+Go ahead and find the `multiqc_report.html` listed above in VS Code's file browser,
+right-click on it and download it to your computer.
+Then, click on the file in your own computer to open it in your browser
+(i.e., just like we did with the FastQC output).
+
+You can also find a copy of the [MultiQC HTML output file here](results/multiqc/multiqc_report.html).
 
 ::: exercise
 #### {{< fa user-edit >}} **Exercise**: Explore the MultiQC results
@@ -1041,7 +1048,7 @@ Once we see the "_Done with script_" line when we use `tail` on the Slurm log fi
 we know the job has finished:
 
 ```bash
-tail slurm-cutadapt.sh
+tail slurm-cutadapt.out
 ```
 ```bash-out
 22      4       0.0     2       0 3 1
@@ -1059,7 +1066,7 @@ Wed Mar  6 14:46:56 EST 2024
 Let's use `less` to take a closer look at the logging output:
 
 ```bash
-less slurm-cutadapt.sh
+less slurm-cutadapt.out
 ```
 ```bash-out
 Input files: data/fastq/NW102AB_R1.fastq.gz data/fastq/NW102AB_R2.fastq.gz
@@ -1093,7 +1100,7 @@ We will use the `grep` command to print all lines that contain the information
 on numbers and percentages of reads with the primer sequences:
 
 ```bash
-grep "with adapter:" slurm-cutadapt.sh
+grep "with adapter:" slurm-cutadapt.out
 ```
 ```bash-out
   Read 1 with adapter:                  12,798 (99.6%)
