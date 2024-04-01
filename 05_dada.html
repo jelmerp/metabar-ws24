@@ -1022,8 +1022,9 @@ NW201C  12223     8188       6797       6799   4693    4693</code></pre>
 <p>This step should be conducted with the final sequence table <code>seqtab</code> after removing chimeras. Then, the tree can be included in the <em>phyloseq</em> object, so if you have a tree, you should rerun the <code>phyloseq()</code> function to create an object that includes it.</p>
 <p>First, we’ll need to load the <a href="https://cran.r-project.org/web/packages/phangorn/index.html"><em>phangorn</em></a> package for estimation of phylogenetic trees in R.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the phangorn package</span></span>
-<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phangorn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the phangorn and DECIPHER packages</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phangorn)</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DECIPHER)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now, run the following steps to estimate a phylogenetic tree:</p>
 <div class="cell">
